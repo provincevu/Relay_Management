@@ -1,4 +1,5 @@
 This file is a merged representation of a subset of the codebase, containing specifically included files and files not matching ignore patterns, combined into a single document by Repomix.
+The content has been processed where empty lines have been removed, line numbers have been added, content has been compressed (code blocks are separated by ⋮---- delimiter).
 
 # File Summary
 
@@ -32,6 +33,9 @@ The content is organized as follows:
 - Files matching these patterns are excluded: OCR_PRJ/**, staticfiles/**, vendor/**, .git/**, .env, rendered.html, tmp_page.html, temp_base.html, repomix-output.*
 - Files matching patterns in .gitignore are excluded
 - Files matching default ignore patterns are excluded
+- Empty lines have been removed from all files
+- Line numbers have been added to the beginning of each line
+- Content has been compressed - code blocks are separated by ⋮---- delimiter
 - Files are sorted by Git change count (files with more changes are at the bottom)
 
 # Directory Structure
@@ -2060,7 +2064,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
 ````html
 <div id="category-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm" onclick="if(event.target === this) document.getElementById('category-modal').remove()">
     <div class="bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-2xl shadow-2xl w-full max-w-2xl mx-4 overflow-hidden transform transition-all flex flex-col max-h-[90vh]">
-        
         <!-- Header -->
         <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/80 flex-shrink-0 transition-colors">
             <h3 class="text-lg font-bold text-slate-800 dark:text-white">
@@ -2070,19 +2073,16 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
                 <i class="fas fa-times text-lg"></i>
             </button>
         </div>
-
         <!-- Form -->
         <form id="category-edit-form"
               action="{% if instance %}{% url 'category_edit' category_id instance.id %}{% else %}{% url 'category_create' category_id %}{% endif %}" 
               method="post"
               hx-boost="false"
               class="flex flex-col overflow-hidden">
-            
             {% csrf_token %}
             {% if instance %}
             <input type="hidden" name="_original_updated_at" value="{{ original_updated_at }}">
             {% endif %}
-            
             {% if form.non_field_errors %}
             <div class="px-6 pt-4">
                 <div class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm flex items-start gap-3">
@@ -2096,7 +2096,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
                 </div>
             </div>
             {% endif %}
-            
             <div class="p-6 overflow-y-auto custom-scrollbar flex-1">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                     {% for field in form %}
@@ -2112,7 +2111,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
                     {% endfor %}
                 </div>
             </div>
-
             <!-- Actions -->
             <div class="px-6 py-4 border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex items-center justify-end gap-3 flex-shrink-0 transition-colors">
                 <button type="button" onclick="document.getElementById('category-modal').remove()" class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-200 dark:focus:ring-slate-600">
@@ -2125,24 +2123,19 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
         </form>
     </div>
 </div>
-
 <script>
     (function() {
         var form = document.getElementById('category-edit-form');
         if (!form) return;
-
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-
             var submitBtn = form.querySelector('button[type="submit"]');
             if (submitBtn) {
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Đang lưu...';
             }
-
             var formData = new FormData(form);
             var actionUrl = form.getAttribute('action');
-
             fetch(actionUrl, {
                 method: 'POST',
                 body: formData,
@@ -2155,10 +2148,8 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
                     // Success
                     var modal = document.getElementById('category-modal');
                     if (modal) modal.remove();
-
                     var urlParams = new URLSearchParams(window.location.search);
                     var detailId = urlParams.get('detail');
-
                     // Find the search/filter form to maintain search state for complex pages
                     var filterForm = document.querySelector('form[hx-target$="-table-container"]');
                     if (filterForm && window.htmx) {
@@ -2173,9 +2164,7 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
                             }
                             hiddenDetail.value = detailId;
                         }
-                        
                         htmx.trigger(filterForm, 'submit');
-                        
                         // Refresh detail panel via Alpine
                         if (detailId) {
                             var detailPanel = document.getElementById('detail-panel-content');
@@ -2264,7 +2253,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
         </tbody>
     </table>
 </div>
-
 <!-- Pagination -->
 {% include 'partials/pagination.html' with hx_target="#category-list-container" hx_select="#category-list-container" hx_indicator="#category-loading" hx_push_url="true" %}
 </div>
@@ -2299,7 +2287,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
         <p class="text-lg font-bold text-slate-800 dark:text-slate-100 font-mono">{{ obj.code }}</p>
         <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">{{ obj.name }}</p>
     </div>
-
     <!-- Section: Thông số kỹ thuật -->
     <div>
         <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
@@ -2314,7 +2301,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             {% include "categories/partials/_detail_field.html" with label="Trạng thái VH" value=obj.id_ttvh %}
         </div>
     </div>
-
     <!-- Section: Kết nối lưới -->
     <div>
         <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
@@ -2338,7 +2324,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             {% include "categories/partials/_detail_field.html" with label="ID DZ" value=obj.id_dz %}
         </div>
     </div>
-
     <!-- Section: Quản lý -->
     <div>
         <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
@@ -2351,7 +2336,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             {% include "categories/partials/_detail_field.html" with label="Sắp xếp" value=obj.sort_order %}
         </div>
     </div>
-
     <!-- Actions -->
     {% if request.user.is_superuser or request.user|has_group:'ADMIN' %}
     <div class="pt-2 border-t border-slate-100 flex gap-2">
@@ -2434,7 +2418,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             </tbody>
         </table>
     </div>
-
     <!-- Pagination -->
     {% include 'partials/pagination.html' with hx_target="#line-table-container" hx_select="#line-table-container" hx_indicator="#loading-indicator" hx_push_url="true" %}
 </div>
@@ -2450,7 +2433,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
         <p class="text-lg font-bold text-slate-800 dark:text-slate-100 font-mono">{{ obj.code }}</p>
         <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">{{ obj.name }}</p>
     </div>
-
     <div>
         <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2"><i class="fas fa-map-location-dot text-slate-300"></i> Vị trí địa lý</h4>
         <div class="grid grid-cols-2 gap-2">
@@ -2462,7 +2444,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             {% include "categories/partials/_detail_field.html" with label="Khoảng cột" value=obj.khoang_cot %}
         </div>
     </div>
-
     <div>
         <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2"><i class="fas fa-road text-slate-300"></i> Đường tiếp cận</h4>
         <div class="bg-slate-50 rounded-lg p-3 border border-slate-100 mb-2">
@@ -2474,7 +2455,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             <p class="text-sm text-slate-700">{{ obj.hanh_lang|default:"—" }}</p>
         </div>
     </div>
-
     <div>
         <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2"><i class="fas fa-building text-slate-300"></i> Liên kết</h4>
         <div class="grid grid-cols-2 gap-2">
@@ -2486,7 +2466,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             {% include "categories/partials/_detail_field.html" with label="Ngày VH" value=obj.ngay_vh|date:"d/m/Y" %}
         </div>
     </div>
-
     {% if request.user.is_superuser or request.user|has_group:'ADMIN' %}
     <div class="pt-2 border-t border-slate-100 flex gap-2">
         <button type="button" onclick="openCategoryModal('{% url 'category_edit' 'location' obj.pk %}')" class="flex-1 flex items-center justify-center gap-2 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-sm font-semibold transition-colors">
@@ -2561,7 +2540,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
         <p class="text-lg font-bold text-slate-800 dark:text-slate-100 font-mono">{{ obj.code }}</p>
         <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">{{ obj.name }}</p>
     </div>
-
     <div>
         <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2"><i class="fas fa-info-circle text-slate-300"></i> Thông tin chung</h4>
         <div class="grid grid-cols-2 gap-2">
@@ -2571,7 +2549,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             {% include "categories/partials/_detail_field.html" with label="Ngày vận hành" value=obj.ngay_vh|date:"d/m/Y" %}
         </div>
     </div>
-
     <div>
         <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2"><i class="fas fa-sitemap text-slate-300"></i> Phân cấp</h4>
         <div class="bg-slate-50 rounded-lg p-3 border border-slate-100 mb-2">
@@ -2584,7 +2561,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             {% include "categories/partials/_detail_field.html" with label="Sắp xếp" value=obj.sort_order %}
         </div>
     </div>
-
     <div>
         <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2"><i class="fas fa-building text-slate-300"></i> Thông tin quản lý</h4>
         <div class="grid grid-cols-2 gap-2">
@@ -2592,7 +2568,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             {% include "categories/partials/_detail_field.html" with label="Sở hữu" value=obj.id_sohuu %}
         </div>
     </div>
-
     {% if request.user.is_superuser or request.user|has_group:'ADMIN' %}
     <div class="pt-2 border-t border-slate-100 flex gap-2">
         <button type="button" onclick="openCategoryModal('{% url 'category_edit' 'project' obj.pk %}')" class="flex-1 flex items-center justify-center gap-2 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold transition-colors">
@@ -2661,7 +2636,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
 {% load auth_extras %}
 {% block title %}Quản lý Đường dây | RMS{% endblock %}
 {% block header_title %}⚡ Danh mục Đường dây{% endblock %}
-
 {% block content %}
 <div x-data="{
     slideOpen: {% if detail_obj %}true{% else %}false{% endif %},
@@ -2687,10 +2661,8 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
         window.history.replaceState({}, '', url.toString());
     }
 }" class="flex gap-0 h-full relative">
-
     <!-- ===== MAIN TABLE AREA ===== -->
     <div class="flex-1 min-w-0 transition-all duration-300" :class="slideOpen ? 'mr-[480px]' : ''">
-
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-3">
             <div>
@@ -2706,7 +2678,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             </button>
             {% endif %}
         </div>
-
         <!-- Filter Bar -->
         <form hx-get="{% url 'asset_line_list' %}" 
               hx-target="#line-table-container" 
@@ -2741,21 +2712,17 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
                 <i class="fas fa-xmark text-xs"></i> Xóa lọc
             </a>
             {% endif %}
-            
             <div id="loading-indicator" class="htmx-indicator flex items-center text-blue-600 dark:text-blue-400 text-sm font-medium ml-2">
                 <i class="fas fa-spinner fa-spin mr-2"></i> Đang tải...
             </div>
         </form>
-
         {% include "categories/partials/line_table.html" %}
     </div>
-
     <!-- ===== SLIDE-OVER PANEL ===== -->
     <!-- Mobile: full screen; Desktop: 480px panel -->
     <div class="fixed inset-0 sm:inset-auto sm:top-0 sm:right-0 sm:h-screen sm:w-[480px] bg-white dark:bg-slate-800 shadow-2xl border-l border-slate-200 dark:border-slate-700 z-40 flex flex-col transform transition-transform duration-300 ease-out translate-x-full"
          :class="slideOpen ? 'translate-x-0' : 'translate-x-full'"
          x-cloak>
-
         <!-- Panel Header -->
         <div class="flex items-center justify-between px-4 md:px-5 py-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex-shrink-0">
             <div class="flex items-center gap-3">
@@ -2771,7 +2738,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
                 <i class="fas fa-xmark"></i>
             </button>
         </div>
-
         <!-- Panel Content (HTMX loaded) -->
         <div class="flex-1 overflow-y-auto" id="detail-panel-content">
             {% if detail_obj %}
@@ -2784,7 +2750,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             {% endif %}
         </div>
     </div>
-
 </div>
 {% endblock %}
 ````
@@ -2795,7 +2760,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
 {% load auth_extras %}
 {% block title %}Quản lý Vị trí | RMS{% endblock %}
 {% block header_title %}📍 Danh mục Vị trí / Cột điện{% endblock %}
-
 {% block content %}
 <div x-data="{
     slideOpen: {% if detail_obj %}true{% else %}false{% endif %},
@@ -2820,7 +2784,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
         window.history.replaceState({}, '', url.toString());
     }
 }" class="flex gap-0 h-full relative">
-
     <div class="flex-1 min-w-0 transition-all duration-300" :class="slideOpen ? 'mr-[480px]' : ''">
         <div class="flex items-center justify-between mb-5">
             <div>
@@ -2834,7 +2797,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             </button>
             {% endif %}
         </div>
-
         <!-- Filter Bar -->
         <form hx-get="{% url 'asset_location_list' %}"
               hx-target="#location-table-container"
@@ -2865,10 +2827,7 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
                 <i class="fas fa-spinner fa-spin mr-2"></i> Đang tải...
             </div>
         </form>
-
         {% include "categories/partials/location_table.html" %}
-
-
     <!-- Slide-over Panel -->
     <div class="fixed inset-0 sm:inset-auto sm:top-0 sm:right-0 sm:h-screen sm:w-[480px] bg-white dark:bg-slate-800 shadow-2xl border-l border-slate-200 dark:border-slate-700 z-40 flex flex-col transform transition-transform duration-300 ease-out translate-x-full"
          :class="slideOpen ? 'translate-x-0' : 'translate-x-full'" x-cloak>
@@ -2897,7 +2856,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
 {% load auth_extras %}
 {% block title %}Quản lý Công trình | RMS{% endblock %}
 {% block header_title %}🏛️ Danh mục Công trình{% endblock %}
-
 {% block content %}
 <div x-data="{
     slideOpen: {% if detail_obj %}true{% else %}false{% endif %},
@@ -2922,7 +2880,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
         window.history.replaceState({}, '', url.toString());
     }
 }" class="flex gap-0 h-full relative">
-
     <div class="flex-1 min-w-0 transition-all duration-300" :class="slideOpen ? 'mr-[480px]' : ''">
         <div class="flex items-center justify-between mb-5">
             <div>
@@ -2936,7 +2893,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             </button>
             {% endif %}
         </div>
-
         <form hx-get="{% url 'asset_project_list' %}"
               hx-target="#project-table-container"
               hx-select="#project-table-container"
@@ -2966,11 +2922,8 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
                 <i class="fas fa-spinner fa-spin mr-2"></i> Đang tải...
             </div>
         </form>
-
         {% include "categories/partials/project_table.html" %}
-
     </div>
-
     <!-- ===== SLIDE-OVER PANEL ===== -->
     <div class="fixed inset-0 sm:inset-auto sm:top-0 sm:right-0 sm:h-screen sm:w-[480px] bg-white dark:bg-slate-800 shadow-2xl border-l border-slate-200 dark:border-slate-700 z-40 flex flex-col transform transition-transform duration-300 ease-out translate-x-full"
          :class="slideOpen ? 'translate-x-0' : 'translate-x-full'" x-cloak>
@@ -2997,13 +2950,10 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
 ````html
 {% extends 'base.html' %}
 {% load static %}
-
 {% block title %}Từ điển Dữ liệu - EVN RMS{% endblock %}
 {% block header_title %}📚 Từ điển Dữ liệu{% endblock %}
-
 {% block content %}
 <div class="space-y-6">
-
     <!-- Header + Search -->
     <div class="flex items-center justify-between">
         <div>
@@ -3011,7 +2961,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Các danh mục tham chiếu dùng chung trên toàn hệ thống</p>
         </div>
     </div>
-
     <!-- Section: Danh mục Tài sản Lưới điện -->
     <div>
         <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-3">
@@ -3023,17 +2972,14 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             <div class="bg-white dark:bg-slate-800/60 backdrop-blur-sm rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-5 hover:border-blue-300/60 dark:hover:border-blue-500/30 shadow-sm hover:shadow-lg hover:shadow-blue-500/5 dark:hover:shadow-blue-900/20 transition-all duration-300 group relative overflow-hidden flex flex-col h-full">
                 <!-- Subtle gradient glow on hover -->
                 <div class="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent dark:from-blue-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-                
                 <div class="flex items-start justify-between mb-4 relative z-10">
                     <div class="w-11 h-11 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/30 group-hover:border-blue-100 dark:group-hover:border-blue-800/50 group-hover:text-blue-600 dark:group-hover:text-blue-400 flex items-center justify-center transition-all duration-300">
                         <i class="fas fa-{% if cat.id == 'line' %}route{% elif cat.id == 'location' %}map-pin{% elif cat.id == 'project' %}building-columns{% elif cat.id == 'station' %}bolt{% elif cat.id == 'bay' %}plug{% else %}microchip{% endif %} text-lg transition-transform duration-300 group-hover:scale-110"></i>
                     </div>
                 </div>
-                
                 <div class="flex-1 relative z-10 flex flex-col">
                     <h3 class="text-sm font-bold text-slate-700 dark:text-slate-200 mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{{ cat.name }}</h3>
                     <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-5 font-medium line-clamp-1">Quản lý danh sách {{ cat.name|lower }}</p>
-                    
                     <div class="mt-auto pt-2 border-t border-slate-100 dark:border-slate-700/50">
                         <a href="{% url 'category_list' cat.id %}" class="flex items-center justify-between w-full py-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                             <span>Truy cập</span>
@@ -3046,9 +2992,7 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             {% endfor %}
         </div>
     </div>
-
     <div class="h-2"></div>
-
     <!-- Section: Danh mục Từ điển -->
     <div>
         <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-3">
@@ -3060,17 +3004,14 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             <div class="bg-white dark:bg-slate-800/60 backdrop-blur-sm rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-5 hover:border-indigo-300/60 dark:hover:border-indigo-500/30 shadow-sm hover:shadow-lg hover:shadow-indigo-500/5 dark:hover:shadow-indigo-900/20 transition-all duration-300 group relative overflow-hidden flex flex-col h-full">
                 <!-- Subtle gradient glow on hover -->
                 <div class="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent dark:from-indigo-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-                
                 <div class="flex items-start justify-between mb-4 relative z-10">
                     <div class="w-11 h-11 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-900/30 group-hover:border-indigo-100 dark:group-hover:border-indigo-800/50 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 flex items-center justify-center transition-all duration-300">
                         <i class="fas fa-{% if cat.id == 'voltage_level' %}plug-circle-bolt{% elif cat.id == 'management_unit' %}sitemap{% elif cat.id == 'manufacturer' %}industry{% elif cat.id == 'manufacturing_country' %}flag{% elif cat.id == 'ownership' %}shield-halved{% elif cat.id == 'equipment_type' %}wrench{% elif cat.id == 'operational_status' %}circle-check{% else %}list{% endif %} text-lg transition-transform duration-300 group-hover:scale-110"></i>
                     </div>
                 </div>
-                
                 <div class="flex-1 relative z-10 flex flex-col">
                     <h3 class="text-sm font-bold text-slate-700 dark:text-slate-200 mb-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{{ cat.name }}</h3>
                     <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-5 font-medium line-clamp-1">Thiết lập dữ liệu {{ cat.name|lower }}</p>
-                    
                     <div class="mt-auto pt-2 border-t border-slate-100 dark:border-slate-700/50">
                         <a href="{% url 'category_list' cat.id %}" class="flex items-center justify-between w-full py-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                             <span>Truy cập</span>
@@ -3083,7 +3024,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             {% endfor %}
         </div>
     </div>
-
 </div>
 {% endblock %}
 ````
@@ -3091,9 +3031,7 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
 ## File: templates/categories/category_list.html
 ````html
 {% extends 'base.html' %}
-
 {% block title %}Quản lý {{ category_name }} - EVN RMS{% endblock %}
-
 {% block header_title %}
 <div class="flex items-center text-sm">
     <a href="{% url 'category_dashboard' %}" class="text-slate-500 hover:text-blue-600 transition-colors">Quản lý Danh mục</a>
@@ -3101,7 +3039,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
     <span class="text-slate-800 font-semibold">{{ category_name }}</span>
 </div>
 {% endblock %}
-
 {% block content %}
 <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden transition-colors duration-200">
     <!-- Toolbar -->
@@ -3119,22 +3056,18 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500"></i>
             <input type="search" id="search-input" name="q" value="{{ q }}" placeholder="Tìm kiếm theo mã hoặc tên..." 
                    class="w-full pl-10 pr-4 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-sm text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm">
-            
             <!-- Loading indicator cho chức năng tìm kiếm & phân trang -->
             <div id="category-loading" class="htmx-indicator ml-3 text-blue-500">
                 <i class="fas fa-spinner fa-spin"></i>
             </div>
         </form>
-
         <button type="button" onclick="openCategoryModal('{% url 'category_create' category_id %}')" class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors">
             <i class="fas fa-plus mr-2"></i> Thêm mới
         </button>
     </div>
-
     <!-- Data Table -->
     {% include 'categories/partials/category_list_partial.html' %}
 </div>
-
 <!-- Modal Container -->
 <div id="modal-container"></div>
 {% endblock %}
@@ -3147,15 +3080,12 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
         <p class="text-sm font-semibold text-slate-800">{{ item_dict.setting.parameter_name }}</p>
         <p class="text-xs text-slate-500 font-mono">{{ item_dict.setting.parameter_code }}</p>
     </td>
-    
     <td class="px-4 py-3 border border-slate-200 text-right font-mono text-sm">
         {{ item_dict.setting.standard_value }} <span class="text-slate-400">{{ item_dict.setting.unit }}</span>
     </td>
-    
     <td class="px-4 py-3 border border-slate-200 text-center font-mono text-xs text-slate-600">
         [{{ item_dict.setting.tolerance_min }} - {{ item_dict.setting.tolerance_max }}]
     </td>
-    
     <td class="px-4 py-3 border border-slate-200 text-center">
         {% if item_dict.item.periodic_check.check_status == 'SCHEDULED' %}
         <div class="relative w-32 mx-auto">
@@ -3174,7 +3104,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
         <div class="font-mono text-sm">{{ item_dict.item.measured_value }} <span class="text-slate-400 text-xs">{{ item_dict.setting.unit }}</span></div>
         {% endif %}
     </td>
-    
     <td class="px-4 py-3 border border-slate-200 text-center font-mono text-sm">
         {% if item_dict.item.measured_value %}
             <span class="{% if item_dict.item.deviation_percent > 5 %}text-red-600 font-bold{% else %}text-slate-700{% endif %}">
@@ -3184,7 +3113,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             <span class="text-slate-400">-</span>
         {% endif %}
     </td>
-    
     <td class="px-4 py-3 border border-slate-200 text-center">
         {% if item_dict.item.measured_value %}
             {% if item_dict.item.is_within_tolerance %}
@@ -3206,7 +3134,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
 ## File: templates/checks/check_detail.html
 ````html
 {% extends "base.html" %}
-
 {% block title %}Đo đạc Kiểm tra Định kỳ | RMS{% endblock %}
 {% block header_title %}
 <div class="flex items-center gap-3">
@@ -3219,10 +3146,8 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
     {% endif %}
 </div>
 {% endblock %}
-
 {% block content %}
 <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-    
     <div class="p-6 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
         <div>
             <h2 class="text-lg font-semibold text-slate-800">Nhập kết quả Đo đạc Thực tế</h2>
@@ -3237,7 +3162,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
         </form>
         {% endif %}
     </div>
-
     <div class="overflow-x-auto p-6">
         <table class="w-full text-left border-collapse border border-slate-200">
             <thead>
@@ -3270,19 +3194,15 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
 ## File: templates/checks/check_form.html
 ````html
 {% extends "base.html" %}
-
 {% block title %}Lên lịch Kiểm tra | RMS{% endblock %}
 {% block header_title %}Lên lịch Kiểm tra Rơ-le{% endblock %}
-
 {% block content %}
 <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
     <div class="p-6 border-b border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800">Tạo Đợt kiểm tra mới</h2>
     </div>
-
     <form method="POST" action="{% url 'check_create' %}" class="p-6 space-y-6">
         {% csrf_token %}
-        
         <div>
             <label class="block text-sm font-medium text-slate-700 mb-2">Chọn Rơ-le</label>
             <select name="relay_id" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all bg-white">
@@ -3292,12 +3212,10 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
                 {% endfor %}
             </select>
         </div>
-
         <div>
             <label class="block text-sm font-medium text-slate-700 mb-2">Ngày dự kiến thực hiện</label>
             <input type="date" name="scheduled_date" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all">
         </div>
-
         <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
             <a href="{% url 'check_list' %}" class="px-5 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors">Hủy bỏ</a>
             <button type="submit" class="px-5 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-blue-700 transition-colors shadow-sm">Lên lịch</button>
@@ -3310,20 +3228,16 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
 ## File: templates/checks/check_list.html
 ````html
 {% extends "base.html" %}
-
 {% block title %}Kiểm tra Định kỳ | RMS{% endblock %}
 {% block header_title %}Lịch Kiểm tra Định kỳ Rơ-le{% endblock %}
-
 {% block content %}
 <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden transition-colors duration-200">
-    
     <div class="p-6 border-b border-slate-100 dark:border-slate-700 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <h2 class="text-lg font-semibold text-slate-800 dark:text-white">Danh sách Đợt Kiểm tra</h2>
         <a href="{% url 'check_create' %}" class="px-4 py-2 bg-primary dark:bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 dark:hover:bg-blue-700 transition-colors inline-flex items-center gap-2 shadow-sm">
             <i class="fas fa-calendar-plus"></i> Lên lịch mới
         </a>
     </div>
-
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
             <thead>
@@ -3432,7 +3346,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
 {% block title %}Tổng quan Hệ thống | RMS{% endblock %}
 {% block header_title %}Tổng quan Hệ thống{% endblock %}
 {% block content %}
-
 <!-- ===== ROW 1: KPI CARDS ===== -->
 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4 mb-6">
     <!-- Card 1 -->
@@ -3520,7 +3433,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
         <p class="text-slate-500 dark:text-slate-400 text-[11px] mt-3 relative z-10"><span class="text-red-600 dark:text-red-400 font-medium">phiếu</span> chờ admin</p>
     </div>
 </div>
-
 <!-- ===== ROW 2: Charts ===== -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
     <!-- Area Chart (Lưu lượng) -->
@@ -3551,7 +3463,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             <canvas id="areaChart"></canvas>
         </div>
     </div>
-
     <!-- Doughnut Chart (Trạng thái) -->
     <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700">
         <h3 class="text-base font-bold text-slate-800 dark:text-white mb-1">Trạng thái Phiếu</h3>
@@ -3561,7 +3472,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
         </div>
     </div>
 </div>
-
 <!-- ===== ROW 3: Asset Status Cards & Activity ===== -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <!-- Quick Links -->
@@ -3602,7 +3512,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             </a>
         </div>
     </div>
-
     <!-- System Health -->
     <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700">
         <h3 class="text-base font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
@@ -3653,7 +3562,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
         </div>
     </div>
 </div>
-
 <script>
     function toggleCustomDates() {
         const period = document.getElementById('periodSelect').value;
@@ -3665,18 +3573,15 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             document.getElementById('chartFilterForm').submit();
         }
     }
-
     (function() {
         // 1. Area Chart (Lưu lượng tạo Phiếu)
         const areaChartEl = document.getElementById('areaChart');
         if (!areaChartEl) return;
         const ctxArea = areaChartEl.getContext('2d');
-        
         // Create modern gradient for area chart
         const gradientArea = ctxArea.createLinearGradient(0, 0, 0, 300);
         gradientArea.addColorStop(0, 'rgba(59, 130, 246, 0.5)'); // Blue-500
         gradientArea.addColorStop(1, 'rgba(59, 130, 246, 0.0)');
-
         new Chart(ctxArea, {
             type: 'line',
             data: {
@@ -3728,7 +3633,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
                 maintainAspectRatio: false
             }
         });
-        
         // 2. Doughnut Chart (Trạng thái Phiếu)
         const ctxStatus = document.getElementById('statusChart');
         if (ctxStatus) {
@@ -3797,7 +3701,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
         </a>
     </div>
 </div>
-
 <!-- Premium Stats Cards -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
     <!-- Card 1: Chờ Rà soát -->
@@ -3819,7 +3722,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             <span class="text-[10px] font-bold text-amber-600 bg-amber-100/50 px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">Xem <i class="fas fa-arrow-right"></i></span>
         </div>
     </a>
-    
     <!-- Card 2: Đã chuyển về trạm -->
     <a href="{% url 'sheet_list' %}?status=ROUTED_TO_STATION" class="block relative overflow-hidden bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-white dark:border-slate-700 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 group animate-fade-in-up cursor-pointer" style="animation-delay: 100ms;">
         <div class="absolute -right-4 -top-4 w-28 h-28 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all duration-500"></div>
@@ -3839,7 +3741,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             <span class="text-[10px] font-bold text-blue-600 bg-blue-100/50 px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">Xem <i class="fas fa-arrow-right"></i></span>
         </div>
     </a>
-    
     <!-- Card 3: KTV đang thi công -->
     <a href="{% url 'sheet_list' %}?status=TRANSFERRED,RECEIVED" class="block relative overflow-hidden bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-white dark:border-slate-700 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 group animate-fade-in-up cursor-pointer" style="animation-delay: 200ms;">
         <div class="absolute -right-4 -top-4 w-28 h-28 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all duration-500"></div>
@@ -3864,7 +3765,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
         </div>
     </a>
 </div>
-
 <!-- ===== ROW 2: Charts ===== -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
     <!-- Area Chart (Lưu lượng) -->
@@ -3874,7 +3774,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
                 <h3 class="text-base font-bold text-slate-800 dark:text-white">{{ chart_title|default:"Lưu lượng tạo Phiếu (7 ngày qua)" }}</h3>
                 <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Thống kê số lượng phiếu bạn đã khởi tạo</p>
             </div>
-            
             <!-- Professional Popover Date Range Picker -->
             <div x-data="{ open: false }" class="relative z-20">
                 <!-- Trigger Button -->
@@ -3890,7 +3789,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
                     </span>
                     <i class="fas fa-chevron-down text-xs text-slate-400 ml-1 transition-transform duration-200" :class="open ? 'rotate-180' : ''"></i>
                 </button>
-
                 <!-- Popover Menu -->
                 <div x-show="open" @click.outside="open = false" x-cloak 
                      x-transition:enter="transition ease-out duration-200"
@@ -3900,7 +3798,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
                      x-transition:leave-start="opacity-100 translate-y-0 scale-100"
                      x-transition:leave-end="opacity-0 translate-y-2 scale-95"
                      class="absolute top-full right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl z-50 w-[320px] overflow-hidden flex flex-col origin-top-right">
-                    
                     <!-- Presets (Quick Select) -->
                     <div class="flex flex-col p-2 bg-slate-50/80 dark:bg-slate-800/80 border-b border-slate-100 dark:border-slate-700">
                         <a href="?period=7days" class="px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm rounded-lg transition-all {% if period == '7days' or not period %}font-bold text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-700 shadow-sm ring-1 ring-slate-200 dark:ring-slate-600{% endif %}">7 ngày qua</a>
@@ -3908,7 +3805,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
                         <a href="?period=last_month" class="px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm rounded-lg transition-all {% if period == 'last_month' %}font-bold text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-700 shadow-sm ring-1 ring-slate-200 dark:ring-slate-600{% endif %}">Tháng trước</a>
                         <a href="?period=this_year" class="px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm rounded-lg transition-all {% if period == 'this_year' %}font-bold text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-700 shadow-sm ring-1 ring-slate-200 dark:ring-slate-600{% endif %}">Năm nay</a>
                     </div>
-                    
                     <!-- Custom Range Form -->
                     <form method="GET" class="p-4 bg-white dark:bg-slate-800 flex flex-col gap-3">
                         <input type="hidden" name="period" value="custom">
@@ -3916,7 +3812,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
                             <span>Tùy chỉnh ngày</span>
                             <div class="flex-1 h-px bg-slate-100 dark:bg-slate-700"></div>
                         </div>
-                        
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1 block">Từ ngày</label>
@@ -3927,7 +3822,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
                                 <input type="date" name="end_date" value="{{ end_date }}" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 text-sm rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
                             </div>
                         </div>
-                        
                         <div class="flex gap-2 mt-2 pt-2">
                             <button type="button" @click="open = false" class="flex-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 font-bold py-2 px-4 rounded-lg text-sm transition-colors">
                                 Hủy
@@ -3944,7 +3838,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             <canvas id="areaChart"></canvas>
         </div>
     </div>
-
     <!-- Doughnut Chart (Trạng thái) -->
     <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700">
         <h3 class="text-base font-bold text-slate-800 dark:text-white mb-1">Trạng thái Phiếu</h3>
@@ -3954,7 +3847,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
         </div>
     </div>
 </div>
-
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
     <!-- Task Tracker (Takes up 2/3 of space on lg screens) -->
     <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden flex flex-col animate-fade-in-up transition-colors" style="animation-delay: 300ms;">
@@ -3966,7 +3858,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
                 Xem tất cả <i class="fas fa-arrow-right ml-1"></i>
             </a>
         </div>
-        
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -4028,16 +3919,13 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             </table>
         </div>
     </div>
-    
     <!-- System Activity Log (Takes up 1/3 of space on lg screens) -->
     <div class="lg:col-span-1 bg-slate-900 rounded-2xl p-6 shadow-lg flex flex-col relative overflow-hidden border border-slate-800 animate-fade-in-up" style="animation-delay: 400ms;">
         <div class="absolute top-0 right-0 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl"></div>
         <div class="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl"></div>
-        
         <div class="flex justify-between items-center mb-6 relative z-10">
             <h3 class="text-base font-bold text-white flex items-center gap-2"><i class="fas fa-bolt text-amber-400"></i> Dòng Sự Kiện (Chữ Ký)</h3>
         </div>
-        
         <div class="space-y-4 flex-1 relative z-10 before:absolute before:inset-0 before:ml-[11px] before:h-full before:w-0.5 before:bg-gradient-to-b before:from-slate-700 before:to-transparent">
             {% for act in recent_activities %}
             <div class="relative flex items-start gap-3 group">
@@ -4061,7 +3949,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
         </div>
     </div>
 </div>
-
 <script>
     (function() {
         // 1. Area Chart (Lưu lượng tạo Phiếu)
@@ -4071,7 +3958,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
             const gradientArea = ctx.createLinearGradient(0, 0, 0, 300);
             gradientArea.addColorStop(0, 'rgba(59, 130, 246, 0.5)'); // Blue-500
             gradientArea.addColorStop(1, 'rgba(59, 130, 246, 0.0)');
-
             new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -4121,7 +4007,6 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
                 }
             });
         }
-
         // 2. Doughnut Chart (Trạng thái Phiếu) - Upgraded
         const ctxStatus = document.getElementById('statusChart');
         if (ctxStatus) {
@@ -4195,9 +4080,7 @@ class SheetReviewView(UserPassesTestMixin, DetailView):
 ## File: templates/core/dashboard_station_leader.html
 ````html
 {% extends "base.html" %}
-
 {% block title %}Dashboard | Trưởng nhóm Trạm{% endblock %}
-
 {% block header_title %}
 Dashboard Điều Hành - 
 {% if my_station %}
@@ -4206,10 +4089,8 @@ Dashboard Điều Hành -
 <span class="text-rose-500 font-extrabold ml-1">Chưa được gán Trạm</span>
 {% endif %}
 {% endblock %}
-
 {% block content %}
 <div class="h-full flex flex-col gap-6 animate-fade-in-up">
-
     {% if not my_station %}
     <div class="bg-rose-50/80 dark:bg-rose-900/20 border-l-4 border-rose-500 p-5 rounded-xl shadow-sm mb-4 flex items-center backdrop-blur-sm">
         <div class="flex-shrink-0 w-10 h-10 bg-rose-100 dark:bg-rose-800 rounded-full flex items-center justify-center">
@@ -4221,7 +4102,6 @@ Dashboard Điều Hành -
         </div>
     </div>
     {% endif %}
-
     <!-- Thống kê tổng quan (KPIs) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Card 1: Cần phân công -->
@@ -4245,7 +4125,6 @@ Dashboard Điều Hành -
                 </div>
             </div>
         </div>
-
         <!-- Card 2: Đang thực thi -->
         <div class="relative bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700/60 overflow-hidden group hover:shadow-md transition-all duration-300">
             <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 dark:bg-blue-500/10 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
@@ -4259,7 +4138,6 @@ Dashboard Điều Hành -
                 </div>
             </div>
         </div>
-
         <!-- Card 3: Chờ giám sát -->
         <div class="relative bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700/60 overflow-hidden group hover:shadow-md transition-all duration-300">
             <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 dark:bg-amber-500/10 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
@@ -4273,7 +4151,6 @@ Dashboard Điều Hành -
                 </div>
             </div>
         </div>
-
         <!-- Card 4: Hoàn thành -->
         <div class="relative bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700/60 overflow-hidden group hover:shadow-md transition-all duration-300">
             <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 dark:bg-emerald-500/10 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
@@ -4288,7 +4165,6 @@ Dashboard Điều Hành -
             </div>
         </div>
     </div>
-
     <!-- Layout Biểu đồ (Charts) -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Biểu đồ khối lượng công việc KTV -->
@@ -4297,7 +4173,6 @@ Dashboard Điều Hành -
                 <h3 class="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
                     <i class="fas fa-chart-column text-indigo-500 dark:text-indigo-400"></i> {{ chart_title|default:"Số Lượng Phiếu (7 Ngày Qua)" }}
                 </h3>
-                
                 <!-- Professional Popover Date Range Picker -->
                 <div x-data="{ open: false }" class="relative z-20">
                     <!-- Trigger Button -->
@@ -4313,7 +4188,6 @@ Dashboard Điều Hành -
                         </span>
                         <i class="fas fa-chevron-down text-xs text-slate-400 ml-1 transition-transform duration-200" :class="open ? 'rotate-180' : ''"></i>
                     </button>
-
                     <!-- Popover Menu -->
                     <div x-show="open" @click.outside="open = false" x-cloak 
                          x-transition:enter="transition ease-out duration-200"
@@ -4323,7 +4197,6 @@ Dashboard Điều Hành -
                          x-transition:leave-start="opacity-100 translate-y-0 scale-100"
                          x-transition:leave-end="opacity-0 translate-y-2 scale-95"
                          class="absolute top-full right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl z-50 w-[320px] overflow-hidden flex flex-col origin-top-right">
-                        
                         <!-- Presets (Quick Select) -->
                         <div class="flex flex-col p-2 bg-slate-50/80 dark:bg-slate-800/80 border-b border-slate-100 dark:border-slate-700">
                             <a href="?period=7days" class="px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm rounded-lg transition-all {% if period == '7days' or not period %}font-bold text-indigo-600 dark:text-indigo-400 bg-white dark:bg-slate-700 shadow-sm ring-1 ring-slate-200 dark:ring-slate-600{% endif %}">7 ngày qua</a>
@@ -4331,7 +4204,6 @@ Dashboard Điều Hành -
                             <a href="?period=last_month" class="px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm rounded-lg transition-all {% if period == 'last_month' %}font-bold text-indigo-600 dark:text-indigo-400 bg-white dark:bg-slate-700 shadow-sm ring-1 ring-slate-200 dark:ring-slate-600{% endif %}">Tháng trước</a>
                             <a href="?period=this_year" class="px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:shadow-sm rounded-lg transition-all {% if period == 'this_year' %}font-bold text-indigo-600 dark:text-indigo-400 bg-white dark:bg-slate-700 shadow-sm ring-1 ring-slate-200 dark:ring-slate-600{% endif %}">Năm nay</a>
                         </div>
-                        
                         <!-- Custom Range Form -->
                         <form method="GET" class="p-4 bg-white dark:bg-slate-800 flex flex-col gap-3">
                             <input type="hidden" name="period" value="custom">
@@ -4339,7 +4211,6 @@ Dashboard Điều Hành -
                                 <span>Tùy chỉnh ngày</span>
                                 <div class="flex-1 h-px bg-slate-100 dark:bg-slate-700"></div>
                             </div>
-                            
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
                                     <label class="text-[11px] font-semibold text-slate-600 dark:text-slate-300 mb-1 block">Từ ngày</label>
@@ -4350,7 +4221,6 @@ Dashboard Điều Hành -
                                     <input type="date" name="end_date" value="{{ end_date }}" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 text-sm rounded-lg p-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors">
                                 </div>
                             </div>
-                            
                             <div class="flex gap-2 mt-2 pt-2">
                                 <button type="button" @click="open = false" class="flex-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 font-bold py-2 px-4 rounded-lg text-sm transition-colors">
                                     Hủy
@@ -4369,7 +4239,6 @@ Dashboard Điều Hành -
                 </div>
             </div>
         </div>
-
         <!-- Biểu đồ phân bổ -->
         <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 overflow-hidden flex flex-col h-full transition-colors">
             <div class="px-6 py-5 border-b border-slate-100 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-800/50">
@@ -4384,10 +4253,8 @@ Dashboard Điều Hành -
             </div>
         </div>
     </div>
-
     <!-- Layout Danh sách & Nhân sự -->
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        
         <!-- Cột trái (2/3): Bảng công việc -->
         <div class="xl:col-span-2 flex flex-col gap-6">
             <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 overflow-hidden flex flex-col h-full">
@@ -4486,10 +4353,8 @@ Dashboard Điều Hành -
                 </div>
             </div>
         </div>
-        
         <!-- Cột phải (1/3): Nhân sự -->
         <div class="xl:col-span-1 flex flex-col gap-6">
-            
             <!-- Tình trạng nhân sự -->
             <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 overflow-hidden flex flex-col h-full transition-colors">
                 <div class="px-6 py-5 border-b border-slate-100 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-800/50">
@@ -4542,23 +4407,19 @@ Dashboard Điều Hành -
         </div>
     </div>
 </div>
-
 <script>
     (function initStationChart() {
         // --- Shared Config ---
         const isDarkMode = document.documentElement.classList.contains('dark');
         const textColor = isDarkMode ? '#94a3b8' : '#64748b'; // slate-400 or slate-500
         const gridColor = isDarkMode ? '#334155' : '#e2e8f0'; // slate-700 or slate-200
-        
         // --- 1. Doughnut Chart (Tổng Quan) ---
         const doughnutEl = document.getElementById('stationChart');
         if (doughnutEl) {
             let existingChart = Chart.getChart(doughnutEl);
             if (existingChart) existingChart.destroy();
-
             const dCtx = doughnutEl.getContext('2d');
             const dData = {{ doughnut_data|safe }};
-            
             if (dData.reduce((a, b) => a + b, 0) === 0) {
                 new Chart(dCtx, {
                     type: 'doughnut',
@@ -4595,27 +4456,22 @@ Dashboard Điều Hành -
                 });
             }
         }
-
         // --- 2. Bar Chart (Tech Workload) ---
         const barChartEl = document.getElementById('techWorkloadChart');
         if (barChartEl) {
             let existingBarChart = Chart.getChart(barChartEl);
             if (existingBarChart) existingBarChart.destroy();
-
             const barCtx = barChartEl.getContext('2d');
             const techLabels = {{ tech_chart_labels|safe|default:"[]" }};
             const techData = {{ tech_chart_data|safe|default:"[]" }};
-
             if (Array.isArray(techLabels) && techLabels.length > 0) {
                 // Tạo gradient chuyên nghiệp cho biểu đồ
                 const gradient = barCtx.createLinearGradient(0, 0, 0, 300);
                 gradient.addColorStop(0, 'rgba(99, 102, 241, 0.85)'); // indigo-500
                 gradient.addColorStop(1, 'rgba(139, 92, 246, 0.6)'); // violet-500
-                
                 const hoverGradient = barCtx.createLinearGradient(0, 0, 0, 300);
                 hoverGradient.addColorStop(0, 'rgba(79, 70, 229, 1)'); // indigo-600
                 hoverGradient.addColorStop(1, 'rgba(124, 58, 237, 0.9)'); // violet-600
-
                 new Chart(barCtx, {
                     type: 'bar',
                     data: {
@@ -4711,7 +4567,6 @@ Dashboard Điều Hành -
 ## File: templates/core/dashboard_supervisor.html
 ````html
 {% extends "base.html" %}
-
 {% block title %}Dashboard | Giám sát viên{% endblock %}
 {% block header_title %}
 Dashboard Giám Sát - 
@@ -4721,10 +4576,8 @@ Dashboard Giám Sát -
 <span class="text-red-500 font-bold ml-1">Chưa được gán Trạm</span>
 {% endif %}
 {% endblock %}
-
 {% block content %}
 <div class="min-h-full flex flex-col gap-6 pb-8 animate-fade-in-up">
-
     {% if not my_station %}
     <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-xl shadow-sm mb-4">
         <div class="flex">
@@ -4735,7 +4588,6 @@ Dashboard Giám Sát -
         </div>
     </div>
     {% endif %}
-
     <!-- PART 1: NEAT KPIs -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         <!-- KPI 1 -->
@@ -4751,7 +4603,6 @@ Dashboard Giám Sát -
                 <i class="fas fa-eye"></i>
             </div>
         </div>
-
         <!-- KPI 2 -->
         <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between group hover:border-orange-400 dark:hover:border-orange-500 transition-colors">
             <div>
@@ -4765,7 +4616,6 @@ Dashboard Giám Sát -
                 <i class="fas fa-clipboard-check"></i>
             </div>
         </div>
-
         <!-- KPI 3 -->
         <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between group hover:border-blue-400 dark:hover:border-blue-500 transition-colors">
             <div>
@@ -4779,7 +4629,6 @@ Dashboard Giám Sát -
                 <i class="fas fa-check-circle"></i>
             </div>
         </div>
-        
         <!-- KPI 4 -->
         <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between group hover:border-indigo-400 dark:hover:border-indigo-500 transition-colors">
             <div>
@@ -4794,7 +4643,6 @@ Dashboard Giám Sát -
             </div>
         </div>
     </div>
-
     <!-- PART 2: ANALYTICS CHARTS -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Bar Chart -->
@@ -4809,7 +4657,6 @@ Dashboard Giám Sát -
                 <canvas id="techPerformanceChart"></canvas>
             </div>
         </div>
-
         <!-- Donut Chart -->
         <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col">
             <h3 class="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
@@ -4820,7 +4667,6 @@ Dashboard Giám Sát -
             </div>
         </div>
     </div>
-
     <!-- PART 3: TASK LIST -->
     <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden flex-1 flex flex-col">
         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center p-5 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 gap-4">
@@ -4901,9 +4747,7 @@ Dashboard Giám Sát -
             </table>
         </div>
     </div>
-
 </div>
-
 <script>
     (function() {
         Chart.defaults.font.family = "'Inter', 'Segoe UI', sans-serif";
@@ -4913,7 +4757,6 @@ Dashboard Giám Sát -
         Chart.defaults.plugins.tooltip.bodyColor = document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#475569';
         Chart.defaults.plugins.tooltip.borderColor = document.documentElement.classList.contains('dark') ? '#334155' : '#e2e8f0';
         Chart.defaults.plugins.tooltip.borderWidth = 1;
-
         // Chart 1: Station Overview (Doughnut)
         const ctxStatus = document.getElementById('stationStatusChart');
         if (ctxStatus && window.Chart) {
@@ -4951,7 +4794,6 @@ Dashboard Giám Sát -
                 }
             });
         }
-
         // Chart 2: Technician Performance (Dynamic data)
         const ctxTech = document.getElementById('techPerformanceChart');
         if (ctxTech && window.Chart) {
@@ -5004,7 +4846,6 @@ Dashboard Giám Sát -
 ## File: templates/core/dashboard_technician.html
 ````html
 {% extends "base.html" %}
-
 {% block title %}Bàn làm việc | Kỹ thuật viên{% endblock %}
 {% block header_title %}
 Dashboard Kỹ Thuật Viên - 
@@ -5014,10 +4855,8 @@ Dashboard Kỹ Thuật Viên -
 <span class="text-red-500 font-bold ml-1">Chưa được phân bổ Trạm</span>
 {% endif %}
 {% endblock %}
-
 {% block content %}
 <div class="min-h-full flex flex-col gap-6 animate-fade-in-up pb-8">
-
     <!-- PART 1: KPI CARDS -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Card 1: Chờ tiếp nhận -->
@@ -5036,7 +4875,6 @@ Dashboard Kỹ Thuật Viên -
                 Phiếu mới từ Trưởng nhóm
             </div>
         </div>
-
         <!-- Card 2: Đang thao tác -->
         <div class="relative overflow-hidden bg-gradient-to-br from-blue-50/80 to-cyan-100/80 dark:from-slate-800 dark:to-blue-900/40 backdrop-blur-md rounded-2xl p-6 shadow-sm border border-white/60 dark:border-slate-700/50 group hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
             <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/10 rounded-full blur-xl group-hover:bg-blue-500/20 transition-all duration-500"></div>
@@ -5053,7 +4891,6 @@ Dashboard Kỹ Thuật Viên -
                 Đang trong quá trình xử lý
             </div>
         </div>
-
         <!-- Card 3: Đã hoàn thành -->
         <div class="relative overflow-hidden bg-gradient-to-br from-emerald-50/80 to-green-100/80 dark:from-slate-800 dark:to-emerald-900/40 backdrop-blur-md rounded-2xl p-6 shadow-sm border border-white/60 dark:border-slate-700/50 group hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
             <div class="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/20 transition-all duration-500"></div>
@@ -5071,7 +4908,6 @@ Dashboard Kỹ Thuật Viên -
             </div>
         </div>
     </div>
-
     <!-- Warning if no station -->
     {% if not my_station %}
     <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-xl shadow-sm">
@@ -5083,10 +4919,8 @@ Dashboard Kỹ Thuật Viên -
         </div>
     </div>
     {% endif %}
-
     <!-- PART 2: ANALYTICS & CHARTS -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
         <!-- Left: Productivity & Progress (Takes up 2/3) -->
         <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col">
             <!-- Progress Bar Strip -->
@@ -5104,7 +4938,6 @@ Dashboard Kỹ Thuật Viên -
                 </div>
                 <p class="text-xs text-slate-500 mt-2 text-right">Hoàn thành {{ completed }}/{{ total_tasks }} phiếu được giao</p>
             </div>
-            
             <!-- Bar Chart -->
             <div class="p-6 flex-1 flex flex-col">
                 <h3 class="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
@@ -5115,7 +4948,6 @@ Dashboard Kỹ Thuật Viên -
                 </div>
             </div>
         </div>
-
         <!-- Right: Status Distribution (Takes up 1/3) -->
         <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 flex flex-col">
             <h3 class="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
@@ -5125,9 +4957,7 @@ Dashboard Kỹ Thuật Viên -
                 <canvas id="taskStatusChart"></canvas>
             </div>
         </div>
-
     </div>
-
     <!-- PART 3: ACTION CENTER (TASK LIST) -->
     <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col">
         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center p-5 lg:px-6 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 gap-4">
@@ -5141,7 +4971,6 @@ Dashboard Kỹ Thuật Viên -
                 Xem toàn bộ kho phiếu <i class="fas fa-arrow-right text-xs ml-1"></i>
             </a>
         </div>
-
         {% if recent_sheets %}
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
@@ -5201,13 +5030,11 @@ Dashboard Kỹ Thuật Viên -
         {% endif %}
     </div>
 </div>
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Shared Chart Settings
         Chart.defaults.font.family = "'Inter', 'Segoe UI', sans-serif";
         Chart.defaults.color = document.documentElement.classList.contains('dark') ? '#94a3b8' : '#64748b';
-
         // Chart 1: Task Status (Doughnut)
         const ctxStatus = document.getElementById('taskStatusChart');
         if (ctxStatus && window.Chart) {
@@ -5253,7 +5080,6 @@ Dashboard Kỹ Thuật Viên -
                 }
             });
         }
-
         // Chart 2: Weekly Performance (Mock data)
         const ctxWeekly = document.getElementById('weeklyPerformanceChart');
         if (ctxWeekly && window.Chart) {
@@ -5316,14 +5142,10 @@ Dashboard Kỹ Thuật Viên -
 ## File: templates/core/dashboard.html
 ````html
 {% extends "base.html" %}
-
 {% block title %}Dashboard | RMS{% endblock %}
 {% block header_title %}Tổng quan Hệ thống RMS{% endblock %}
-
 {% block content %}
-
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    
     <!-- Card 1 -->
     <div class="bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-800/80 rounded-2xl p-6 shadow-sm border border-slate-100/60 dark:border-slate-700 flex items-center justify-between hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
         <div>
@@ -5334,7 +5156,6 @@ Dashboard Kỹ Thuật Viên -
             <i class="fas fa-file-alt"></i>
         </div>
     </div>
-    
     <!-- Card 2 -->
     <div class="bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-800/80 rounded-2xl p-6 shadow-sm border border-slate-100/60 dark:border-slate-700 flex items-center justify-between hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
         <div>
@@ -5345,7 +5166,6 @@ Dashboard Kỹ Thuật Viên -
             <i class="fas fa-pen-nib"></i>
         </div>
     </div>
-    
     <!-- Card 3 -->
     <div class="bg-gradient-to-br from-white to-amber-50/30 dark:from-slate-800 dark:to-slate-800/80 rounded-2xl p-6 shadow-sm border border-slate-100/60 dark:border-slate-700 flex items-center justify-between hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
         <div>
@@ -5356,7 +5176,6 @@ Dashboard Kỹ Thuật Viên -
             <i class="fas fa-clock"></i>
         </div>
     </div>
-    
     <!-- Card 4 -->
     <div class="bg-gradient-to-br from-white to-emerald-50/30 dark:from-slate-800 dark:to-slate-800/80 rounded-2xl p-6 shadow-sm border border-slate-100/60 dark:border-slate-700 flex items-center justify-between hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
         <div>
@@ -5368,7 +5187,6 @@ Dashboard Kỹ Thuật Viên -
         </div>
     </div>
 </div>
-
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
     <!-- Chart Section (Bar Chart) -->
     <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 transition-colors">
@@ -5377,7 +5195,6 @@ Dashboard Kỹ Thuật Viên -
             <canvas id="barChart"></canvas>
         </div>
     </div>
-    
     <!-- Chart Section (Doughnut Chart) -->
     <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 transition-colors">
         <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-2"><i class="fas fa-chart-pie text-evn-blue dark:text-blue-400"></i> Tỷ lệ Trạng thái Phiếu</h3>
@@ -5390,7 +5207,6 @@ Dashboard Kỹ Thuật Viên -
         </div>
     </div>
 </div>
-
 <!-- Activity Section -->
 <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 transition-colors">
     <div class="flex items-center justify-between mb-6">
@@ -5419,14 +5235,12 @@ Dashboard Kỹ Thuật Viên -
         {% endfor %}
     </div>
 </div>
-
 <script>
 (function() {
     // Data from Django
     const labels = {{ chart_labels|safe }};
     const data = {{ chart_data|safe }};
     const doughnutData = {{ doughnut_data|safe }};
-    
     // Bar Chart
     const barChartEl = document.getElementById('barChart');
     if (!barChartEl) return;
@@ -5474,7 +5288,6 @@ Dashboard Kỹ Thuật Viên -
             animation: { duration: 1000, easing: 'easeOutQuart' }
         }
     });
-
     // Doughnut Chart
     const pieChartEl = document.getElementById('pieChart');
     if (!pieChartEl) return;
@@ -5520,11 +5333,8 @@ Dashboard Kỹ Thuật Viên -
 ## File: templates/core/manage_team.html
 ````html
 {% extends "base.html" %}
-
 {% block title %}Quản lý Đội ngũ | Trưởng nhóm Trạm{% endblock %}
-
 {% block header_title %}Quản lý Đội ngũ Trực ca - {{ my_station.station_code }}{% endblock %}
-
 {% block content %}
 <div class="flex flex-col gap-6 animate-fade-in-up" id="manage-team-content" x-data="{ 
     search: '', 
@@ -5557,7 +5367,6 @@ Dashboard Kỹ Thuật Viên -
             </div>
         </div>
     </div>
-
     <!-- Tabs -->
     <div class="flex gap-4 border-b border-slate-200 dark:border-slate-700/60">
         <button @click="activeTab = 'technician'; search = ''" 
@@ -5571,7 +5380,6 @@ Dashboard Kỹ Thuật Viên -
             <i class="fas fa-user-shield"></i> Giám sát viên ({{ station_supervisors|length }})
         </button>
     </div>
-
     <!-- Technician Table -->
     <div x-show="activeTab === 'technician'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 overflow-hidden">
         <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-800/50 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
@@ -5696,7 +5504,6 @@ Dashboard Kỹ Thuật Viên -
             </table>
         </div>
     </div>
-
     <!-- Supervisor Table -->
     <div x-show="activeTab === 'supervisor'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/60 overflow-hidden" style="display: none;">
         <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-800/50 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
@@ -5815,7 +5622,6 @@ Dashboard Kỹ Thuật Viên -
             </table>
         </div>
     </div>
-
     <!-- Assign Modal -->
     <template x-teleport="body">
         <div x-show="assignModalOpen" x-init="if (window.htmx) htmx.process($el)" class="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto overflow-x-hidden bg-slate-900/60 backdrop-blur-sm" x-cloak>
@@ -5828,7 +5634,6 @@ Dashboard Kỹ Thuật Viên -
                  x-transition:leave="ease-in duration-200"
                  x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
                  x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-                
                 <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 flex justify-between items-center">
                     <h3 class="text-lg font-bold text-slate-800 dark:text-white" x-show="!isSupervisor">
                         <i class="fas fa-clipboard-check text-emerald-500 mr-2"></i> Giao việc cho KTV <span class="text-indigo-600 dark:text-indigo-400" x-text="selectedUserName"></span>
@@ -5840,7 +5645,6 @@ Dashboard Kỹ Thuật Viên -
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
-                
                 <form hx-post="{% url 'manage_team' %}" 
                       hx-target="#manage-team-content" 
                       hx-select="#manage-team-content" 
@@ -5863,7 +5667,6 @@ Dashboard Kỹ Thuật Viên -
                     {% csrf_token %}
                     <input type="hidden" name="tech_id" :value="selectedUserId" :disabled="isSupervisor">
                     <input type="hidden" name="sup_id" :value="selectedUserId" :disabled="!isSupervisor">
-                    
                     <div class="p-6 max-h-[60vh] overflow-y-auto">
                         <!-- List for Technicians -->
                         <div x-show="!isSupervisor">
@@ -5896,7 +5699,6 @@ Dashboard Kỹ Thuật Viên -
                             </div>
                             {% endif %}
                         </div>
-
                         <!-- List for Supervisors -->
                         <div x-show="isSupervisor" style="display: none;">
                             {% if unassigned_sup_sheets %}
@@ -5931,12 +5733,10 @@ Dashboard Kỹ Thuật Viên -
                             {% endif %}
                         </div>
                     </div>
-                    
                     <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 flex justify-end gap-3">
                         <button type="button" @click="assignModalOpen = false" class="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
                             Hủy bỏ
                         </button>
-                        
                         <div x-show="!isSupervisor">
                             {% if unassigned_sheets %}
                             <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-bold shadow-md shadow-indigo-500/20 transition-colors flex items-center gap-2">
@@ -5944,7 +5744,6 @@ Dashboard Kỹ Thuật Viên -
                             </button>
                             {% endif %}
                         </div>
-                        
                         <div x-show="isSupervisor" style="display: none;">
                             {% if unassigned_sup_sheets %}
                             <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-bold shadow-md shadow-indigo-500/20 transition-colors flex items-center gap-2">
@@ -5964,12 +5763,9 @@ Dashboard Kỹ Thuật Viên -
 ## File: templates/core/profile.html
 ````html
 {% extends "base.html" %}
-
 {% block header_title %}Thông tin tài khoản{% endblock %}
-
 {% block content %}
 <div class="max-w-4xl mx-auto py-6">
-    
     <!-- Profile Header Card -->
     <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden mb-6 relative">
         <div class="h-32 bg-gradient-to-r from-brand-600 to-indigo-700"></div>
@@ -5995,27 +5791,22 @@ Dashboard Kỹ Thuật Viên -
             </div>
         </div>
     </div>
-
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Left Col: Details -->
         <div class="md:col-span-2 space-y-6">
-            
             <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
                 <h2 class="text-base font-bold text-slate-800 dark:text-white mb-5 flex items-center gap-2">
                     <i class="fas fa-id-card text-brand-500"></i> Thông tin cơ bản
                 </h2>
-                
                 <div class="space-y-4">
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-1 sm:gap-4 border-b border-slate-100 dark:border-slate-700 pb-4">
                         <div class="text-sm font-medium text-slate-500 dark:text-slate-400">Họ và tên</div>
                         <div class="text-sm font-semibold text-slate-800 dark:text-slate-200 sm:col-span-2">{{ user.first_name|default:"Chưa cập nhật" }}</div>
                     </div>
-                    
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-1 sm:gap-4 border-b border-slate-100 dark:border-slate-700 pb-4">
                         <div class="text-sm font-medium text-slate-500 dark:text-slate-400">Email</div>
                         <div class="text-sm font-semibold text-slate-800 dark:text-slate-200 sm:col-span-2">{{ user.email|default:"Chưa cập nhật" }}</div>
                     </div>
-
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-1 sm:gap-4 border-b border-slate-100 dark:border-slate-700 pb-4">
                         <div class="text-sm font-medium text-slate-500 dark:text-slate-400">Trạng thái</div>
                         <div class="text-sm font-semibold sm:col-span-2">
@@ -6030,24 +5821,19 @@ Dashboard Kỹ Thuật Viên -
                             {% endif %}
                         </div>
                     </div>
-
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-1 sm:gap-4 pt-1">
                         <div class="text-sm font-medium text-slate-500 dark:text-slate-400">Ngày tham gia</div>
                         <div class="text-sm font-semibold text-slate-800 dark:text-slate-200 sm:col-span-2">{{ user.date_joined|date:"d/m/Y H:i" }}</div>
                     </div>
                 </div>
             </div>
-
         </div>
-
         <!-- Right Col: Roles & Permissions -->
         <div class="space-y-6">
-            
             <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
                 <h2 class="text-base font-bold text-slate-800 dark:text-white mb-5 flex items-center gap-2">
                     <i class="fas fa-shield-halved text-brand-500"></i> Vai trò & Đơn vị
                 </h2>
-                
                 <div class="space-y-5">
                     <div>
                         <div class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Vai trò Hệ thống</div>
@@ -6057,7 +5843,6 @@ Dashboard Kỹ Thuật Viên -
                                 <i class="fas fa-crown text-purple-500"></i> Quản trị tối cao
                             </span>
                             {% endif %}
-                            
                             {% for group in user.groups.all %}
                             <span class="inline-flex items-center px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-bold border border-blue-200 dark:border-blue-800/50">
                                 {{ group.name }}
@@ -6069,7 +5854,6 @@ Dashboard Kỹ Thuật Viên -
                             {% endfor %}
                         </div>
                     </div>
-
                     <div>
                         <div class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Đơn vị / Trạm Công tác</div>
                         {% if user.userprofile and user.userprofile.station %}
@@ -6090,7 +5874,6 @@ Dashboard Kỹ Thuật Viên -
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
@@ -6100,13 +5883,10 @@ Dashboard Kỹ Thuật Viên -
 ## File: templates/core/role_matrix.html
 ````html
 {% extends "base.html" %}
-
 {% block title %}Quản trị Hệ thống | Ma trận Phân quyền{% endblock %}
 {% block header_title %}Ma trận Phân quyền Động{% endblock %}
-
 {% block content %}
 <div class="h-full flex flex-col">
-    
     <!-- Top Bar -->
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-4 mb-6 flex justify-between items-center transition-colors">
         <div>
@@ -6119,7 +5899,6 @@ Dashboard Kỹ Thuật Viên -
             </a>
         </div>
     </div>
-
     <!-- Matrix Table -->
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden flex-1 flex flex-col p-4 relative transition-colors">
         <div class="overflow-x-auto">
@@ -6129,8 +5908,6 @@ Dashboard Kỹ Thuật Viên -
                         <th class="px-4 py-4 text-xs font-bold tracking-wider text-slate-600 dark:text-slate-400 uppercase border-r border-slate-300 dark:border-slate-700 w-64">
                             Quyền hạn \ Nhóm Vai trò
                         </th>
-
-
                         {% for group in groups %}
                         <th class="px-3 py-4 text-xs font-bold tracking-wider text-slate-700 dark:text-slate-300 text-center uppercase border-r border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700/50 transition-colors align-top min-w-[140px]">
                             <div class="flex flex-col items-center gap-2">
@@ -6140,8 +5917,6 @@ Dashboard Kỹ Thuật Viên -
                             </div>
                         </th>
                         {% endfor %}
-
-
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
@@ -6182,13 +5957,11 @@ Dashboard Kỹ Thuật Viên -
 ````html
 {% extends "base.html" %}
 {% block header_title %}Danh sách Rơ-le Đã Duyệt Về Trạm{% endblock %}
-
 {% block content %}
 <div class="mb-8">
     <h2 class="text-3xl font-black text-slate-800 dark:text-white tracking-tight">Danh sách Rơ-le Đã Duyệt</h2>
     <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Quản lý và tra cứu toàn bộ các Rơ-le đã có phiếu chỉnh định được Quản trị viên (Admin) phê duyệt ban hành chính thức (hiển thị phiếu hoàn tất mới nhất của mỗi rơ-le).</p>
 </div>
-
 <!-- List View -->
 <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
     <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-800/80">
@@ -6196,7 +5969,6 @@ Dashboard Kỹ Thuật Viên -
             Tổng cộng: <span class="text-blue-600 dark:text-blue-400">{{ sheets.paginator.count }}</span> Rơ-le
         </h3>
     </div>
-    
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
             <thead>
@@ -6220,17 +5992,14 @@ Dashboard Kỹ Thuật Viên -
                             <i class="fas fa-building mr-1"></i> {{ sheet.relay.bay.station.station_name|default:"Không xác định" }}
                         </div>
                     </td>
-                    
                     <!-- Sheet Code -->
                     <td class="px-6 py-4 font-bold text-blue-700 dark:text-blue-400">
                         <a href="{% url 'sheet_detail' sheet.id %}" class="hover:underline">{{ sheet.sheet_code }}</a>
                     </td>
-                    
                     <!-- Status -->
                     <td class="px-6 py-4">
                         {% include "sheets/partials/_status_badge.html" with status=sheet.status %}
                     </td>
-                    
                     <!-- Date -->
                     <td class="px-6 py-4">
                         <div class="text-slate-700 dark:text-slate-300 font-medium">
@@ -6240,7 +6009,6 @@ Dashboard Kỹ Thuật Viên -
                             {{ sheet.created_at|date:"H:i:s" }}
                         </div>
                     </td>
-                    
                     <!-- Action -->
                     <td class="px-6 py-4 text-right">
                         <a href="{% url 'sheet_detail' sheet.id %}" class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-bold hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:shadow-sm transition-all text-xs">
@@ -6262,7 +6030,6 @@ Dashboard Kỹ Thuật Viên -
             </tbody>
         </table>
     </div>
-    
     <!-- Pagination -->
     {% include 'partials/pagination.html' with page_obj=sheets %}
 </div>
@@ -6273,13 +6040,10 @@ Dashboard Kỹ Thuật Viên -
 ````html
 {% extends 'base.html' %}
 {% load core_extras %}
-
 {% block title %}Cấu hình Hệ thống - EVN RMS{% endblock %}
-
 {% block header_title %}
 <span class="text-slate-800 font-semibold">Cấu hình Hệ thống (API)</span>
 {% endblock %}
-
 {% block content %}
 <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden transition-colors duration-200" 
      x-data="{ 
@@ -6333,10 +6097,8 @@ Dashboard Kỹ Thuật Viên -
              this.editAuthHeader = auth;
              this.editAutoSync = autoSync === 'True' || autoSync === true;
              this.editUpdatedAt = updatedAt;
-             
              let interval = parseInt(syncInterval) || 1440;
              this.editSyncInterval = interval;
-             
              if (interval >= 525600 && interval % 525600 === 0) {
                  this.syncUnit = 525600;
                  this.syncValue = interval / 525600;
@@ -6353,7 +6115,6 @@ Dashboard Kỹ Thuật Viên -
                  this.syncUnit = 1;
                  this.syncValue = interval;
              }
-             
              setTimeout(() => {
                  const form = document.getElementById('editConfigForm');
                  if(form) {
@@ -6365,7 +6126,6 @@ Dashboard Kỹ Thuật Viên -
          }
      }"
      @open-edit.window="setEdit($event.detail.id, $event.detail.key, $event.detail.value, $event.detail.description, $event.detail.auth_header, $event.detail.auto_sync, $event.detail.sync_interval, $event.detail.updated_at)">
-     
     <div class="p-6 border-b border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
             <h2 class="text-lg font-bold text-slate-800 dark:text-white mb-1">Quản lý Endpoint API</h2>
@@ -6378,12 +6138,10 @@ Dashboard Kỹ Thuật Viên -
                     if(this.syncing) return;
                     if(!confirm('Bạn có muốn đồng bộ lại toàn bộ dữ liệu theo trình tự chuẩn (từ đơn vị, danh mục đến thiết bị) không? Quá trình này có thể mất vài phút.')) return;
                     this.syncing = true;
-                    
                     // Lấy tất cả các nút đồng bộ theo thứ tự đang hiển thị trên giao diện
                     // (Giao diện đã được backend sort theo thứ tự ưu tiên)
                     const rows = document.querySelectorAll('button[hx-post]');
                     const syncBtns = Array.from(rows).filter(btn => btn.getAttribute('title') === 'Đồng bộ ngay');
-                    
                     for(let btn of syncBtns) {
                         btn.scrollIntoView({behavior: 'smooth', block: 'center'});
                         try {
@@ -6406,7 +6164,6 @@ Dashboard Kỹ Thuật Viên -
             </button>
         </div>
     </div>
-    
     <!-- Bộ lọc & Tìm kiếm -->
     <div class="px-6 py-4 bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700/60 flex flex-col xl:flex-row justify-between gap-4">
         <!-- Search -->
@@ -6424,7 +6181,6 @@ Dashboard Kỹ Thuật Viên -
                 <i class="fas fa-spinner fa-spin"></i>
             </div>
         </form>
-        
         <!-- Category Filter -->
         <div class="flex items-center gap-2 overflow-x-auto pb-2 xl:pb-0 hide-scrollbar w-full">
             <template x-for="cat in categories" :key="cat.id">
@@ -6436,7 +6192,6 @@ Dashboard Kỹ Thuật Viên -
             </template>
         </div>
     </div>
-    
     <div id="api-table-container" class="overflow-x-auto relative">
         <table class="w-full text-sm text-left text-slate-600 dark:text-slate-300">
             <thead class="text-xs text-slate-500 dark:text-slate-400 uppercase bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
@@ -6451,10 +6206,8 @@ Dashboard Kỹ Thuật Viên -
                 {% for config in configs %}
                 {{ config.rendered_row|safe }}
                 {% endfor %}
-
         </table>
     </div>
-
     <!-- Edit Modal -->
     <div x-show="editingId !== null" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm" x-transition>
         <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden border border-slate-200 dark:border-slate-700" @click.away="editingId = null">
@@ -6488,13 +6241,11 @@ Dashboard Kỹ Thuật Viên -
                     <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Header/Token xác thực</label>
                     <input type="text" name="auth_header" x-model="editAuthHeader" placeholder="VD: Bearer eyJhbGciOiJIUzI1..." class="w-full rounded-xl border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:border-blue-500 focus:ring-blue-500 text-sm font-mono text-emerald-600 dark:text-emerald-400 shadow-sm transition-colors">
                 </div>
-                
                 <div class="p-5 bg-blue-50/50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800/30 mt-4 space-y-4 shadow-inner">
                     <h4 class="text-sm font-bold text-blue-800 dark:text-blue-400 mb-2 pb-2 flex items-center gap-2">
                         <div class="bg-blue-100 dark:bg-blue-900/50 p-1.5 rounded-lg text-blue-600 dark:text-blue-400"><i class="fas fa-robot"></i></div>
                         Cấu hình Tự động Đồng bộ
                     </h4>
-                    
                     <div class="flex items-center mb-4">
                         <label class="flex items-center cursor-pointer group">
                             <div class="relative">
@@ -6505,7 +6256,6 @@ Dashboard Kỹ Thuật Viên -
                             <div class="ml-3 text-sm font-semibold transition-colors duration-300" :class="editAutoSync ? 'text-blue-700 dark:text-blue-400' : 'text-slate-600 dark:text-slate-400'">Kích hoạt Tự động đồng bộ ngầm</div>
                         </label>
                     </div>
-                    
                     <div class="mt-2 p-4 bg-white dark:bg-slate-800 rounded-lg border border-blue-100 dark:border-slate-700 shadow-sm" :class="editAutoSync ? '' : 'opacity-70'">
                         <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Chu kỳ đồng bộ</label>
                         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
@@ -6524,7 +6274,6 @@ Dashboard Kỹ Thuật Viên -
                         </div>
                     </div>
                 </div>
-
                 <div class="pt-4 flex justify-end gap-3">
                     <button type="button" @click="editingId = null" class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700">Hủy</button>
                     <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-lg shadow-blue-500/30">
@@ -6534,7 +6283,6 @@ Dashboard Kỹ Thuật Viên -
             </form>
         </div>
     </div>
-
     <!-- Create Modal -->
     <div x-show="createOpen" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm" x-transition>
         <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden border border-slate-200 dark:border-slate-700" @click.away="createOpen = false">
@@ -6573,7 +6321,6 @@ Dashboard Kỹ Thuật Viên -
             </form>
         </div>
     </div>
-    
     <!-- Bulk Create Modal -->
     <div x-show="bulkOpen" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm" x-transition>
         <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-xl mx-4 overflow-hidden border border-slate-200 dark:border-slate-700" @click.away="bulkOpen = false">
@@ -6600,12 +6347,10 @@ Dashboard Kỹ Thuật Viên -
         </div>
     </div>
 </div>
-
 <script>
     function openEditModal(id, key, val, desc, auth, autoSync, syncInterval, updatedAt) {
         window.dispatchEvent(new CustomEvent('open-edit', { detail: { id: id, key: key, value: val, description: desc, auth_header: auth, auto_sync: autoSync, sync_interval: syncInterval, updated_at: updatedAt } }));
     }
-
     document.body.addEventListener('htmx:afterRequest', function(evt) {
         if (evt.detail.successful) {
             if (evt.detail.elt.hasAttribute('hx-post') && evt.detail.elt.id === 'editConfigForm') {
@@ -6622,10 +6367,8 @@ Dashboard Kỹ Thuật Viên -
 ## File: templates/core/user_list.html
 ````html
 {% extends "base.html" %}
-
 {% block title %}Quản trị Hệ thống | Danh sách Tài khoản{% endblock %}
 {% block header_title %}Danh sách Tài khoản Hệ thống{% endblock %}
-
 {% block content %}
 <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
@@ -6633,7 +6376,6 @@ Dashboard Kỹ Thuật Viên -
     /* Custom TomSelect styles to match Tailwind in User form */
     .ts-control { border-radius: 0.5rem; border-color: #e2e8f0; padding: 0.5rem 0.75rem; font-size: 0.875rem; background-color: #f8fafc; }
     .ts-control.focus { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); background-color: #ffffff; }
-    
     /* Dark mode for TomSelect */
     html.dark .ts-wrapper .ts-control { border-color: rgba(51, 65, 85, 1); background-color: rgba(30, 41, 59, 0.5); color: #e2e8f0; }
     html.dark .ts-wrapper.focus .ts-control, html.dark .ts-control.focus { border-color: #3b82f6; background-color: rgba(15, 23, 42, 1); }
@@ -6662,18 +6404,14 @@ Dashboard Kỹ Thuật Viên -
         this.editGroup = groupId;
         this.editGroupName = groupName;
         this.editStationId = stationId;
-        
         const urlTemplate = '{% url "user_update" 0 %}';
         document.getElementById('globalEditForm').action = urlTemplate.replace('0', id);
-        
         this.showGlobalEditModal = true;
-        
         if (this.$refs.globalStationSelect && this.$refs.globalStationSelect.tomselect) {
             this.$refs.globalStationSelect.tomselect.setValue(stationId);
         }
     }
 }">
-    
     <!-- Top Bar -->
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-4 mb-6 flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-center transition-colors duration-200">
         <div class="min-w-0">
@@ -6694,7 +6432,6 @@ Dashboard Kỹ Thuật Viên -
             </button>
         </div>
     </div>
-
     <style>
         .htmx-indicator {
             opacity: 0 !important;
@@ -6706,10 +6443,8 @@ Dashboard Kỹ Thuật Viên -
             pointer-events: auto !important;
         }
     </style>
-
     <!-- User Table -->
     <div id="user-table-container" class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden flex-1 flex flex-col transition-colors duration-200 relative">
-        
         <!-- Indicator for HTMX loading -->
         <div class="htmx-indicator absolute inset-0 bg-white/60 dark:bg-slate-900/60 backdrop-blur-[2px] z-20 flex items-center justify-center">
             <div class="text-blue-600 flex flex-col items-center">
@@ -6717,7 +6452,6 @@ Dashboard Kỹ Thuật Viên -
                 <span class="font-medium text-sm">Đang tải...</span>
             </div>
         </div>
-
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -6784,7 +6518,6 @@ Dashboard Kỹ Thuật Viên -
                 </tbody>
             </table>
         </div>
-        
         <!-- Pagination -->
         <div class="px-6 py-4 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
             <span class="text-sm text-slate-500 dark:text-slate-400">
@@ -6794,7 +6527,6 @@ Dashboard Kỹ Thuật Viên -
                 {% if users.has_previous %}
                 <a href="?page={{ users.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search|urlencode }}{% endif %}" class="px-3 py-1 border border-slate-300 dark:border-slate-600 rounded text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">&laquo; Trước</a>
                 {% endif %}
-                
                 {% for i in users.paginator.page_range %}
                     {% if users.number == i %}
                     <span class="px-3 py-1 bg-blue-600 text-white rounded text-sm font-bold shadow-sm">{{ i }}</span>
@@ -6802,14 +6534,12 @@ Dashboard Kỹ Thuật Viên -
                     <a href="?page={{ i }}{% if request.GET.search %}&search={{ request.GET.search|urlencode }}{% endif %}" class="px-3 py-1 border border-slate-300 dark:border-slate-600 rounded text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">{{ i }}</a>
                     {% endif %}
                 {% endfor %}
-                
                 {% if users.has_next %}
                 <a href="?page={{ users.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search|urlencode }}{% endif %}" class="px-3 py-1 border border-slate-300 dark:border-slate-600 rounded text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Sau &raquo;</a>
                 {% endif %}
             </div>
         </div>
     </div>
-
     <!-- Create User Modal -->
     <div x-show="showModal"
          x-transition:enter="transition ease-out duration-200"
@@ -6837,7 +6567,6 @@ Dashboard Kỹ Thuật Viên -
                             <h3 class="text-lg font-bold text-slate-800 dark:text-white">Tạo Tài khoản mới</h3>
                             <button type="button" @click="showModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"><i class="fas fa-times"></i></button>
                         </div>
-                        
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Tên đăng nhập *</label>
@@ -6864,7 +6593,6 @@ Dashboard Kỹ Thuật Viên -
                                     {% endfor %}
                                 </select>
                             </div>
-                            
                             <div
                                 x-show="['TECHNICIAN', 'SUPERVISOR', 'STATION_LEADER'].includes(selectedGroupName)"
                                 x-transition:enter="transition ease-out duration-200"
@@ -6899,7 +6627,6 @@ Dashboard Kỹ Thuật Viên -
             </div>
         </div>
     </div>
-
     <!-- Global Edit User Modal -->
     <div x-show="showGlobalEditModal"
          x-transition:enter="transition ease-out duration-200"
@@ -6928,7 +6655,6 @@ Dashboard Kỹ Thuật Viên -
                             <h3 class="text-lg font-bold text-slate-800 dark:text-white" x-text="`Chỉnh sửa Tài khoản: ${editUsername}`"></h3>
                             <button type="button" @click="showGlobalEditModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"><i class="fas fa-times"></i></button>
                         </div>
-                        
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Mật khẩu mới (Để trống nếu không đổi)</label>
@@ -6951,7 +6677,6 @@ Dashboard Kỹ Thuật Viên -
                                     {% endfor %}
                                 </select>
                             </div>
-                            
                             <div
                                 x-show="['TECHNICIAN', 'SUPERVISOR', 'STATION_LEADER'].includes(editGroupName)"
                                 x-transition:enter="transition ease-out duration-200"
@@ -7008,7 +6733,6 @@ Dashboard Kỹ Thuật Viên -
     }
 </style>
 <aside id="sidebar" class="flex flex-col h-full bg-white dark:bg-slate-900/95 backdrop-blur-xl border-r border-slate-200 dark:border-slate-800/80 shadow-[4px_0_24px_rgba(0,0,0,0.02)] dark:shadow-[4px_0_24px_rgba(0,0,0,0.2)]">
-    
     <!-- Logo -->
     <a href="{% url 'dashboard' %}" class="h-16 flex items-center px-5 border-b border-slate-200 dark:border-slate-800/80 transition-colors flex-shrink-0 relative overflow-hidden group">
         <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-transparent dark:from-blue-500/10 pointer-events-none"></div>
@@ -7026,7 +6750,6 @@ Dashboard Kỹ Thuật Viên -
             <i class="fas fa-times text-sm"></i>
         </button>
     </a>
-
     <!-- Navigation -->
     <nav class="flex-1 overflow-y-auto px-4 py-5 space-y-1.5" id="sidebar-nav">
         {% url 'dashboard' as url_dashboard %}
@@ -7036,7 +6759,6 @@ Dashboard Kỹ Thuật Viên -
         {% url 'station_list' as url_stations %}
         {% url 'user_list' as url_users %}
         {% url 'role_matrix' as url_roles %}
-
         {% if perms.sheets.can_manage_users %}
         <p class="nav-section-label mt-1">Bàn làm việc</p>
         <a href="{{ url_dashboard }}" class="nav-item {% if request.path == url_dashboard %}active{% endif %}" onclick="closeSidebar()">
@@ -7071,7 +6793,6 @@ Dashboard Kỹ Thuật Viên -
         </a>
         <div class="h-1"></div>
         {% endif %}
-        
         {% if perms.sheets.can_approve_sheet %}
         <div x-data="{ open: localStorage.getItem('menu-approve') === null ? true : localStorage.getItem('menu-approve') === 'true' }" x-init="$watch('open', val => localStorage.setItem('menu-approve', val))" class="mb-1.5">
             <button @click="open = !open" class="nav-item w-full text-left">
@@ -7099,7 +6820,6 @@ Dashboard Kỹ Thuật Viên -
             <script>if(localStorage.getItem('menu-approve') !== 'false') document.getElementById('nav-menu-approve').removeAttribute('x-cloak');</script>
         </div>
         {% endif %}
-
         {% if perms.sheets.can_create_sheet or perms.sheets.can_dispatch_sheet %}
         {% if perms.sheets.can_manage_users %}
         <p class="nav-section-label mt-4 mb-2">Điều phối</p>
@@ -7191,7 +6911,6 @@ Dashboard Kỹ Thuật Viên -
             {% endif %}
         </div>
         {% endif %}
-
         {% if perms.sheets.can_execute_sheet or perms.sheets.can_supervise_sheet %}
         {% if perms.sheets.can_manage_users %}
         <p class="nav-section-label mt-4 mb-2">Thi công & Giám sát</p>
@@ -7245,7 +6964,6 @@ Dashboard Kỹ Thuật Viên -
             </a>
         </div>
         {% endif %}
-
         {% if perms.sheets.can_view_stations %}
         <div x-data="{ open: localStorage.getItem('menu-asset') === null ? true : localStorage.getItem('menu-asset') === 'true' }" x-init="$watch('open', val => localStorage.setItem('menu-asset', val))" class="mb-1.5">
             <button @click="open = !open" class="nav-item w-full text-left">
@@ -7276,7 +6994,6 @@ Dashboard Kỹ Thuật Viên -
             </div>
             <script>if(localStorage.getItem('menu-asset') !== 'false') document.getElementById('nav-menu-asset').removeAttribute('x-cloak');</script>
         </div>
-
         <div x-data="{ open: localStorage.getItem('menu-device') === null ? true : localStorage.getItem('menu-device') === 'true' }" x-init="$watch('open', val => localStorage.setItem('menu-device', val))" class="mb-1.5">
             <button @click="open = !open" class="nav-item w-full text-left">
                 <div class="flex items-center gap-3">
@@ -7299,7 +7016,6 @@ Dashboard Kỹ Thuật Viên -
             <script>if(localStorage.getItem('menu-device') !== 'false') document.getElementById('nav-menu-device').removeAttribute('x-cloak');</script>
         </div>
         {% endif %}
-
         {% if perms.sheets.can_manage_users %}
         <div x-data="{ open: localStorage.getItem('menu-admin') === 'true' }" x-init="$watch('open', val => localStorage.setItem('menu-admin', val))" class="mb-1.5">
             <button @click="open = !open" class="nav-item w-full text-left">
@@ -7331,12 +7047,10 @@ Dashboard Kỹ Thuật Viên -
         </div>
         {% endif %}
     </nav>
-    
     <!-- User profile block -->
     <div class="border-t border-slate-200 dark:border-slate-800/80 p-4 bg-slate-50/50 dark:bg-slate-900/50 flex-shrink-0" x-data="{ open: false }">
         {% if user.is_authenticated %}
         <div class="relative">
-
             <div x-show="open"
                  @click.away="open = false"
                  x-cloak
@@ -7347,16 +7061,13 @@ Dashboard Kỹ Thuật Viên -
                  x-transition:leave-start="opacity-100 translate-y-0 scale-100"
                  x-transition:leave-end="opacity-0 translate-y-4 scale-95"
                  class="absolute bottom-[calc(100%+12px)] left-0 w-full bg-white/95 dark:bg-slate-800/95 backdrop-blur-md border border-slate-200/80 dark:border-slate-700/80 transition-colors rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] overflow-hidden py-1.5 z-50">
-                
                 <a href="{% url 'profile' %}" class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100/50 dark:hover:bg-white/5 transition-colors group">
                     <div class="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-700/50 flex items-center justify-center group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30 transition-colors">
                         <i class="fas fa-user-cog text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"></i>
                     </div>
                     <span>Tài khoản & Cài đặt</span>
                 </a>
-                
                 <div class="h-px bg-slate-200 dark:bg-slate-700/80 my-1 mx-3 transition-colors"></div>
-                
                 <form method="post" action="{% url 'logout' %}" hx-boost="false">
                     {% csrf_token %}
                     <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-red-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors text-left group">
@@ -7367,7 +7078,6 @@ Dashboard Kỹ Thuật Viên -
                     </button>
                 </form>
             </div>
-
             <!-- Profile Trigger Button -->
             <button @click="open = !open" class="w-full flex items-center gap-3 p-2.5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 hover:border-blue-300 dark:hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10 dark:hover:shadow-blue-900/20 text-left group transition-all duration-300 relative overflow-hidden">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm uppercase flex-shrink-0 shadow-md shadow-blue-500/30 group-hover:scale-105 transition-transform duration-300 z-10">
@@ -7384,7 +7094,6 @@ Dashboard Kỹ Thuật Viên -
                     <i class="fas fa-chevron-up text-[10px] text-slate-500 dark:text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-transform duration-300" :class="{'rotate-180': open}"></i>
                 </div>
             </button>
-            
         </div>
         {% else %}
         <a href="{% url 'login' %}" class="block w-full py-3 text-sm text-center text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 rounded-xl transition-all duration-300 font-bold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5">
@@ -7393,7 +7102,6 @@ Dashboard Kỹ Thuật Viên -
         {% endif %}
     </div>
 </aside>
-
 <!-- Sidebar Scroll Preservation (Inline to prevent flicker and clamping) -->
 <script>
     (function() {
@@ -7414,23 +7122,18 @@ Dashboard Kỹ Thuật Viên -
             }, { passive: true });
         }
     })();
-    
     // Update active state in sidebar when HTMX swaps main content
     function updateSidebarActiveState() {
         let path = window.location.pathname;
         let search = window.location.search;
         let fullUrl = path + search;
-        
         let links = document.querySelectorAll('#sidebar-nav a.nav-item, #sidebar-nav a.nav-item-child');
         links.forEach(el => el.classList.remove('active'));
-        
         let bestMatch = null;
         let bestMatchLength = 0;
-        
         links.forEach(link => {
             let href = link.getAttribute('href');
             if (!href || href === '#') return;
-            
             if (href === fullUrl) {
                 bestMatch = link;
                 bestMatchLength = href.length;
@@ -7447,7 +7150,6 @@ Dashboard Kỹ Thuật Viên -
                 }
             }
         });
-        
         // Nếu đang ở trang detail của phiếu và không match được tab nào
         // thì dùng lại menu trước đó đã click để highlight
         if (!bestMatch && path.match(/^\/sheets\/\d+\/$/)) {
@@ -7459,7 +7161,6 @@ Dashboard Kỹ Thuật Viên -
                     }
                 });
             }
-            
             // Fallback bằng server context nếu vẫn không thấy (trường hợp mở tab mới)
             if (!bestMatch) {
                 let status = "{{ sheet.status|default:'' }}";
@@ -7472,7 +7173,6 @@ Dashboard Kỹ Thuật Viên -
                     });
                 }
             }
-            
             // Nếu vẫn không có (hoặc fallback kia ra một menu bị ẩn), luôn bôi sáng "Danh sách Phiếu"
             if (!bestMatch) {
                 links.forEach(link => {
@@ -7482,7 +7182,6 @@ Dashboard Kỹ Thuật Viên -
                 });
             }
         }
-        
         // Cứu cánh cuối cùng cho các trang detail khác (không phải phiếu)
         if (!bestMatch) {
             links.forEach(link => {
@@ -7497,10 +7196,8 @@ Dashboard Kỹ Thuật Viên -
                 }
             });
         }
-        
         if (bestMatch) {
             bestMatch.classList.add('active');
-            
             // Tự động mở menu cha (nếu đang bị đóng bởi Alpine)
             let parentMenu = bestMatch.closest('.nav-tree');
             if (parentMenu) {
@@ -7513,14 +7210,12 @@ Dashboard Kỹ Thuật Viên -
                     } catch(e) {}
                 }
             }
-            
             // Ghi nhớ menu nếu không phải đang ở trang detail
             if (!path.match(/^\/sheets\/\d+\/$/)) {
                 sessionStorage.setItem('last_active_sidebar_menu', bestMatch.getAttribute('href'));
             }
         }
     }
-    
     // Gắn event để lưu lại khi click trực tiếp (phòng khi không phải navigate bằng HTMX)
     document.querySelectorAll('#sidebar-nav a.nav-item, #sidebar-nav a.nav-item-child').forEach(link => {
         link.addEventListener('click', function(e) {
@@ -7530,7 +7225,6 @@ Dashboard Kỹ Thuật Viên -
             }
         });
     });
-    
     document.body.addEventListener('htmx:pushedIntoHistory', updateSidebarActiveState);
     document.body.addEventListener('htmx:replacedInHistory', updateSidebarActiveState);
     document.body.addEventListener('htmx:afterSettle', function(e) {
@@ -7545,7 +7239,6 @@ Dashboard Kỹ Thuật Viên -
         }
     });
     window.addEventListener('popstate', function() { setTimeout(updateSidebarActiveState, 50); });
-    
     // Gọi thử 1 lần khi load (bên cạnh việc server render class active)
     document.addEventListener('DOMContentLoaded', function() {
         updateSidebarActiveState();
@@ -7571,7 +7264,6 @@ Dashboard Kỹ Thuật Viên -
             Trước
         </a>
         {% endif %}
-        
         {% for num in page_obj.paginator.page_range %}
             {% if page_obj.number == num %}
             <span class="px-3 py-1 text-sm bg-blue-600 text-white rounded font-medium shadow-sm cursor-default">{{ num }}</span>
@@ -7583,7 +7275,6 @@ Dashboard Kỹ Thuật Viên -
                class="px-3 py-1 text-sm border border-slate-300 dark:border-slate-600 rounded hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors">{{ num }}</a>
             {% endif %}
         {% endfor %}
-
         {% if page_obj.has_next %}
         <a href="?{% url_replace 'page' page_obj.next_page_number %}"
            {% if hx_target %}hx-get="?{% url_replace 'page' page_obj.next_page_number %}" hx-target="{{ hx_target }}" hx-select="{% if hx_select %}{{ hx_select }}{% else %}{{ hx_target }}{% endif %}" hx-swap="{% if hx_swap %}{{ hx_swap }}{% else %}outerHTML{% endif %}"{% endif %}
@@ -7607,7 +7298,6 @@ Dashboard Kỹ Thuật Viên -
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>Đăng nhập | RMS EVN</title>
-    
     <!-- TailwindCSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -7667,16 +7357,13 @@ Dashboard Kỹ Thuật Viên -
     </style>
 </head>
 <body class="h-screen w-full flex flex-col lg:flex-row overflow-hidden bg-slate-950 text-slate-200">
-
     <!-- LEFT PANE: Background Image -->
     <div class="hidden lg:flex w-[55%] relative items-center justify-center overflow-hidden">
         <!-- Background Image -->
         <img src="{% static 'img/electricity_bg.png' %}" alt="Electricity Grid" class="absolute inset-0 w-full h-full object-cover animate-fade-in opacity-80 mix-blend-screen scale-105 transition-transform duration-[20s] ease-linear hover:scale-110">
-        
         <!-- Gradient Overlays for depth -->
         <div class="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-900/40 to-slate-900/10 z-10"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-brand-900/80 via-transparent to-transparent z-10"></div>
-        
         <!-- Content on Image -->
         <div class="relative z-20 p-16 w-full max-w-2xl animate-slide-up" style="animation-delay: 0.2s;">
             <div class="flex items-center gap-4 mb-8">
@@ -7688,21 +7375,17 @@ Dashboard Kỹ Thuật Viên -
                     <p class="text-brand-300 text-sm font-semibold tracking-wider uppercase">Relay Management System</p>
                 </div>
             </div>
-            
             <h1 class="text-5xl font-outfit font-bold text-white leading-[1.2] mb-6 drop-shadow-lg">
                 Quản lý rơ le <br>
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-cyan-300">Thông minh & An toàn</span>
             </h1>
-            
             <p class="text-lg text-slate-300/90 leading-relaxed max-w-xl font-light border-l-4 border-brand-500 pl-4">
                 Nền tảng chuyển đổi số toàn diện hỗ trợ điều hành, giám sát và quản lý Phiếu chỉnh định rơ-le cho Tập đoàn Điện lực Việt Nam.
             </p>
         </div>
     </div>
-
     <!-- RIGHT PANE: Login Form -->
     <div class="w-full lg:w-[45%] h-full flex flex-col justify-center px-6 sm:px-12 lg:px-20 xl:px-28 py-10 relative z-30 glass-panel shadow-2xl">
-        
         <!-- Mobile Header (Hidden on Desktop) -->
         <div class="lg:hidden flex items-center justify-center gap-3 mb-12 animate-fade-in">
             <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-brand-500/30 border border-white/10">
@@ -7712,25 +7395,20 @@ Dashboard Kỹ Thuật Viên -
                 <h2 class="text-2xl font-outfit font-extrabold tracking-widest text-white">RMS EVN</h2>
             </div>
         </div>
-
         <div class="w-full max-w-md mx-auto animate-slide-up" style="animation-delay: 0.3s;">
-            
             <div class="mb-10 text-center lg:text-left">
                 <h2 class="text-3xl font-outfit font-bold text-white mb-3">Đăng nhập hệ thống</h2>
                 <p class="text-slate-400 text-sm font-medium">Vui lòng sử dụng tài khoản được cấp quyền để truy cập.</p>
             </div>
-
             {% if form.errors %}
             <div class="bg-red-500/10 border border-red-500/30 text-red-400 px-5 py-4 rounded-2xl mb-8 text-sm flex items-start gap-3 backdrop-blur-md animate-fade-in">
                 <i class="fas fa-exclamation-triangle mt-0.5"></i>
                 <p>Tên đăng nhập hoặc mật khẩu không chính xác.</p>
             </div>
             {% endif %}
-
             <form method="post" action="{% url 'login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" class="space-y-6">
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ request.GET.next }}">
-                
                 <div class="space-y-2">
                     <label class="block text-sm font-semibold text-slate-300">Tên đăng nhập</label>
                     <div class="relative input-field">
@@ -7742,7 +7420,6 @@ Dashboard Kỹ Thuật Viên -
                             placeholder="Nhập tên đăng nhập">
                     </div>
                 </div>
-
                 <div class="space-y-2">
                     <div class="flex justify-between items-center">
                         <label class="block text-sm font-semibold text-slate-300">Mật khẩu</label>
@@ -7756,7 +7433,6 @@ Dashboard Kỹ Thuật Viên -
                             placeholder="••••••••">
                     </div>
                 </div>
-
                 <div class="flex items-center justify-between pt-2">
                     <label class="flex items-center cursor-pointer group">
                         <div class="relative flex items-center">
@@ -7769,13 +7445,11 @@ Dashboard Kỹ Thuật Viên -
                     </label>
                     <a href="#" class="text-sm font-medium text-brand-400 hover:text-brand-300 transition-colors">Quên mật khẩu?</a>
                 </div>
-
                 <button type="submit" class="w-full bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold py-4 rounded-2xl mt-4 flex items-center justify-center gap-3 shadow-[0_8px_20px_rgba(37,99,235,0.25)] hover:shadow-[0_12px_25px_rgba(37,99,235,0.4)] transition-all hover:-translate-y-1">
                     <span>Đăng nhập hệ thống</span>
                     <i class="fas fa-arrow-right text-sm"></i>
                 </button>
             </form>
-            
             <!-- Quick Login for Demo -->
             <div class="mt-12 border-t border-slate-700/50 pt-8 animate-slide-up" style="animation-delay: 0.5s;">
                 <div class="mb-5 flex items-center gap-3">
@@ -7783,7 +7457,6 @@ Dashboard Kỹ Thuật Viên -
                     <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Đăng nhập nhanh (Test Data)</span>
                     <div class="h-px bg-slate-700/50 flex-1"></div>
                 </div>
-                
                 <div class="flex flex-col gap-4 bg-slate-900/40 p-5 rounded-2xl border border-slate-700/50">
                     <div class="flex gap-3">
                         <select id="quickRole" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800/80 text-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
@@ -7800,20 +7473,17 @@ Dashboard Kỹ Thuật Viên -
                     </button>
                 </div>
             </div>
-
             <!-- Footer -->
             <div class="mt-8 text-center lg:hidden">
                 <p class="text-xs text-slate-500">&copy; 2026 EVN RMS. Hệ thống nội bộ.</p>
             </div>
         </div>
     </div>
-
     <!-- Mobile Background Overlay (visible only on small screens) -->
     <div class="lg:hidden absolute inset-0 z-0">
         <img src="{% static 'img/electricity_bg.png' %}" class="w-full h-full object-cover opacity-20">
         <div class="absolute inset-0 bg-slate-950/80"></div>
     </div>
-
     <script>
         function executeQuickLogin() {
             const role = document.getElementById('quickRole').value;
@@ -7821,16 +7491,12 @@ Dashboard Kỹ Thuật Viên -
             let id = parseInt(idInput);
             if(isNaN(id) || id < 1) id = 1;
             if(id > 45) id = 45;
-            
             const paddedId = id.toString().padStart(3, '0');
             const username = `${role}_${paddedId}`;
-            
             document.getElementById('username').value = username;
             document.getElementById('password').value = '123456';
-            
             document.getElementById('username').classList.add('ring-2', 'ring-brand-500', 'bg-brand-900/30');
             document.getElementById('password').classList.add('ring-2', 'ring-brand-500', 'bg-brand-900/30');
-            
             setTimeout(() => {
                 document.forms[0].submit();
             }, 300);
@@ -7854,16 +7520,13 @@ Dashboard Kỹ Thuật Viên -
                 <p class="text-xs text-slate-500 dark:text-slate-400">Theo dõi toàn bộ vòng đời và lịch sử chỉnh sửa của Phiếu</p>
             </div>
         </div>
-
         <div class="relative pl-6 md:pl-0 space-y-6 before:absolute before:inset-0 before:ml-[1.4rem] before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 dark:before:via-slate-700 before:to-transparent">
             {% for log in history_logs %}
             <div class="relative flex items-center justify-between md:justify-normal {% if forloop.counter0|divisibleby:2 %}md:flex-row-reverse{% endif %} group is-active">
-                
                 <!-- Icon -->
                 <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-slate-50 dark:border-slate-800/50 {{ log.bg_class }} {{ log.color_class }} shadow-sm shrink-0 md:order-1 md:group-even:-translate-x-1/2 md:group-odd:translate-x-1/2 z-10 transition-transform duration-300 hover:scale-110">
                     <i class="fas {{ log.icon }} text-sm"></i>
                 </div>
-                
                 <!-- Content -->
                 <div class="w-[calc(100%-3.5rem)] md:w-[calc(50%-3rem)] p-4 rounded-xl border bg-white dark:bg-slate-900 shadow-sm hover:shadow-md transition-shadow {{ log.border_class }}">
                     <div class="flex items-center justify-between mb-2">
@@ -7895,7 +7558,6 @@ Dashboard Kỹ Thuật Viên -
 <!-- TRẠNG THÁI CHỮ KÝ SỐ -->
 <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 mb-6" id="signature-panel">
     <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-6 uppercase tracking-wide">Quy trình Ký số & Phê duyệt</h3>
-    
     <div x-data="{ 
             openModal: false, 
             sessionUrl: '', 
@@ -7937,10 +7599,8 @@ Dashboard Kỹ Thuật Viên -
                 }
             }
         }">
-        
         <!-- Timeline / Stepper -->
         <div class="relative pl-6 space-y-8 before:absolute before:inset-0 before:ml-[1.4rem] before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 before:to-transparent">
-            
             <!-- 0. Role Dispatcher -->
             <div class="relative flex items-center justify-between md:justify-normal md:even:flex-row-reverse group is-active">
                 <div class="flex items-center justify-center w-8 h-8 rounded-full border-4 border-white dark:border-slate-900 bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 {% if dispatcher_sig %}bg-teal-500 dark:bg-teal-600 text-white dark:text-white border-teal-100 dark:border-teal-900{% endif %}">
@@ -7959,7 +7619,6 @@ Dashboard Kỹ Thuật Viên -
                     {% endif %}
                 </div>
             </div>
-
             <!-- 1. Role Technician -->
             <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                 <div class="flex items-center justify-center w-8 h-8 rounded-full border-4 border-white dark:border-slate-900 bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 {% if tech_sig %}bg-green-500 dark:bg-green-600 text-white dark:text-white border-green-100 dark:border-green-900{% endif %}">
@@ -7981,7 +7640,6 @@ Dashboard Kỹ Thuật Viên -
                     {% endif %}
                 </div>
             </div>
-
             <!-- 2. Role Supervisor -->
             <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                 <div class="flex items-center justify-center w-8 h-8 rounded-full border-4 border-white dark:border-slate-900 bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 {% if sup_sig %}bg-green-500 dark:bg-green-600 text-white dark:text-white border-green-100 dark:border-green-900{% endif %}">
@@ -8011,7 +7669,6 @@ Dashboard Kỹ Thuật Viên -
                     {% endif %}
                 </div>
             </div>
-            
             <!-- 3. Role Admin -->
             <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                 <div class="flex items-center justify-center w-8 h-8 rounded-full border-4 border-white dark:border-slate-900 bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 {% if admin_sig %}bg-blue-500 dark:bg-blue-600 text-white dark:text-white border-blue-100 dark:border-blue-900{% endif %}">
@@ -8037,13 +7694,10 @@ Dashboard Kỹ Thuật Viên -
                     {% endif %}
                 </div>
             </div>
-
         </div>
-
         <!-- SmartCA Mockup Modal -->
         <div x-show="openModal" class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center bg-slate-900/60 backdrop-blur-sm" style="display: none;" x-cloak>
             <div @click.away="if(signState==='input') openModal = false" class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden transform transition-all relative">
-                
                 <!-- Header -->
                 <div class="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4 flex items-center justify-between">
                     <div class="flex items-center gap-2">
@@ -8054,7 +7708,6 @@ Dashboard Kỹ Thuật Viên -
                     </div>
                     <button x-show="signState==='input'" @click="openModal = false" class="text-white/80 hover:text-white"><i class="fas fa-times"></i></button>
                 </div>
-
                 <!-- Body -->
                 <div class="p-6 bg-white dark:bg-slate-900">
                     <!-- State: Input PIN -->
@@ -8070,7 +7723,6 @@ Dashboard Kỹ Thuật Viên -
                         </button>
                         <p class="text-xs text-slate-400 mt-4"><i class="fas fa-shield-alt mr-1"></i> Chứng thư số được bảo mật bởi EVN CA</p>
                     </div>
-
                     <!-- State: Loading / Hashing -->
                     <div x-show="signState === 'loading'" class="text-center py-6" style="display: none;">
                         <div class="relative w-16 h-16 mx-auto mb-4">
@@ -8084,7 +7736,6 @@ Dashboard Kỹ Thuật Viên -
                             <div class="bg-red-600 h-full w-full animate-[progress_2s_ease-in-out]"></div>
                         </div>
                     </div>
-
                     <!-- State: Success -->
                     <div x-show="signState === 'success'" class="text-center py-6" style="display: none;">
                         <div class="w-16 h-16 mx-auto mb-4 text-green-500 flex items-center justify-center">
@@ -8102,7 +7753,6 @@ Dashboard Kỹ Thuật Viên -
                         <h4 class="font-bold text-slate-800 text-lg">Ký số Thành công!</h4>
                         <p class="text-xs text-slate-500 mt-2">Văn bản đã được gắn chứng thư số hợp lệ.</p>
                     </div>
-                    
                     <!-- Hidden Form for HTMX Submission -->
                     <form x-ref="signForm" hx-post="{% url 'confirm_signature' sheet.pk %}" 
                           hx-target="#signature-panel" 
@@ -8117,7 +7767,6 @@ Dashboard Kỹ Thuật Viên -
         </div>
     </div>
 </div>
-
 {% if messages %}
 <div class="hidden" id="django-messages-data" hx-swap-oob="true">
     {% for message in messages %}
@@ -8125,11 +7774,9 @@ Dashboard Kỹ Thuật Viên -
     {% endfor %}
 </div>
 {% endif %}
-
 <div id="header-status-badge" hx-swap-oob="true">
     {% include "sheets/partials/_status_badge.html" with sheet=sheet %}
 </div>
-
 {% if sheet.status == 'COMPLETED' and admin_sig and request.method == 'POST' %}
 <script>
     (function() {
@@ -8193,57 +7840,45 @@ Dashboard Kỹ Thuật Viên -
 ## File: templates/sheets/partials/_status_stepper.html
 ````html
 <div class="hidden lg:flex items-center ml-4 text-[10px] font-bold uppercase tracking-wider bg-white rounded-full p-1.5 shadow-sm border border-slate-200 overflow-x-auto dark:bg-slate-800 dark:border-slate-700">
-    
     <!-- Step 1: DRAFT -->
     <div class="flex shrink-0 whitespace-nowrap items-center px-3 py-1.5 rounded-full transition-all duration-300 {% if sheet.status == 'DRAFT' %}bg-blue-50 text-blue-700 ring-1 ring-blue-500/30 shadow-sm animate-pulse dark:bg-blue-900/30 dark:text-blue-400 dark:ring-blue-500/50{% else %}bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400{% endif %}">
         {% if sheet.status != 'DRAFT' %}<i class="fas fa-check-circle mr-1.5 text-emerald-500"></i>{% endif %}
         Tạo Mới
     </div>
-    
     <!-- Connector 1 -->
     <div class="w-4 h-1 mx-1 rounded-full transition-colors duration-500 {% if sheet.status != 'DRAFT' %}bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]{% else %}bg-slate-200 dark:bg-slate-600{% endif %}"></div>
-
     <!-- Step 2: ISSUED -->
     <div class="flex shrink-0 whitespace-nowrap items-center px-3 py-1.5 rounded-full transition-all duration-300 {% if sheet.status == 'ISSUED' %}bg-blue-50 text-blue-700 ring-1 ring-blue-500/30 shadow-sm animate-pulse dark:bg-blue-900/30 dark:text-blue-400 dark:ring-blue-500/50{% elif sheet.status in 'ROUTED_TO_STATION,TRANSFERRED,RECEIVED,COMPLETED' %}bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400{% else %}text-slate-400 dark:text-slate-500{% endif %}">
         {% if sheet.status in 'ROUTED_TO_STATION,TRANSFERRED,RECEIVED,COMPLETED' %}<i class="fas fa-check-circle mr-1.5 text-emerald-500"></i>{% endif %}
         Chờ Điều Phối
     </div>
-
     <!-- Connector 2 -->
     <div class="w-4 h-1 mx-1 rounded-full transition-colors duration-500 {% if sheet.status in 'ROUTED_TO_STATION,TRANSFERRED,RECEIVED,COMPLETED' %}bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]{% else %}bg-slate-200 dark:bg-slate-600{% endif %}"></div>
-
     <!-- Step 3: ROUTED_TO_STATION -->
     <div class="flex shrink-0 whitespace-nowrap items-center px-3 py-1.5 rounded-full transition-all duration-300 {% if sheet.status == 'ROUTED_TO_STATION' %}bg-blue-50 text-blue-700 ring-1 ring-blue-500/30 shadow-sm animate-pulse dark:bg-blue-900/30 dark:text-blue-400 dark:ring-blue-500/50{% elif sheet.status in 'TRANSFERRED,RECEIVED,COMPLETED' %}bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400{% else %}text-slate-400 dark:text-slate-500{% endif %}">
         {% if sheet.status in 'TRANSFERRED,RECEIVED,COMPLETED' %}<i class="fas fa-check-circle mr-1.5 text-emerald-500"></i>{% endif %}
         Đã Về Trạm
     </div>
-
     <!-- Connector 3 -->
     <div class="w-4 h-1 mx-1 rounded-full transition-colors duration-500 {% if sheet.status in 'TRANSFERRED,RECEIVED,COMPLETED' %}bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]{% else %}bg-slate-200 dark:bg-slate-600{% endif %}"></div>
-
     <!-- Step 4: TRANSFERRED -->
     <div class="flex shrink-0 whitespace-nowrap items-center px-3 py-1.5 rounded-full transition-all duration-300 {% if sheet.status == 'TRANSFERRED' %}bg-blue-50 text-blue-700 ring-1 ring-blue-500/30 shadow-sm animate-pulse dark:bg-blue-900/30 dark:text-blue-400 dark:ring-blue-500/50{% elif sheet.status in 'RECEIVED,COMPLETED' %}bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400{% else %}text-slate-400 dark:text-slate-500{% endif %}">
         {% if sheet.status in 'RECEIVED,COMPLETED' %}<i class="fas fa-check-circle mr-1.5 text-emerald-500"></i>{% endif %}
         Đã Giao KTV
     </div>
-
     <!-- Connector 4 -->
     <div class="w-4 h-1 mx-1 rounded-full transition-colors duration-500 {% if sheet.status in 'RECEIVED,COMPLETED' %}bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]{% else %}bg-slate-200 dark:bg-slate-600{% endif %}"></div>
-
     <!-- Step 5: RECEIVED -->
     <div class="flex shrink-0 whitespace-nowrap items-center px-3 py-1.5 rounded-full transition-all duration-300 {% if sheet.status == 'RECEIVED' %}bg-blue-50 text-blue-700 ring-1 ring-blue-500/30 shadow-sm animate-pulse dark:bg-blue-900/30 dark:text-blue-400 dark:ring-blue-500/50{% elif sheet.status == 'COMPLETED' %}bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400{% else %}text-slate-400 dark:text-slate-500{% endif %}">
         {% if sheet.status == 'COMPLETED' %}<i class="fas fa-check-circle mr-1.5 text-emerald-500"></i>{% endif %}
         Đang Thực Hiện
     </div>
-
     <!-- Connector 5 -->
     <div class="w-4 h-1 mx-1 rounded-full transition-colors duration-500 {% if sheet.status == 'COMPLETED' %}bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]{% else %}bg-slate-200 dark:bg-slate-600{% endif %}"></div>
-
     <!-- Step 6: COMPLETED -->
     <div class="flex shrink-0 whitespace-nowrap items-center px-3 py-1.5 rounded-full transition-all duration-300 {% if sheet.status == 'COMPLETED' %}bg-emerald-100 text-emerald-800 ring-1 ring-emerald-500/50 shadow-sm dark:bg-emerald-900/40 dark:text-emerald-300{% else %}text-slate-400 dark:text-slate-500{% endif %}">
         Hoàn Thành
     </div>
-
 </div>
 ````
 
@@ -8251,19 +7886,15 @@ Dashboard Kỹ Thuật Viên -
 ````html
 {% extends 'base.html' %}
 {% load static %}
-
 {% block title %}Trích Xuất Qua API (Test) | EVN RMS{% endblock %}
-
 {% block header_title %}
     <div class="flex items-center gap-3">
         <i class="fas fa-microchip text-purple-500 text-xl"></i>
         <span>Trích Xuất Qua API (Test)</span>
     </div>
 {% endblock %}
-
 {% block content %}
 <div class="max-w-6xl mx-auto space-y-6" x-data="apiExtractApp()">
-    
     <!-- Info Banner -->
     <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-r-lg flex items-start gap-3">
         <i class="fas fa-info-circle text-purple-500 mt-1"></i>
@@ -8272,14 +7903,11 @@ Dashboard Kỹ Thuật Viên -
             Tính năng này cho phép tải file lên và gọi trực tiếp (động) một Mock API để đọc thông tin từ file. Khác với "Trích xuất Hàng loạt" chạy ngầm, tính năng này trả về dữ liệu trực tiếp dưới dạng JSON trên màn hình để kiểm tra trước.
         </div>
     </div>
-    
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Form Card (Left side) -->
         <div class="page-card p-6 h-fit">
             <h2 class="text-lg font-bold text-slate-800 border-b pb-3 mb-6">Tải lên Bản scan</h2>
-            
             <form @submit.prevent="submitTask" class="space-y-5">
-                
                 <!-- API URL Input -->
                 <div class="space-y-1.5">
                     <label class="block text-sm font-semibold text-slate-700">Đường dẫn API (Tùy chọn)</label>
@@ -8287,14 +7915,12 @@ Dashboard Kỹ Thuật Viên -
                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-colors text-sm">
                     <p class="text-xs text-slate-500">Nếu để trống, hệ thống sẽ trả về dữ liệu Mock (giả lập) để thử nghiệm giao diện.</p>
                 </div>
-
                 <div class="h-64 flex justify-center items-center px-6 pt-5 pb-6 border-2 border-dashed rounded-2xl transition-all relative overflow-hidden group"
                      @dragover.prevent="isDragging = true" 
                      @dragleave.prevent="isDragging = false" 
                      @drop.prevent="handleDrop($event)"
                      :class="isDragging ? 'border-purple-500 bg-purple-50' : 'border-slate-300 bg-slate-50'"
                      x-show="files.length === 0">
-                    
                     <div class="space-y-3 text-center transition-transform group-hover:scale-105 pointer-events-none">
                         <div class="w-16 h-16 mx-auto bg-white rounded-full shadow-sm flex items-center justify-center transition-transform">
                             <i class="fas fa-cloud-upload-alt text-2xl text-purple-600"></i>
@@ -8304,10 +7930,8 @@ Dashboard Kỹ Thuật Viên -
                             <div class="text-xs text-slate-500 mt-1">Hỗ trợ PDF, PNG, JPG (Có thể chọn nhiều file)</div>
                         </div>
                     </div>
-                    
                     <input x-ref="fileInput" @change="handleFiles($event.target.files)" type="file" multiple accept=".pdf,image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                 </div>
-
                 <!-- Header when files are selected -->
                 <div x-show="files.length > 0" class="flex justify-between items-center bg-slate-100 px-4 py-3 rounded-lg" x-cloak>
                     <div class="font-bold text-slate-700">
@@ -8317,7 +7941,6 @@ Dashboard Kỹ Thuật Viên -
                         <i class="fas fa-trash-alt mr-1"></i> Làm lại
                     </button>
                 </div>
-
                 <!-- List of selected files -->
                 <div x-show="files.length > 0" x-cloak class="max-h-[300px] overflow-y-auto border border-slate-200 rounded-lg bg-white shadow-inner p-2 space-y-1">
                     <template x-for="(file, index) in files" :key="index">
@@ -8332,7 +7955,6 @@ Dashboard Kỹ Thuật Viên -
                         </div>
                     </template>
                 </div>
-                
                 <!-- Actions -->
                 <div class="pt-4 flex flex-col gap-3 border-t">
                     <button type="submit" :disabled="loading || files.length === 0"
@@ -8341,7 +7963,6 @@ Dashboard Kỹ Thuật Viên -
                         <i class="fas fa-bolt" x-show="!loading"></i>
                         <span x-text="loading ? 'Đang gọi API & Đọc thông tin...' : 'Gửi Yêu Cầu Trích Xuất'"></span>
                     </button>
-                    
                     <!-- Link back to bulk create -->
                     <a href="{% url 'bulk_create_ui' %}" class="w-full px-5 py-2 text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors flex items-center justify-center gap-2 text-center" :class="{'opacity-50 pointer-events-none': loading}">
                         <i class="fas fa-layer-group"></i>
@@ -8350,7 +7971,6 @@ Dashboard Kỹ Thuật Viên -
                 </div>
             </form>
         </div>
-        
         <!-- Results Card (Right side) -->
         <div class="page-card p-6 flex flex-col h-full lg:h-auto min-h-[500px]">
             <div class="flex justify-between items-center border-b pb-3 mb-4">
@@ -8359,7 +7979,6 @@ Dashboard Kỹ Thuật Viên -
                     <i class="fas fa-check-circle mr-1"></i> Đã trích xuất
                 </span>
             </div>
-            
             <div class="flex-1 bg-slate-900 rounded-lg p-4 overflow-auto text-sm text-green-400 font-mono relative shadow-inner">
                 <div x-show="!resultData && !loading" class="absolute inset-0 flex items-center justify-center text-slate-500" x-cloak>
                     <div class="text-center">
@@ -8367,19 +7986,15 @@ Dashboard Kỹ Thuật Viên -
                         <p>Dữ liệu JSON từ API sẽ hiển thị ở đây</p>
                     </div>
                 </div>
-                
                 <div x-show="loading" class="absolute inset-0 flex flex-col items-center justify-center text-purple-400 bg-slate-900/80 z-10 rounded-lg" x-cloak>
                     <i class="fas fa-circle-notch fa-spin text-4xl mb-4"></i>
                     <p class="animate-pulse font-sans font-semibold">Đang mô phỏng độ trễ API...</p>
                 </div>
-                
                 <pre x-show="resultData" x-text="resultData" class="whitespace-pre-wrap break-all" x-cloak></pre>
             </div>
         </div>
     </div>
-    
 </div>
-
 <script>
     document.addEventListener('alpine:init', () => {
         Alpine.data('apiExtractApp', () => ({
@@ -8388,14 +8003,12 @@ Dashboard Kỹ Thuật Viên -
             apiUrl: '',
             loading: false,
             resultData: null,
-            
             handleDrop(event) {
                 this.isDragging = false;
                 if(!this.loading) {
                     this.handleFiles(event.dataTransfer.files);
                 }
             },
-            
             handleFiles(fileList) {
                 for (let i = 0; i < fileList.length; i++) {
                     this.files.push({
@@ -8405,30 +8018,24 @@ Dashboard Kỹ Thuật Viên -
                 }
                 this.$refs.fileInput.value = '';
             },
-            
             removeFile(index) {
                 this.files.splice(index, 1);
             },
-            
             clearFiles() {
                 this.files = [];
                 this.resultData = null;
             },
-            
             async submitTask() {
                 if(this.loading || this.files.length === 0) return;
                 this.loading = true;
                 this.resultData = null;
-                
                 const formData = new FormData();
                 if (this.apiUrl.trim() !== '') {
                     formData.append('api_url', this.apiUrl.trim());
                 }
-                
                 for (let i = 0; i < this.files.length; i++) {
                     formData.append('scan_files', this.files[i].fileObj);
                 }
-                
                 try {
                     const response = await fetch("{% url 'api_extract_test_execute' %}", {
                         method: 'POST',
@@ -8437,9 +8044,7 @@ Dashboard Kỹ Thuật Viên -
                         },
                         body: formData
                     });
-                    
                     const result = await response.json();
-                    
                     if(response.ok) {
                         // Pretty print JSON
                         this.resultData = JSON.stringify(result, null, 4);
@@ -8472,19 +8077,15 @@ Dashboard Kỹ Thuật Viên -
 ````html
 {% extends 'base.html' %}
 {% load static %}
-
 {% block title %}Trích Xuất Dữ Liệu Hàng Loạt (Test) | EVN RMS{% endblock %}
-
 {% block header_title %}
     <div class="flex items-center gap-3">
         <i class="fas fa-layer-group text-blue-500 text-xl"></i>
         <span>Trích Xuất Dữ Liệu Hàng Loạt (Test)</span>
     </div>
 {% endblock %}
-
 {% block content %}
 <div class="max-w-4xl mx-auto space-y-6" x-data="bulkCreateApp()" @ws-message.window="handleWsMessage($event.detail)">
-    
     <!-- Info Banner -->
     <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg flex items-start gap-3">
         <i class="fas fa-info-circle text-blue-500 mt-1"></i>
@@ -8499,11 +8100,9 @@ Dashboard Kỹ Thuật Viên -
             </a>
         </div>
     </div>
-    
     <!-- Form Card -->
     <div class="page-card p-6">
         <h2 class="text-lg font-bold text-slate-800 border-b pb-3 mb-6">Tải lên Bản scan</h2>
-        
         <form @submit.prevent="submitTask" class="space-y-5">
             <div class="h-64 flex justify-center items-center px-6 pt-5 pb-6 border-2 border-dashed rounded-2xl transition-all relative overflow-hidden group"
                  @dragover.prevent="isDragging = true" 
@@ -8511,7 +8110,6 @@ Dashboard Kỹ Thuật Viên -
                  @drop.prevent="handleDrop($event)"
                  :class="isDragging ? 'border-blue-500 bg-blue-50' : 'border-slate-300 bg-slate-50'"
                  x-show="!isProcessing && files.length === 0">
-                
                 <div class="space-y-3 text-center transition-transform group-hover:scale-105 pointer-events-none">
                     <div class="w-16 h-16 mx-auto bg-white rounded-full shadow-sm flex items-center justify-center transition-transform">
                         <i class="fas fa-cloud-upload-alt text-2xl text-blue-600"></i>
@@ -8521,10 +8119,8 @@ Dashboard Kỹ Thuật Viên -
                         <div class="text-xs text-slate-500 mt-1">Hỗ trợ PDF, PNG, JPG (Giữ phím Ctrl/Shift để chọn nhiều file)</div>
                     </div>
                 </div>
-                
                 <input x-ref="fileInput" @change="handleFiles($event.target.files)" type="file" multiple accept=".pdf,image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
             </div>
-
             <!-- Header when files are selected or processing -->
             <div x-show="files.length > 0" class="flex justify-between items-center bg-slate-100 px-4 py-3 rounded-lg">
                 <div class="font-bold text-slate-700" x-show="!isProcessing">
@@ -8537,7 +8133,6 @@ Dashboard Kỹ Thuật Viên -
                     <i class="fas fa-trash-alt mr-1"></i> Xóa tất cả
                 </button>
             </div>
-
             <!-- List of selected files -->
             <div x-show="files.length > 0" x-cloak class="min-h-[256px] max-h-[500px] overflow-y-auto border border-slate-200 rounded-lg bg-white shadow-inner p-2 space-y-1">
                 <template x-for="(file, index) in files" :key="index">
@@ -8554,7 +8149,6 @@ Dashboard Kỹ Thuật Viên -
                             <i class="fas fa-check-circle text-emerald-500" x-show="file.status === 'success'"></i>
                             <i class="fas fa-times-circle text-red-500" x-show="file.status === 'failed'"></i>
                             <i class="far fa-circle text-slate-300" x-show="file.status === 'pending'"></i>
-                            
                             <span class="truncate font-medium" 
                                   :class="{
                                       'text-slate-700': file.status === 'pending',
@@ -8576,7 +8170,6 @@ Dashboard Kỹ Thuật Viên -
                     </div>
                 </template>
             </div>
-            
             <!-- Actions -->
             <div class="pt-4 flex items-center justify-end gap-3 border-t">
                 <a href="{% url 'sheet_list' %}" class="px-5 py-2.5 text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors" :class="{'opacity-50 pointer-events-none': isProcessing}">
@@ -8591,7 +8184,6 @@ Dashboard Kỹ Thuật Viên -
             </div>
         </form>
     </div>
-    
     <!-- Status Display -->
     <div x-show="serverMessage" x-transition x-cloak class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl flex items-start gap-3">
         <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
@@ -8605,7 +8197,6 @@ Dashboard Kỹ Thuật Viên -
             </p>
         </div>
     </div>
-    
     <!-- Recent Sheets List -->
     <div id="recent-sheets-container">
     {% if recent_sheets %}
@@ -8661,16 +8252,12 @@ Dashboard Kỹ Thuật Viên -
                 </tbody>
             </table>
         </div>
-        
         <!-- Pagination Controls -->
         {% include 'partials/pagination.html' with page_obj=recent_sheets rounded_b="true" %}
-        
     </div>
     {% endif %}
     </div>
-    
 </div>
-
 <script>
     function generateUUID() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -8678,7 +8265,6 @@ Dashboard Kỹ Thuật Viên -
             return v.toString(16);
         });
     }
-
     document.addEventListener('alpine:init', () => {
         Alpine.data('bulkCreateApp', () => ({
             isDragging: false,
@@ -8688,14 +8274,12 @@ Dashboard Kỹ Thuật Viên -
             processedCount: 0,
             totalCount: 0,
             serverMessage: '',
-            
             handleDrop(event) {
                 this.isDragging = false;
                 if(!this.isProcessing) {
                     this.handleFiles(event.dataTransfer.files);
                 }
             },
-            
             handleFiles(fileList) {
                 for (let i = 0; i < fileList.length; i++) {
                     this.files.push({
@@ -8707,30 +8291,25 @@ Dashboard Kỹ Thuật Viên -
                 this.$refs.fileInput.value = '';
                 this.totalCount = this.files.length;
             },
-            
             removeFile(index) {
                 this.files.splice(index, 1);
                 this.totalCount = this.files.length;
             },
-            
             clearFiles() {
                 this.files = [];
                 this.totalCount = 0;
             },
-            
             handleWsMessage(data) {
                 if(data.event_type === 'bulk_progress') {
                     // Update progress counter
                     if(data.status === 'success' || data.status === 'failed') {
                         this.processedCount = data.processed_count;
                     }
-                    
                     // Update file status in list
                     const index = this.files.findIndex(f => f.name === data.file_name && (f.status === 'pending' || f.status === 'processing'));
                     if(index !== -1) {
                         this.files[index].status = data.status;
                     }
-                    
                     if(data.status === 'success') {
                         // Live update the recent sheets table using socket event trigger after EACH file finishes
                         fetch(window.location.href)
@@ -8743,7 +8322,6 @@ Dashboard Kỹ Thuật Viên -
                                 }
                             });
                     }
-                    
                     if(this.processedCount >= this.totalCount && this.totalCount > 0) {
                         // Finished all
                         this.serverMessage = 'Hoàn tất trích xuất ' + this.totalCount + ' file.';
@@ -8754,20 +8332,16 @@ Dashboard Kỹ Thuật Viên -
                     }
                 }
             },
-            
             async submitTask() {
                 if(this.loading || this.files.length === 0 || this.isProcessing) return;
                 this.loading = true;
                 this.serverMessage = '';
-                
                 const idempotencyKey = 'bulk_' + generateUUID();
                 const formData = new FormData();
                 formData.append('idempotency_key', idempotencyKey);
-                
                 for (let i = 0; i < this.files.length; i++) {
                     formData.append('scan_files', this.files[i].fileObj);
                 }
-                
                 try {
                     const response = await fetch("{% url 'bulk_create_execute' %}", {
                         method: 'POST',
@@ -8776,14 +8350,11 @@ Dashboard Kỹ Thuật Viên -
                         },
                         body: formData
                     });
-                    
                     const result = await response.json();
-                    
                     if(response.ok) {
                         this.serverMessage = result.message;
                         this.isProcessing = true;
                         this.loading = false;
-                        
                         // Live update table immediately after upload so new files appear as Pending
                         fetch(window.location.href)
                             .then(res => res.text())
@@ -8820,33 +8391,25 @@ Dashboard Kỹ Thuật Viên -
 {% load auth_extras %}
 {% block title %}Tiến độ Trích xuất OCR | RMS EVN{% endblock %}
 {% block header_title %}{{ list_title|default:"Tiến độ Trích xuất OCR" }}{% endblock %}
-
 {% block content %}
 <!-- ==================== ALPINE.JS REACTIVE COMPONENT ==================== -->
-
-
 <script id="ocr-jobs-data" type="application/json">{{ jobs_json|safe }}</script>
 <script id="ocr-pagination-data" type="application/json">{{ pagination_json|safe|default:'{"current_page":1, "total_pages":1, "has_next":false, "has_previous":false, "total_items":0}' }}</script>
 <script id="ocr-stats-data" type="application/json">{ "total": {{ total_count|default:0 }}, "failed": {{ failed_count|default:0 }}, "processing": {{ processing_count|default:0 }}, "success": {{ success_count|default:0 }} }</script>
-
 <div x-data="getOcrProgressManager(
     JSON.parse(document.getElementById('ocr-jobs-data').textContent),
     JSON.parse(document.getElementById('ocr-pagination-data').textContent),
     JSON.parse(document.getElementById('ocr-stats-data').textContent)
 )" x-init="init()" class="space-y-6 max-w-[1600px] mx-auto pb-12">
-
     <!-- Bỏ Header Title & GPU Warning theo yêu cầu để giao diện gọn gàng hơn -->
-
     <!-- ==================== KPI STATS CARDS (INTERACTIVE FILTERS) ==================== -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         <!-- Card 1: Tổng số Job -->
         <button type="button" @click="setStatusFilter('ALL')" 
                 class="group relative overflow-hidden p-5 md:p-6 rounded-[2rem] transition-all duration-300 text-left shadow-lg hover:shadow-xl active:scale-95 cursor-pointer border backdrop-blur-xl"
                 :class="statusFilter === 'ALL' ? 'bg-indigo-600/90 border-indigo-400 text-white shadow-indigo-500/30' : 'bg-white/80 dark:bg-slate-800/80 border-white/40 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800'">
-            
             <!-- Glassmorphism decorative blobs -->
             <div class="absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br from-indigo-400/20 to-purple-400/20 rounded-full blur-2xl group-hover:bg-indigo-400/30 transition-all duration-500"></div>
-            
             <div class="relative z-10 flex items-center justify-between mb-3">
                 <span class="text-[13px] font-bold uppercase tracking-wider opacity-80">Tổng số Job</span>
                 <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-lg transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110 shadow-inner"
@@ -8860,14 +8423,11 @@ Dashboard Kỹ Thuật Viên -
                 <i class="fas fa-filter text-[10px]" x-show="statusFilter === 'ALL'" x-cloak></i>
             </div>
         </button>
-
         <!-- Card 2: Thành công -->
         <button type="button" @click="setStatusFilter('SUCCESS')" 
                 class="group relative overflow-hidden p-5 md:p-6 rounded-[2rem] transition-all duration-300 text-left shadow-lg hover:shadow-xl active:scale-95 cursor-pointer border backdrop-blur-xl"
                 :class="statusFilter === 'SUCCESS' ? 'bg-emerald-500/90 border-emerald-400 text-white shadow-emerald-500/30' : 'bg-white/80 dark:bg-slate-800/80 border-white/40 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800'">
-            
             <div class="absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br from-emerald-400/20 to-teal-400/20 rounded-full blur-2xl group-hover:bg-emerald-400/30 transition-all duration-500"></div>
-            
             <div class="relative z-10 flex items-center justify-between mb-3">
                 <span class="text-[13px] font-bold uppercase tracking-wider" :class="statusFilter === 'SUCCESS' ? 'opacity-80' : 'text-emerald-600 dark:text-emerald-400'">Thành công</span>
                 <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-lg transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110 shadow-inner"
@@ -8881,14 +8441,11 @@ Dashboard Kỹ Thuật Viên -
                 <i class="fas fa-filter text-[10px]" x-show="statusFilter === 'SUCCESS'" x-cloak></i>
             </div>
         </button>
-
         <!-- Card 3: Đang trích xuất -->
         <button type="button" @click="setStatusFilter('PROCESSING')" 
                 class="group relative overflow-hidden p-5 md:p-6 rounded-[2rem] transition-all duration-300 text-left shadow-lg hover:shadow-xl active:scale-95 cursor-pointer border backdrop-blur-xl"
                 :class="statusFilter === 'PROCESSING' ? 'bg-sky-500/90 border-sky-400 text-white shadow-sky-500/30' : 'bg-white/80 dark:bg-slate-800/80 border-white/40 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800'">
-            
             <div class="absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br from-sky-400/20 to-blue-400/20 rounded-full blur-2xl group-hover:bg-sky-400/30 transition-all duration-500"></div>
-            
             <div class="relative z-10 flex items-center justify-between mb-3">
                 <span class="text-[13px] font-bold uppercase tracking-wider" :class="statusFilter === 'PROCESSING' ? 'opacity-80' : 'text-sky-600 dark:text-sky-400'">Đang trích xuất</span>
                 <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-lg transition-transform duration-300 group-hover:scale-110 shadow-inner"
@@ -8902,14 +8459,11 @@ Dashboard Kỹ Thuật Viên -
                 <i class="fas fa-filter text-[10px]" x-show="statusFilter === 'PROCESSING'" x-cloak></i>
             </div>
         </button>
-
         <!-- Card 4: Thất bại -->
         <button type="button" @click="setStatusFilter('FAILED')" 
                 class="group relative overflow-hidden p-5 md:p-6 rounded-[2rem] transition-all duration-300 text-left shadow-lg hover:shadow-xl active:scale-95 cursor-pointer border backdrop-blur-xl"
                 :class="statusFilter === 'FAILED' ? 'bg-rose-500/90 border-rose-400 text-white shadow-rose-500/30' : 'bg-white/80 dark:bg-slate-800/80 border-white/40 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800'">
-            
             <div class="absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br from-rose-400/20 to-red-400/20 rounded-full blur-2xl group-hover:bg-rose-400/30 transition-all duration-500"></div>
-            
             <div class="relative z-10 flex items-center justify-between mb-3">
                 <span class="text-[13px] font-bold uppercase tracking-wider" :class="statusFilter === 'FAILED' ? 'opacity-80' : 'text-rose-600 dark:text-rose-400'">Cần xử lý lại</span>
                 <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-lg transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110 shadow-inner"
@@ -8924,13 +8478,10 @@ Dashboard Kỹ Thuật Viên -
             </div>
         </button>
     </div>
-
     <!-- ==================== MAIN TABLE CARD WITH SMART FILTERS ==================== -->
     <div class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl rounded-[2rem] shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100/50 dark:border-slate-700/50 overflow-hidden relative transition-colors mt-8">
-        
         <!-- Filter & Search Toolbar -->
         <div class="p-5 md:px-6 md:py-5 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 flex flex-col xl:flex-row xl:items-center justify-between gap-4 transition-colors">
-            
             <!-- Filter Tabs -->
             <div class="flex flex-wrap items-center gap-2 pb-1 md:pb-0">
                 <button type="button" @click="setStatusFilter('ALL')"
@@ -8956,10 +8507,8 @@ Dashboard Kỹ Thuật Viên -
                     <i class="fas fa-triangle-exclamation"></i>
                     <span>Thất bại (<span x-text="stats.failed"></span>)</span>
                 </button>
-
                 <!-- Actions Controls moved here -->
                 <div class="w-px h-6 bg-slate-200/80 dark:bg-slate-700 mx-2 hidden sm:block"></div>
-
                 <!-- BUGS FIXED: Changed template x-if to div x-show x-cloak to prevent DOM duplication by Alpine+HTMX -->
                 <div x-show="stats.failed > 0 || stats.processing > 0" x-cloak style="display: none;">
                     <div class="relative inline-block text-left" x-data="{ open: false }" @click.away="open = false" @keydown.escape.window="open = false">
@@ -8975,7 +8524,6 @@ Dashboard Kỹ Thuật Viên -
                                 <i class="fas fa-chevron-down text-[10px] transition-transform duration-300" :class="{'rotate-180': open}"></i>
                             </button>
                         </div>
-                        
                         <div x-show="open" style="display: none;"
                              x-transition:enter="transition ease-out duration-200"
                              x-transition:enter-start="transform opacity-0 scale-95 translate-y-2"
@@ -8994,20 +8542,17 @@ Dashboard Kỹ Thuật Viên -
                         </div>
                     </div>
                 </div>
-
                 <button type="button" @click="fetchLatestData(true)" :disabled="isSyncing"
                         class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-bold rounded-full transition-all text-[13px] shadow-sm hover:shadow-md cursor-pointer active:scale-95"
                         title="Làm mới dữ liệu">
                     <i class="fas fa-arrows-rotate" :class="isSyncing ? 'fa-spin text-indigo-600' : 'text-slate-500'"></i>
                     <span class="hidden sm:inline">Làm mới</span>
                 </button>
-
                 <a href="{% url 'sheet_create' %}" class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-bold rounded-full shadow-md shadow-indigo-500/30 transition-all text-[13px] shrink-0 cursor-pointer active:scale-95">
                     <i class="fas fa-plus"></i>
                     <span>Tải Lên Mới</span>
                 </a>
             </div>
-
             <!-- Search Box -->
             <div class="flex items-center gap-2 w-full xl:w-auto mt-3 xl:mt-0">
                 <div class="relative w-full xl:w-64 group">
@@ -9021,7 +8566,6 @@ Dashboard Kỹ Thuật Viên -
                         <i class="fas fa-times-circle"></i>
                     </button>
                 </div>
-
                 <!-- Device Filter Selector -->
                 <select x-model="deviceFilter" @change="applyFilter()" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 text-xs rounded-xl px-2.5 py-2 focus:outline-none focus:border-blue-500 font-medium">
                     <option value="ALL">Mọi cấu hình</option>
@@ -9030,7 +8574,6 @@ Dashboard Kỹ Thuật Viên -
                 </select>
             </div>
         </div>
-
         <!-- Sync Indicator Bar -->
         <div class="px-5 py-2.5 bg-slate-50/40 dark:bg-slate-800/40 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
             <div class="flex items-center gap-2">
@@ -9042,7 +8585,6 @@ Dashboard Kỹ Thuật Viên -
                 <span x-show="lastUpdatedTime" class="text-slate-400 dark:text-slate-500 hidden sm:inline">• Cập nhật: <span x-text="lastUpdatedTime"></span></span>
             </div>
         </div>
-
         <!-- Progress Table -->
         <div class="overflow-x-auto -webkit-overflow-scrolling-touch min-h-[460px] relative">
             <!-- Loading Overlay for Pagination/Filtering -->
@@ -9058,7 +8600,6 @@ Dashboard Kỹ Thuật Viên -
                     <span class="font-bold text-slate-700 dark:text-slate-200 text-sm">Đang tải dữ liệu...</span>
                 </div>
             </div>
-
             <table class="w-full text-left border-collapse" :class="{'opacity-50 pointer-events-none transition-opacity duration-200': isSyncing}">
                 <thead>
                     <tr class="bg-slate-50/90 dark:bg-slate-800/90 border-b border-slate-100 dark:border-slate-700 text-slate-400 dark:text-slate-500 text-[11px] font-black uppercase tracking-wider">
@@ -9071,7 +8612,6 @@ Dashboard Kỹ Thuật Viên -
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-700 text-sm relative">
-
                     <!-- Alpine x-for for Real-time Reactive Rows -->
                     <template x-for="job in jobs" :key="job.id">
                         <tr @click="handleRowClick(job, $event)"
@@ -9084,7 +8624,6 @@ Dashboard Kỹ Thuật Viên -
                                 'bg-blue-50/70 dark:bg-blue-900/20 ring-2 ring-blue-400/60 dark:ring-blue-500/40 ring-inset': highlightedJobId === job.id,
                                 'opacity-50 hover:opacity-100': ['ROUTED_TO_STATION','TRANSFERRED','RECEIVED','PENDING_ADMIN_APPROVAL','COMPLETED'].includes(job.sheet_status) && highlightedJobId !== job.id
                             }">
-
                             <!-- Tài liệu Gốc -->
                             <td class="px-6 py-3.5">
                                 <div class="flex items-center gap-3">
@@ -9106,7 +8645,6 @@ Dashboard Kỹ Thuật Viên -
                                     </div>
                                 </div>
                             </td>
-
                             <!-- 3. Cấu hình (CPU / GPU) -->
                             <td class="px-6 py-3.5 whitespace-nowrap">
                                 <span x-show="job.device_mode === 'GPU'" x-cloak
@@ -9118,7 +8656,6 @@ Dashboard Kỹ Thuật Viên -
                                     <i class="fas fa-microchip text-[11px] text-slate-500 dark:text-slate-400"></i> CPU
                                 </span>
                             </td>
-
                             <!-- 4. Thời gian -->
                             <td class="px-6 py-3.5 whitespace-nowrap">
                                 <div class="flex flex-col text-xs">
@@ -9129,7 +8666,6 @@ Dashboard Kỹ Thuật Viên -
                                     </span>
                                 </div>
                             </td>
-
                             <!-- 5. Trạng thái & Tiến trình Bóc tách (Live progress badge) -->
                             <td class="px-6 py-3.5 whitespace-nowrap">
                                 <!-- PENDING -->
@@ -9139,7 +8675,6 @@ Dashboard Kỹ Thuật Viên -
                                         <span x-text="job.stage_text || 'Đang chờ hàng đợi...'"></span>
                                     </span>
                                 </div>
-
                                 <!-- PROCESSING -->
                                 <div x-show="job.status === 'PROCESSING'" x-cloak class="flex flex-col gap-1.5 min-w-[150px] max-w-xs">
                                     <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border border-blue-200/90 dark:border-blue-800/50 shadow-sm w-fit relative overflow-hidden">
@@ -9148,7 +8683,6 @@ Dashboard Kỹ Thuật Viên -
                                         <span class="relative z-10" x-text="(job.stage_text && job.stage_text.match(/Trang \d+(\/\d+)?/i)) ? job.stage_text.match(/Trang \d+(\/\d+)?/i)[0] : 'Đang bóc tách...'"></span>
                                     </span>
                                 </div>
-
                                 <!-- SUCCESS -->
                                 <div x-show="job.status === 'SUCCESS' || job.status === 'SUCCESS_WITH_WARNINGS'" x-cloak class="flex flex-col gap-1.5">
                                     <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50 shadow-sm w-fit">
@@ -9160,7 +8694,6 @@ Dashboard Kỹ Thuật Viên -
                                         <span>Đã vào Phiếu Chờ Rà Soát</span>
                                     </span>
                                 </div>
-
                                 <!-- FAILED -->
                                 <div x-show="job.status === 'FAILED'" x-cloak class="flex flex-col gap-1.5">
                                     <button type="button" @click.stop="viewError(job.sheet_title, job.error_code, job.error_stage, job.error_detail, job.id, job.device_mode)" 
@@ -9173,7 +8706,6 @@ Dashboard Kỹ Thuật Viên -
                                     <span class="text-[11px] text-rose-500/80 dark:text-rose-400/80 font-medium ml-1 truncate max-w-[200px]" x-text="job.error_detail ? (job.error_detail.substring(0, 35) + '...') : 'Bấm để xem chi tiết'"></span>
                                 </div>
                             </td>
-
                             <!-- 5b. Trạng thái Phiếu -->
                             <td class="px-6 py-3.5 whitespace-nowrap">
                                 <span x-show="job.sheet_status === 'DRAFT'" x-cloak class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-600"><i class="fas fa-pencil text-[9px]"></i> Nháp</span>
@@ -9184,7 +8716,6 @@ Dashboard Kỹ Thuật Viên -
                                 <span x-show="job.sheet_status === 'PENDING_ADMIN_APPROVAL'" x-cloak class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-orange-50 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 border border-orange-200 dark:border-orange-800"><i class="fas fa-stamp text-[9px]"></i> Chờ Ban hành</span>
                                 <span x-show="job.sheet_status === 'COMPLETED'" x-cloak class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800"><i class="fas fa-circle-check text-[9px]"></i> Hoàn thành</span>
                             </td>
-
                             <!-- 6. Thao tác -->
                             <td class="px-6 py-3.5 text-left whitespace-nowrap">
                                 <div class="inline-flex items-center justify-start gap-2">
@@ -9195,14 +8726,12 @@ Dashboard Kỹ Thuật Viên -
                                             <i class="fas fa-arrow-right text-[9px] group-hover:translate-x-0.5 transition-transform"></i>
                                         </span>
                                     </div>
-
                                     <!-- Khi ĐANG XỬ LÝ / CHỜ: Trạng thái chờ không thể click -->
                                     <div x-show="job.status === 'PROCESSING' || job.status === 'PENDING'" x-cloak class="flex items-center gap-1.5 text-slate-400 dark:text-slate-500 text-[11px] font-medium">
                                         <i class="fas fa-spinner fa-spin text-sky-500 text-[10px]" x-show="job.status === 'PROCESSING'"></i>
                                         <i class="fas fa-hourglass-half text-slate-400 text-[10px]" x-show="job.status === 'PENDING'"></i>
                                         <span x-text="job.status === 'PROCESSING' ? 'Đang chạy' : 'Đang chờ'"></span>
                                     </div>
-
                                     <!-- Khi THẤT BẠI: Nút Chạy lại phiếu -->
                                     <div x-show="job.status === 'FAILED'" x-cloak class="flex items-center gap-1.5" @click.stop>
                                         <button type="button" @click="retryJob(job.id)" :disabled="retryingJobId === job.id"
@@ -9221,7 +8750,6 @@ Dashboard Kỹ Thuật Viên -
                             </td>
                         </tr>
                     </template>
-
                     <!-- Empty State -->
                     <tr x-show="jobs.length === 0" x-cloak>
                         <td colspan="6" class="px-6 py-20 text-center">
@@ -9240,7 +8768,6 @@ Dashboard Kỹ Thuật Viên -
                 </tbody>
             </table>
         </div>
-        
         <!-- Pagination UI -->
         <div class="p-5 border-t border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 flex flex-col md:flex-row items-center justify-between gap-4 transition-colors">
             <div class="text-[13px] text-slate-500 dark:text-slate-400 font-medium">
@@ -9254,7 +8781,6 @@ Dashboard Kỹ Thuật Viên -
                         :class="!pagination.has_previous ? 'border-slate-100 dark:border-slate-700 shadow-none' : 'border-slate-200 dark:border-slate-600'">
                     <i class="fas fa-chevron-left mr-1.5 text-[10px]"></i> Trước
                 </button>
-                
                 <template x-for="page in Array.from({length: pagination.total_pages}, (_, i) => i + 1)">
                     <button type="button"
                             x-show="page === 1 || page === pagination.total_pages || Math.abs(page - pagination.current_page) <= 2"
@@ -9264,7 +8790,6 @@ Dashboard Kỹ Thuật Viên -
                         <span x-text="page"></span>
                     </button>
                 </template>
-                
                 <button type="button" 
                         @click="goToPage(pagination.current_page + 1)" 
                         :disabled="!pagination.has_next"
@@ -9275,11 +8800,9 @@ Dashboard Kỹ Thuật Viên -
             </div>
         </div>
     </div>
-
     <!-- ==================== MODAL XEM CHI TIẾT LỖI ==================== -->
     <div x-show="showErrorModal" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6" x-cloak>
         <div x-show="showErrorModal" x-transition.opacity class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" @click="showErrorModal = false"></div>
-        
         <div x-show="showErrorModal" x-transition.scale.origin.center class="relative bg-white dark:bg-slate-800 rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden border border-slate-100 dark:border-slate-700 z-10 flex flex-col max-h-[90vh] transition-colors">
             <div class="p-5 border-b border-slate-100 dark:border-slate-700 bg-rose-50/70 dark:bg-rose-900/20 flex justify-between items-center shrink-0 transition-colors">
                 <div class="flex items-center gap-3">
@@ -9295,7 +8818,6 @@ Dashboard Kỹ Thuật Viên -
                     <i class="fas fa-times text-base"></i>
                 </button>
             </div>
-            
             <div class="p-6 space-y-4 overflow-y-auto">
                 <div class="grid grid-cols-2 gap-3">
                     <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 transition-colors">
@@ -9307,12 +8829,10 @@ Dashboard Kỹ Thuật Viên -
                         <div class="text-xs font-bold text-slate-700 dark:text-slate-300 mt-1 truncate" x-text="errorData.stage"></div>
                     </div>
                 </div>
-
                 <div>
                     <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Thông báo chi tiết từ Hệ thống AI</label>
                     <div class="p-4 rounded-2xl bg-slate-900 text-slate-200 text-xs font-mono leading-relaxed whitespace-pre-wrap max-h-48 overflow-y-auto border border-slate-800 dark:border-slate-700 selection:bg-rose-500" x-text="errorData.detail"></div>
                 </div>
-
                 <!-- Gợi ý thông minh khi lỗi GPU -->
                 <div x-show="errorData.deviceMode === 'GPU' || (errorData.detail && (errorData.detail.includes('GPU') || errorData.detail.includes('CUDA')))" x-cloak
                      class="p-4 rounded-2xl bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 border border-purple-200/80 dark:border-purple-800/50 text-purple-900 dark:text-purple-300 text-[13px] leading-relaxed flex items-start gap-3.5 transition-colors shadow-sm">
@@ -9322,7 +8842,6 @@ Dashboard Kỹ Thuật Viên -
                         <p class="mt-1 text-purple-700/80 dark:text-purple-400/80 font-medium">Bạn có thể bấm ngay nút <strong>"Chạy lại (CPU)"</strong> bên dưới để hệ thống tự động chuyển sang chế độ CPU chuẩn và bóc tách phiếu bình thường.</p>
                     </div>
                 </div>
-
                 <!-- Gợi ý thông thường -->
                 <div x-show="!(errorData.deviceMode === 'GPU' || (errorData.detail && (errorData.detail.includes('GPU') || errorData.detail.includes('CUDA'))))" x-cloak
                      class="p-4 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border border-amber-200/80 dark:border-amber-800/50 text-amber-900 dark:text-amber-300 text-[13px] leading-relaxed flex items-start gap-3.5 transition-colors shadow-sm">
@@ -9330,7 +8849,6 @@ Dashboard Kỹ Thuật Viên -
                     <span class="font-medium">Gợi ý: Nếu ảnh mờ hoặc mạng gián đoạn, bạn có thể bấm <strong>"Trích xuất lại ngay"</strong> để yêu cầu AI phân tích lại file.</span>
                 </div>
             </div>
-            
             <div class="p-5 border-t border-slate-100 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/80 flex justify-end gap-3 shrink-0 transition-colors">
                 <button @click="showErrorModal = false" class="px-5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-full transition-colors font-bold text-[13px] cursor-pointer shadow-sm hover:shadow-md active:scale-95">
                     Đóng
@@ -9348,11 +8866,9 @@ Dashboard Kỹ Thuật Viên -
             </div>
         </div>
     </div>
-
     <!-- ==================== MODAL XEM JSON ==================== -->
     <div x-show="showModal" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6" x-cloak>
         <div x-show="showModal" x-transition.opacity class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" @click="showModal = false"></div>
-        
         <div x-show="showModal" x-transition.scale.origin.bottom class="relative bg-slate-900 text-slate-300 rounded-3xl shadow-2xl w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden border border-slate-800 z-10">
             <div class="p-4 border-b border-slate-800 bg-slate-900 flex justify-between items-center shrink-0">
                 <h3 class="font-bold text-emerald-400 flex items-center gap-2 text-sm">
@@ -9362,7 +8878,6 @@ Dashboard Kỹ Thuật Viên -
                     <i class="fas fa-times text-base"></i>
                 </button>
             </div>
-            
             <div class="p-0 overflow-y-auto flex-1 bg-[#18181b] relative">
                 <div x-show="isLoading" class="absolute inset-0 flex items-center justify-center bg-[#18181b]/80 z-10">
                     <i class="fas fa-circle-notch fa-spin text-3xl text-emerald-500"></i>
@@ -9381,8 +8896,6 @@ Dashboard Kỹ Thuật Viên -
         </div>
     </div>
 </div>
-
-
 {% endblock %}
 ````
 
@@ -9390,7 +8903,6 @@ Dashboard Kỹ Thuật Viên -
 ````html
 {% extends "base.html" %}
 {% load auth_extras %}
-
 {% block title %}Chi tiết Phiếu {{ sheet.sheet_code }} | RMS{% endblock %}
 {% block header_title %}
 <div class="flex items-center gap-3">
@@ -9401,18 +8913,15 @@ Dashboard Kỹ Thuật Viên -
     </div>
 </div>
 {% endblock %}
-
 {% block header_right %}
 <!-- Compact Inline Stepper -->
 <div id="header-status-stepper" class="hidden lg:block mr-2">
     {% include "sheets/partials/_status_stepper.html" with sheet=sheet %}
 </div>
-
 <div class="hidden sm:flex items-center text-xs text-slate-500 font-medium bg-slate-100/80 px-3 py-1.5 rounded-lg border border-slate-200/60 shadow-inner mr-2 dark:text-slate-400 dark:bg-slate-800/80" title="Thời gian trích xuất phiếu">
     <i class="far fa-clock mr-1.5 text-blue-500"></i> Trích xuất: {{ sheet.created_at|date:"H:i d/m/Y" }}
 </div>
 {% endblock %}
-
 {% block content %}
 <style>
     /* Allow main content to scroll if it gets taller */
@@ -9426,7 +8935,6 @@ Dashboard Kỹ Thuật Viên -
     /* Custom TomSelect styles to match Tailwind */
     .ts-control { border-radius: 0.5rem; border-color: #e2e8f0; padding: 0.625rem 1rem; font-size: 1rem; background-color: #f8fafc; }
     .ts-control.focus { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); background-color: #ffffff; }
-    
     /* TomSelect Clear Button & Item Editing */
     .plugin-clear_button .clear-button {
         font-size: 1.15rem !important;
@@ -9449,7 +8957,6 @@ Dashboard Kỹ Thuật Viên -
     .ts-wrapper .ts-control .item {
         cursor: text;
     }
-    
     /* Dark mode for TomSelect */
     html.dark .ts-wrapper .ts-control { border-color: rgba(51, 65, 85, 1) !important; background-color: rgba(30, 41, 59, 0.5) !important; color: #e2e8f0 !important; }
     html.dark .ts-wrapper.focus .ts-control, html.dark .ts-control.focus { border-color: #3b82f6 !important; background-color: rgba(15, 23, 42, 1) !important; }
@@ -9466,13 +8973,11 @@ Dashboard Kỹ Thuật Viên -
     window.BAYS_DATA = {{ bays_json|safe|default:"[]" }};
     window.RELAYS_DATA = {{ relays_json|safe|default:"[]" }};
     window.PAGE1_FIELDS = {{ page1_fields_json|safe|default:"{}" }};
-    
     // Initial data from server
     window.currentStationId = "{{ current_station_id|default:'' }}";
     window.currentRelayId = "{{ current_relay_id|default:'' }}";
     window.currentRelayBayId = "{{ current_relay_bay_id|default:'' }}";
     window.currentRelayText = "{{ sheet.relay_text|default:''|escapejs }}";
-    
     function getEffectiveRelayId() {
         // 1. Direct TomSelect instance
         if (window.metadataFormInstance && window.metadataFormInstance.tsRelay) {
@@ -9483,11 +8988,9 @@ Dashboard Kỹ Thuật Viên -
             const v = window.tsRelay.getValue();
             if (v) return v;
         }
-        
         // 2. Select element
         const sel = document.getElementById('relaySelect');
         if (sel && sel.value) return sel.value;
-        
         // 3. TomSelect UI selected item
         const tsWrapper = sel ? sel.closest('.ts-wrapper') : document.querySelector('#relaySelect')?.closest('.ts-wrapper');
         if (tsWrapper) {
@@ -9507,46 +9010,37 @@ Dashboard Kỹ Thuật Viên -
                 if (text) return text;
             }
         }
-        
         // 4. Alpine metadataForm instance selectedRelay
         if (window.metadataFormInstance && window.metadataFormInstance.selectedRelay) {
             return window.metadataFormInstance.selectedRelay;
         }
-
         // 5. Server currentRelayId
         if (window.currentRelayId) return window.currentRelayId;
-
         // 6. Extracted OCR relay name
         if (window.PAGE1_FIELDS && window.PAGE1_FIELDS['relay_name']) {
             return window.PAGE1_FIELDS['relay_name'];
         }
-
         return null;
     }
-
     window.openRelayGlobalModal = function(relayId) {
         if (!relayId) {
             relayId = getEffectiveRelayId();
         }
-        
         if (!relayId) {
             alert('Vui lòng chọn hoặc tìm kiếm Rơ-le trước để xem thông tin CSDL đối chiếu.');
             return;
         }
-
         const modal = document.getElementById('relayDetailModal');
         if (modal) {
             modal.classList.remove('hidden');
             modal.style.setProperty('display', 'flex', 'important');
         }
-
         // Also notify Alpine if available
         const root = document.getElementById('sheetDetailRoot');
         if (root && window.Alpine) {
             try { Alpine.$data(root).showRelayDetailModal = true; } catch(e) {}
         }
         window.dispatchEvent(new CustomEvent('open-relay-modal', { detail: { relayId: relayId } }));
-
         const target = document.getElementById('relay-detail-modal-body');
         if (target) {
             target.innerHTML = `
@@ -9557,7 +9051,6 @@ Dashboard Kỹ Thuật Viên -
                 </div>
             `;
         }
-
         const url = `/stations/htmx/relay/${encodeURIComponent(relayId)}/detail/?sheet_id={{ sheet.id }}`;
         fetch(url)
             .then(res => {
@@ -9586,7 +9079,6 @@ Dashboard Kỹ Thuật Viên -
                 }
             });
     };
-
     window.closeRelayGlobalModal = function() {
         const modal = document.getElementById('relayDetailModal');
         if (modal) {
@@ -9599,7 +9091,6 @@ Dashboard Kỹ Thuật Viên -
         }
         window.dispatchEvent(new CustomEvent('close-relay-modal'));
     };
-
     document.addEventListener('DOMContentLoaded', function() {
         const modal = document.getElementById('relayDetailModal');
         if (modal) {
@@ -9618,7 +9109,6 @@ Dashboard Kỹ Thuật Viên -
             }
         });
     });
-    
     // Register with Alpine
     if (window.Alpine) {
         Alpine.data('metadataForm', () => window.metadataForm());
@@ -9627,43 +9117,34 @@ Dashboard Kỹ Thuật Viên -
             Alpine.data('metadataForm', () => window.metadataForm());
         });
     }
-
     window.metadataForm = function() {
         const ocrStationRaw = String(window.PAGE1_FIELDS['Trạm'] || window.PAGE1_FIELDS['station'] || '');
         const ocrEquipRaw = String(window.PAGE1_FIELDS['Thiết Bị Được Bảo Vệ'] || window.PAGE1_FIELDS['protected_equipment'] || '');
         const ocrBreakerRaw = String(window.PAGE1_FIELDS['Máy Cắt'] || window.PAGE1_FIELDS['circuit_breaker'] || '');
         const ocrBayRaw = `${ocrEquipRaw} ${ocrBreakerRaw}`.trim();
         const ocrRelayRaw = String(window.PAGE1_FIELDS['Tên Rơ-le'] || window.PAGE1_FIELDS['relay_name'] || '');
-
         return {
             stations: window.STATIONS_DATA,
             bays: window.BAYS_DATA,
             relays: window.RELAYS_DATA,
-            
             selectedStation: window.currentStationId,
             selectedBay: window.currentRelayBayId,
             selectedRelay: window.currentRelayId,
-            
             // Chế độ Nhập tay tự do vs Chọn từ CSDL
             isCustomRelayMode: Boolean(window.currentRelayText && !window.currentRelayId),
             customRelayText: window.currentRelayText || '',
-            
             ocrStationRaw: ocrStationRaw,
             ocrBayRaw: ocrBayRaw,
             ocrRelayRaw: ocrRelayRaw,
-            
             tsStation: null,
             tsBay: null,
             tsRelay: null,
-            
             autoSuggestMessage: '',
             isOcrRunning: {% if sheet.ocr_jobs.last and sheet.ocr_jobs.last.status in 'PENDING PROCESSING' %}true{% else %}false{% endif %},
-            
             openRelayModal(relayId) {
                 const rVal = relayId || (this.tsRelay ? this.tsRelay.getValue() : null) || this.selectedRelay;
                 window.openRelayGlobalModal(rVal);
             },
-
             toggleRelayMode() {
                 this.isCustomRelayMode = !this.isCustomRelayMode;
                 if (this.isCustomRelayMode) {
@@ -9690,7 +9171,6 @@ Dashboard Kỹ Thuật Viên -
                     }
                 }
             },
-
             resetToOcr() {
                 this.autoSuggestMessage = '';
                 this.runAutoSuggest(true);
@@ -9701,19 +9181,16 @@ Dashboard Kỹ Thuật Viên -
                     showToast('Đã khôi phục các thông số gợi ý từ OCR bản scan', 'info');
                 }
             },
-            
             init() {
                 window.metadataFormInstance = this;
                 // Initialize TomSelects
                 this.$nextTick(() => {
                     this.initTomSelects();
-                    
                     // Determine auto-suggest if ANY of the main fields are missing
                     if (!this.selectedStation || !this.selectedBay || !this.selectedRelay) {
                         this.runAutoSuggest();
                     }
                 });
-                
                 // Auto-reload when Pipeline 1 completes to show newly extracted metadata
                 window.addEventListener('ws-message', (e) => {
                     const data = e.detail;
@@ -9734,13 +9211,11 @@ Dashboard Kỹ Thuật Viên -
                     }
                 });
             },
-            
             async runAutoSuggest(force = false) {
                 let suggestedStationId = null;
                 let suggestedBayId = null;
                 let suggestedRelayId = null;
                 let msg = [];
-                
                 const ocrStationRaw = String(window.PAGE1_FIELDS['Trạm'] || window.PAGE1_FIELDS['station'] || '');
                 const ocrEquipRaw = String(window.PAGE1_FIELDS['Thiết Bị Được Bảo Vệ'] || window.PAGE1_FIELDS['protected_equipment'] || '');
                 const ocrBreakerRaw = String(window.PAGE1_FIELDS['Máy Cắt'] || window.PAGE1_FIELDS['circuit_breaker'] || '');
@@ -9750,9 +9225,7 @@ Dashboard Kỹ Thuật Viên -
                 const ocrCircuitRaw = String(window.PAGE1_FIELDS['Mạch Bảo Vệ'] || window.PAGE1_FIELDS['Tủ Bảo Vệ'] || window.PAGE1_FIELDS['protection_circuit'] || window.PAGE1_FIELDS['protection_cabinet'] || '');
                 const ocrProtTypeRaw = String(window.PAGE1_FIELDS['Kiểu Bảo Vệ'] || window.PAGE1_FIELDS['protection_type'] || '');
                 const ocrMfrRaw = String(window.PAGE1_FIELDS['Nhà Chế Tạo'] || window.PAGE1_FIELDS['manufacturer'] || '');
-                
                 if (!ocrStationRaw.trim() && !ocrBayRaw.trim() && !ocrRelayRaw.trim()) return;
-
                 // Hàm chuẩn hóa tiếng Việt
                 const normalizeText = (str) => {
                     return String(str || '')
@@ -9764,11 +9237,9 @@ Dashboard Kỹ Thuật Viên -
                         .replace(/\s+/g, ' ')
                         .trim();
                 };
-
                 let foundStation = (!force && this.selectedStation) ? this.stations.find(s => s.id == this.selectedStation) : null;
                 let foundBay = (!force && this.selectedBay) ? this.bays.find(b => b.id == this.selectedBay) : null;
                 let foundRelay = (!force && this.selectedRelay) ? this.relays.find(r => r.id == this.selectedRelay) : null;
-
                 // Hàm đếm số từ trùng khớp (Token Intersection)
                 const getMatchScore = (source, target, removePattern = null) => {
                     if (!source || !target) return 0;
@@ -9780,11 +9251,9 @@ Dashboard Kỹ Thuật Viên -
                     }
                     if (normSource === normTarget) return 100;
                     if (normTarget.includes(normSource) || normSource.includes(normTarget)) return 50;
-                    
                     const srcTokens = normSource.split(/\s+/).filter(w => w.length > 0);
                     const tgtTokens = normTarget.split(/\s+/).filter(w => w.length > 0);
                     if (srcTokens.length === 0 || tgtTokens.length === 0) return 0;
-                    
                     let matches = 0;
                     for (const s of srcTokens) {
                         if (tgtTokens.includes(s)) matches++;
@@ -9799,7 +9268,6 @@ Dashboard Kỹ Thuật Viên -
                     }
                     return (matches / Math.max(srcTokens.length, tgtTokens.length)) * 10;
                 };
-
                 // --- BƯỚC 1: TÌM TRẠM ---
                 if (!foundStation && ocrStationRaw) {
                     let maxScore = 0;
@@ -9810,7 +9278,6 @@ Dashboard Kỹ Thuật Viên -
                         else if (ocrStationRaw.includes('220') && s.station_name.includes('220')) bonus = 20;
                         else if (ocrStationRaw.includes('110') && s.station_name.includes('110')) bonus = 20;
                         else if (ocrStationRaw.includes('22') && s.station_name.includes('22')) bonus = 10;
-                        
                         if (score + bonus > maxScore) {
                             maxScore = score + bonus;
                             foundStation = s;
@@ -9818,19 +9285,16 @@ Dashboard Kỹ Thuật Viên -
                     }
                     if (maxScore < 5) foundStation = null;
                 }
-
                 if (foundStation) {
                     msg.push(`Trạm: <b class="text-green-700">${foundStation.station_name}</b> <i class="fas fa-check-circle text-green-500"></i>`);
                     if (!this.selectedStation) suggestedStationId = foundStation.id;
                 } else if (ocrStationRaw) {
                     msg.push(`Trạm: <b class="text-orange-600">${ocrStationRaw}</b> <i class="fas fa-exclamation-circle text-orange-500" title="Không có trong CSDL"></i>`);
                 }
-
                 // --- BƯỚC 2: TÌM NGĂN LỘ (chỉ tìm trong Trạm đã chọn) ---
                 if (!foundBay && ocrBayRaw) {
                     let maxScore = 0;
                     const searchBays = foundStation ? this.bays.filter(b => b.station_id == foundStation.id) : this.bays;
-                    
                     for (const b of searchBays) {
                         const score = getMatchScore(ocrBayRaw, b.bay_name, /ngan\s*(lo)?\s*|may\s*cat\s*|khang\s*/g);
                         if (score > maxScore) {
@@ -9840,7 +9304,6 @@ Dashboard Kỹ Thuật Viên -
                     }
                     if (maxScore < 1) foundBay = null;
                 }
-                
                 if (foundBay) {
                     msg.push(`Ngăn: <b class="text-green-700">${foundBay.bay_name}</b> <i class="fas fa-check-circle text-green-500"></i>`);
                     if (!this.selectedBay) suggestedBayId = foundBay.id;
@@ -9854,7 +9317,6 @@ Dashboard Kỹ Thuật Viên -
                 } else if (ocrBayRaw) {
                     msg.push(`Ngăn: <b class="text-orange-600">${ocrBayRaw}</b> <i class="fas fa-exclamation-circle text-orange-500" title="Không có trong CSDL"></i>`);
                 }
-
                 // Đảm bảo nạp đầy đủ danh sách Rơ-le của Trạm trước khi chấm điểm Rơ-le
                 const targetStationForRelays = foundStation ? foundStation.id : (this.selectedStation || suggestedStationId);
                 if (targetStationForRelays && (!this.relays || this.relays.length === 0)) {
@@ -9867,7 +9329,6 @@ Dashboard Kỹ Thuật Viên -
                         console.warn('Could not load station relays in autoSuggest:', err);
                     }
                 }
-
                 // --- BƯỚC 3: NHẬN DIỆN RƠ-LE ĐA TẦNG THÔNG MINH (MULTI-LAYER RELAY MATCHER) ---
                 if (!foundRelay && (ocrRelayRaw || ocrBayRaw || ocrProtTypeRaw)) {
                     const MODEL_REGISTRY = {
@@ -9878,26 +9339,22 @@ Dashboard Kỹ Thuật Viên -
                         '7sj64': { fns: ['50/51', '67', 'bcu'], mfr: 'siemens' },
                         '7sj62': { fns: ['50/51', '67', 'bcu'], mfr: 'siemens' },
                         '7sj': { fns: ['50/51', '67', 'bcu'], mfr: 'siemens' },
-
                         '7sa87': { fns: ['21', '87l'], mfr: 'siemens' },
                         '7sa86': { fns: ['21', '87l'], mfr: 'siemens' },
                         '7sa82': { fns: ['21'], mfr: 'siemens' },
                         '7sa6': { fns: ['21', '87l'], mfr: 'siemens' },
                         '7sa52': { fns: ['21', '87l'], mfr: 'siemens' },
                         '7sa': { fns: ['21', '87l'], mfr: 'siemens' },
-
                         '7sd87': { fns: ['87l', '21'], mfr: 'siemens' },
                         '7sd86': { fns: ['87l', '21'], mfr: 'siemens' },
                         '7sd82': { fns: ['87l'], mfr: 'siemens' },
                         '7sd61': { fns: ['87l'], mfr: 'siemens' },
                         '7sd52': { fns: ['87l', '21'], mfr: 'siemens' },
                         '7sd': { fns: ['87l', '21'], mfr: 'siemens' },
-
                         '7sl87': { fns: ['87l', '21'], mfr: 'siemens' },
                         '7sl86': { fns: ['87l', '21'], mfr: 'siemens' },
                         '7sl82': { fns: ['87l', '21'], mfr: 'siemens' },
                         '7sl': { fns: ['87l', '21'], mfr: 'siemens' },
-
                         '7ut87': { fns: ['87t', '87r', '64ref'], mfr: 'siemens' },
                         '7ut86': { fns: ['87t', '87r', '64ref'], mfr: 'siemens' },
                         '7ut85': { fns: ['87t', '87r', '64ref'], mfr: 'siemens' },
@@ -9905,11 +9362,9 @@ Dashboard Kỹ Thuật Viên -
                         '7ut63': { fns: ['87t', '87r', '64ref'], mfr: 'siemens' },
                         '7ut61': { fns: ['87t', '64ref'], mfr: 'siemens' },
                         '7ut': { fns: ['87r', '87t', '64ref'], mfr: 'siemens' },
-
                         '7ss85': { fns: ['87b'], mfr: 'siemens' },
                         '7ss52': { fns: ['87b'], mfr: 'siemens' },
                         '7ss': { fns: ['87b'], mfr: 'siemens' },
-
                         '7vk87': { fns: ['50bf', '79', 'bcu'], mfr: 'siemens' },
                         '7vk61': { fns: ['50bf', '79'], mfr: 'siemens' },
                         '7vk': { fns: ['50bf', '79', 'bcu'], mfr: 'siemens' },
@@ -9961,7 +9416,6 @@ Dashboard Kỹ Thuật Viên -
                         'rex640': { fns: ['87t', '87l', '50/51', 'bcu'], mfr: 'abb' },
                         'rex615': { fns: ['50/51', '67', 'bcu'], mfr: 'abb' },
                         'rex521': { fns: ['50/51', '67'], mfr: 'abb' },
-
                         'rel670': { fns: ['21', '87l'], mfr: 'abb' },
                         'rel650': { fns: ['21'], mfr: 'abb' },
                         'red670': { fns: ['87l', '21'], mfr: 'abb' },
@@ -9973,7 +9427,6 @@ Dashboard Kỹ Thuật Viên -
                         'rec670': { fns: ['bcu'], mfr: 'abb' },
                         'rec650': { fns: ['bcu'], mfr: 'abb' },
                         'reg670': { fns: ['87g', '40', '64g'], mfr: 'abb' },
-
                         'ret': { fns: ['87t', '87r', '64ref'], mfr: 'abb' },
                         'rel': { fns: ['21'], mfr: 'abb' },
                         'red': { fns: ['87l'], mfr: 'abb' },
@@ -9983,7 +9436,6 @@ Dashboard Kỹ Thuật Viên -
                         'rem': { fns: ['49', '50/51'], mfr: 'abb' },
                         'reg': { fns: ['87g'], mfr: 'abb' },
                         'vc100': { fns: ['90'], mfr: 'abb' },
-
                         // MiCOM (Schneider / Alstom / AREVA)
                         'p122': { fns: ['50/51', '67'], mfr: 'micom' },
                         'p123': { fns: ['50/51', '67'], mfr: 'micom' },
@@ -10027,7 +9479,6 @@ Dashboard Kỹ Thuật Viên -
                         'p841': { fns: ['bcu', '79', '25'], mfr: 'micom' },
                         'p84': { fns: ['bcu', '79', '25'], mfr: 'micom' },
                         'mcag': { fns: ['64ref'], mfr: 'micom' },
-
                         't60': { fns: ['87t', '87r'], mfr: 'ge' },
                         'l90': { fns: ['87l'], mfr: 'ge' },
                         'd60': { fns: ['21'], mfr: 'ge' },
@@ -10047,7 +9498,6 @@ Dashboard Kỹ Thuật Viên -
                         'pcs-921': { fns: ['50/51', '50bf', '67'], mfr: 'nari' },
                         'rcs-921': { fns: ['50/51', '50bf', '67'], mfr: 'nari' }
                     };
-
                     const RELAY_FUNCTION_KEYWORDS = {
                         '87l': ['87l', 'f87l', 'so lech dz', 'so lech duong day', 'so lech quang', 'so lech dd', 'so lech'],
                         '21': ['f21', 'khoang cach', '21 21n', '21n'],
@@ -10067,7 +9517,6 @@ Dashboard Kỹ Thuật Viên -
                         '25': ['kiem tra hoa dong bo', 'f25', 'synchrocheck', 'hoa dong bo'],
                         'bcu': ['bcu', 'dieu khien ngan', 'dieu khien', 'bay control']
                     };
-
                     const MANUFACTURER_ALIASES = {
                         'nari': ['nari', 'nr', 'nr electric', 'nam thuy'],
                         'nr electric': ['nari', 'nr', 'nr electric', 'nam thuy'],
@@ -10093,7 +9542,6 @@ Dashboard Kỹ Thuật Viên -
                         'ge': ['ge', 'general electric', 'multilin', 'enervista'],
                         'mr': ['mr', 'reinhausen', 'maschinenfabrik reinhausen']
                     };
-
                     const AUXILIARY_KEYWORDS = [
                         'ro le hoi', 'van ap luc', 'van cat nhanh', 'van ', 'dong ho nhiet do', 'dong ho muc dau',
                         'dong ho', 'ap luc', 'muc dau', 'nhiet do', 'lua chon thoi diem',
@@ -10101,7 +9549,6 @@ Dashboard Kỹ Thuật Viên -
                         'cfc', 'sigra', 'continuous function chart', 'single line editor', 'display editor', 'system configurator',
                         'selogic', 'quickset', 'synchrowave', 'graphical logic editor', 'terminal'
                     ];
-
                     let targetCircuit = null;
                     const normCircuit = normalizeText(`${ocrCircuitRaw} ${window.PAGE1_FIELDS['Mục Đích Ban Hành / Chỉnh Định'] || ''} ${window.PAGE1_FIELDS['Tiêu Đề Phiếu'] || ''}`);
                     if (/\b(mach 1|bo 1|bao ve 1|main 1|circuit 1|wr1|wr4|m1)\b/.test(normCircuit) || normCircuit.includes('mach 1') || normCircuit.includes('bo 1') || normCircuit.includes('wr4') || normCircuit.includes('wr1')) {
@@ -10109,7 +9556,6 @@ Dashboard Kỹ Thuật Viên -
                     } else if (/\b(mach 2|bo 2|bao ve 2|main 2|circuit 2|wr2|wr5|m2)\b/.test(normCircuit) || normCircuit.includes('mach 2') || normCircuit.includes('bo 2') || normCircuit.includes('wr5') || normCircuit.includes('wr2')) {
                         targetCircuit = 2;
                     }
-
                     const normRelay = normalizeText(`${ocrRelayRaw} ${ocrSerialRaw}`);
                     const normRelayCompact = normRelay.replace(/\s+/g, '');
                     const normProt = normalizeText(ocrProtTypeRaw);
@@ -10117,10 +9563,8 @@ Dashboard Kỹ Thuật Viên -
                     const normMfr = normalizeText(ocrMfrRaw);
                     const ocrSoftwareRaw = String(window.PAGE1_FIELDS['Phần mềm'] || window.PAGE1_FIELDS['software'] || '');
                     const normSoftware = normalizeText(ocrSoftwareRaw);
-
                     let detectedMfr = normMfr;
                     const modelFunctions = new Set();
-
                     for (const [prefix, info] of Object.entries(MODEL_REGISTRY)) {
                         const cleanPrefix = prefix.replace(/\s+/g, '');
                         if (normRelay.includes(prefix) || normRelayCompact.includes(cleanPrefix)) {
@@ -10129,7 +9573,6 @@ Dashboard Kỹ Thuật Viên -
                             break;
                         }
                     }
-
                     // Suy diễn Hãng từ Phần mềm cấu hình nếu chưa có hãng
                     if (!detectedMfr) {
                         if (normSoftware.includes('pcm600')) detectedMfr = 'abb';
@@ -10139,12 +9582,10 @@ Dashboard Kỹ Thuật Viên -
                         else if (normSoftware.includes('acselerator') || normSoftware.includes('quickset') || normSoftware.includes('synchrowave') || normSoftware.includes('sel 5030') || normSoftware.includes('sel 5601')) detectedMfr = 'sel';
                         else if (normSoftware.includes('enervista')) detectedMfr = 'ge';
                     }
-
                     // Phân tách Chức năng CHÍNH vs PHỤ
                     const primaryText = normalizeText(ocrProtTypeRaw.split('(')[0].split('kèm')[0].split('kem')[0]);
                     const primaryFunctions = new Set();
                     const secondaryFunctions = new Set(modelFunctions);
-
                     for (const [fnCode, keywords] of Object.entries(RELAY_FUNCTION_KEYWORDS)) {
                         for (const kw of keywords) {
                             if (primaryText.includes(kw)) {
@@ -10156,7 +9597,6 @@ Dashboard Kỹ Thuật Viên -
                             }
                         }
                     }
-
                     if (normEquip.includes('khang') || /\bkh\d{3}\b/.test(normEquip)) {
                         if (modelFunctions.has('87r') || primaryText.includes('so lech')) primaryFunctions.add('87r');
                     } else if (normEquip.includes('mba') || normEquip.includes('bien ap') || /\bat\d\b/.test(normEquip)) {
@@ -10165,23 +9605,19 @@ Dashboard Kỹ Thuật Viên -
                         if (primaryText.includes('so lech')) primaryFunctions.add('87l');
                         else if (primaryText.includes('khoang cach')) primaryFunctions.add('21');
                     }
-
                     if (primaryFunctions.size === 0 && secondaryFunctions.size > 0) {
                         secondaryFunctions.forEach(f => primaryFunctions.add(f));
                     }
-
                     // Hàm đánh giá tập ứng viên rơ-le
                     const evaluateRelays = (relayList) => {
                         let topCand = null;
                         let topScore = -999;
                         let topReasons = [];
-
                         for (const r of relayList) {
                             const rName = normalizeText(r.relay_name || '');
                             const rCode = normalizeText(r.relay_code || '');
                             const rMfr = normalizeText(r.manufacturer || '');
                             const combinedR = `${rCode} ${rName}`;
-
                             // Loại trừ triệt để các thiết bị không phải rơ-le bảo vệ (Dao cách ly, Biến điện áp TU, Biến dòng TI, v.v.)
                             const isNonRelay = (
                                 rCode.includes('_dcl_') || rCode.includes('_tu_') || rCode.includes('_ti_') ||
@@ -10193,16 +9629,13 @@ Dashboard Kỹ Thuật Viên -
                             if (isNonRelay) {
                                 continue;
                             }
-
                             let score = 0;
                             let reasons = [];
-
                             const rawModelClean = normalizeText(ocrRelayRaw);
                             if (rawModelClean && (rName.includes(rawModelClean) || rCode.includes(rawModelClean))) {
                                 score += 80;
                                 reasons.push(`Model ${ocrRelayRaw}`);
                             }
-
                             // So khớp Chức năng CHÍNH trên tên rơ-le (+60đ)
                             const matchedPrimary = [];
                             for (const fn of primaryFunctions) {
@@ -10238,14 +9671,12 @@ Dashboard Kỹ Thuật Viên -
                                     reasons.push(`Phụ: ${matchedSecondary.join('/')}`);
                                 }
                             }
-
                             // Mạch bảo vệ (F50-1/F50-2, F87...1/F87...2, F21-1/F21-2, Mạch 1/2)
                             if (targetCircuit) {
                                 const targetStr = String(targetCircuit);
                                 const oppStr = targetCircuit === 1 ? '2' : '1';
                                 const targetRegex = new RegExp(`(?:f)?(?:87[rtl]?|50|51|21)[\\-_ \\.]*${targetStr}\\b|mach\\s*${targetStr}\\b|bo\\s*${targetStr}\\b`);
                                 const oppRegex = new RegExp(`(?:f)?(?:87[rtl]?|50|51|21)[\\-_ \\.]*${oppStr}\\b|mach\\s*${oppStr}\\b|bo\\s*${oppStr}\\b`);
-
                                 if (targetRegex.test(combinedR)) {
                                     score += 30;
                                     reasons.push(`Mạch ${targetCircuit}`);
@@ -10253,7 +9684,6 @@ Dashboard Kỹ Thuật Viên -
                                     score -= 40;
                                 }
                             }
-
                             // Hãng SX
                             if (detectedMfr && rMfr) {
                                 const aliases = MANUFACTURER_ALIASES[detectedMfr] || [detectedMfr];
@@ -10268,7 +9698,6 @@ Dashboard Kỹ Thuật Viên -
                                     }
                                 }
                             }
-
                             // Xung đột Dòng Model
                             if (normRelay) {
                                 for (const [prefix, info] of Object.entries(MODEL_REGISTRY)) {
@@ -10280,13 +9709,11 @@ Dashboard Kỹ Thuật Viên -
                                     }
                                 }
                             }
-
                             // Khớp Ngăn Lộ / Máy Cắt (+40đ, lệch trừ 60đ)
                             const bayObj = this.bays.find(b => b.id == r.bay_id);
                             const bayNameNorm = bayObj ? normalizeText(bayObj.bay_name) : '';
                             const breakerNorm = normalizeText(ocrBreakerRaw);
                             const equipNorm = normalizeText(ocrEquipRaw);
-
                             if (bayNameNorm) {
                                 if (breakerNorm && (bayNameNorm.includes(breakerNorm) || new RegExp(`\\b${breakerNorm}\\b`).test(bayNameNorm))) {
                                     score += 40;
@@ -10311,10 +9738,8 @@ Dashboard Kỹ Thuật Viên -
                                     reasons.push(`Lệch Ngăn (${bayObj.bay_name})`);
                                 }
                             }
-
                             const fallbackScore = getMatchScore(ocrRelayRaw, r.relay_name || '') + getMatchScore(ocrRelayRaw, r.relay_code || '');
                             score += fallbackScore;
-
                             if (score > topScore) {
                                 topScore = score;
                                 topCand = r;
@@ -10323,11 +9748,9 @@ Dashboard Kỹ Thuật Viên -
                         }
                         return { candidate: topCand, score: topScore, reasons: topReasons };
                     };
-
                     // Bước 3.1: Thử tìm trong Ngăn lộ đã xác định
                     let searchRelays = foundBay ? this.relays.filter(r => r.bay_id == foundBay.id) : [];
                     let evalResult = evaluateRelays(searchRelays);
-
                     // Bước 3.2: FALLBACK TOÀN TRẠM CHỈ KHI PHIẾU CHƯA XÁC ĐỊNH ĐƯỢC NGĂN LỘ
                     // Nếu phiếu đã ghi rõ Ngăn lộ (foundBay), TUYỆT ĐỐI KHÔNG tự động chuyển sang ngăn lộ khác!
                     if ((!evalResult.candidate || evalResult.score < 30) && !foundBay) {
@@ -10348,7 +9771,6 @@ Dashboard Kỹ Thuật Viên -
                             }
                         }
                     }
-
                     if (evalResult.candidate && evalResult.score >= 30) {
                         foundRelay = evalResult.candidate;
                         const badgeReason = evalResult.reasons.length ? `<span class="text-xs bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 px-2 py-0.5 rounded-full font-medium ml-1">${evalResult.reasons.join(' • ')}</span>` : '';
@@ -10359,7 +9781,6 @@ Dashboard Kỹ Thuật Viên -
                         msg.push(`Rơ-le: <b class="text-orange-600">${ocrRelayRaw}</b> <i class="fas fa-exclamation-circle text-orange-500" title="Không có${bayContextMsg} trong CSDL"></i> <span class="text-xs text-orange-600 font-semibold">(Không có${bayContextMsg} trong CSDL)</span>`);
                     }
                 }
-
                 // Cập nhật State & TomSelects
                 if (suggestedStationId && (!this.selectedStation || force)) {
                     this.selectedStation = suggestedStationId;
@@ -10369,19 +9790,16 @@ Dashboard Kỹ Thuật Viên -
                         this.tsBay.addOptions(this.filteredBays);
                     }
                 }
-                
                 if (suggestedBayId && (!this.selectedBay || force)) {
                     this.selectedBay = suggestedBayId;
                     if (this.tsBay) {
                         this.tsBay.setValue(suggestedBayId, true);
                     }
                 }
-
                 if (this.tsRelay) {
                     this.tsRelay.clearOptions();
                     this.tsRelay.addOptions(this.filteredRelays.map(r => ({...r, display_name: r.relay_code + ' - ' + r.relay_name + (r.manufacturer ? ' [' + r.manufacturer + ']' : '')})));
                 }
-
                 if (suggestedRelayId && (!this.selectedRelay || force)) {
                     this.selectedRelay = suggestedRelayId;
                     this.isCustomRelayMode = false;
@@ -10394,18 +9812,14 @@ Dashboard Kỹ Thuật Viên -
                     this.selectedRelay = '';
                     if (this.tsRelay) this.tsRelay.clear();
                 }
-                
                 this.autoSuggestMessage = msg.length ? msg.join(' <span class="text-slate-300 mx-2">|</span> ') : '';
                 console.log('runAutoSuggest finished.', {
                     ocrStationRaw, ocrBayRaw, ocrRelayRaw,
                     msg, autoSuggestMessage: this.autoSuggestMessage
                 });
             },
-
-            
             initTomSelects() {
                 const commonPlugins = ['restore_on_backspace', 'clear_button'];
-                
                 // Helper: Hỗ trợ nhấp đúp hoặc click trực tiếp để chuyển thành ô nhập text sửa từng ký tự
                 const enableClickToEdit = (ts) => {
                     if (!ts || !ts.control) return;
@@ -10424,7 +9838,6 @@ Dashboard Kỹ Thuật Viên -
                         }
                     });
                 };
-
                 // 1. Station
                 this.tsStation = new TomSelect(this.$refs.stationSelect, {
                     plugins: commonPlugins,
@@ -10439,7 +9852,6 @@ Dashboard Kỹ Thuật Viên -
                     }
                 });
                 enableClickToEdit(this.tsStation);
-                
                 // 2. Bay
                 this.tsBay = new TomSelect(this.$refs.baySelect, {
                     plugins: commonPlugins,
@@ -10455,7 +9867,6 @@ Dashboard Kỹ Thuật Viên -
                             if (bayObj && this.selectedStation != bayObj.station_id) {
                                 this.selectedStation = bayObj.station_id;
                                 if (this.tsStation) this.tsStation.setValue(bayObj.station_id, true);
-                                
                                 if (this.tsBay) {
                                     this.tsBay.clearOptions();
                                     this.tsBay.addOptions(this.filteredBays);
@@ -10467,7 +9878,6 @@ Dashboard Kỹ Thuật Viên -
                     }
                 });
                 enableClickToEdit(this.tsBay);
-                
                 // 3. Relay
                 let initialRelayOptions = this.filteredRelays.map(r => ({...r, display_name: r.relay_code + ' - ' + r.relay_name + (r.manufacturer ? ' [' + r.manufacturer + ']' : '')}));
                 let initialRelayItems = [];
@@ -10483,7 +9893,6 @@ Dashboard Kỹ Thuật Viên -
                         this.selectedRelay = '';
                     }
                 }
-
                 this.tsRelay = new TomSelect(this.$refs.relaySelect, {
                     plugins: commonPlugins,
                     valueField: 'id',
@@ -10505,7 +9914,6 @@ Dashboard Kỹ Thuật Viên -
                                         stationChanged = true;
                                         if (this.tsStation) this.tsStation.setValue(bayObj.station_id, true);
                                     }
-                                    
                                     if (this.selectedBay != bayObj.id || stationChanged) {
                                         this.selectedBay = bayObj.id;
                                         if (this.tsBay) {
@@ -10514,7 +9922,6 @@ Dashboard Kỹ Thuật Viên -
                                             this.tsBay.setValue(bayObj.id, true);
                                         }
                                     }
-                                    
                                     // Update Relay options to match the new filtered list but keep value
                                     if (this.tsRelay) {
                                         this.tsRelay.clearOptions();
@@ -10532,12 +9939,10 @@ Dashboard Kỹ Thuật Viên -
                 });
                 enableClickToEdit(this.tsRelay);
             },
-            
             get filteredBays() {
                 if (!this.selectedStation) return this.bays;
                 return this.bays.filter(b => b.station_id == this.selectedStation);
             },
-            
             get filteredRelays() {
                 if (this.selectedBay) {
                     return this.relays.filter(r => r.bay_id == this.selectedBay);
@@ -10548,11 +9953,9 @@ Dashboard Kỹ Thuật Viên -
                 }
                 return this.relays;
             },
-            
             onStationChange() {
                 this.selectedBay = '';
                 this.selectedRelay = '';
-                
                 if (this.selectedStation) {
                     fetch(`/stations/api/station/${this.selectedStation}/relays/`)
                         .then(res => res.json())
@@ -10566,7 +9969,6 @@ Dashboard Kỹ Thuật Viên -
                         })
                         .catch(err => console.warn('Could not fetch station relays:', err));
                 }
-                
                 if (this.tsBay) {
                     this.tsBay.clearOptions();
                     this.tsBay.addOptions(this.filteredBays);
@@ -10578,7 +9980,6 @@ Dashboard Kỹ Thuật Viên -
                     this.tsRelay.clear();
                 }
             },
-            
             onBayChange() {
                 this.selectedRelay = '';
                 if (this.tsRelay) {
@@ -10597,7 +9998,6 @@ Dashboard Kỹ Thuật Viên -
      @open-relay-modal.window="showRelayDetailModal = true; if ($event.detail && $event.detail.relayId) activeRelayId = $event.detail.relayId;"
      @close-relay-modal.window="showRelayDetailModal = false;">
     <div class="flex-1 flex flex-col lg:flex-row gap-6 overflow-hidden">
-    
     {% if not request.user|has_group:'TECHNICIAN' and not request.user|has_group:'SUPERVISOR' and not request.user|has_group:'STATION_LEADER' %}
     <!-- Left Column: Document Viewer (Split View 40%) -->
     <div class="w-full lg:w-2/5 bg-slate-800 rounded-xl shadow-sm border border-slate-700 overflow-hidden flex flex-col h-full shrink-0 relative">
@@ -10634,11 +10034,8 @@ Dashboard Kỹ Thuật Viên -
         </div>
     </div>
     {% endif %}
-
     <!-- Right Column: Metadata & Form -->
     <div class="w-full {% if not request.user|has_group:'TECHNICIAN' and not request.user|has_group:'SUPERVISOR' and not request.user|has_group:'STATION_LEADER' %}lg:w-3/5{% endif %} flex flex-col h-full overflow-hidden" x-data="{ activeTab: '{% if request.user|has_group:'STATION_LEADER' or request.user|has_group:'TECHNICIAN' or request.user|has_group:'SUPERVISOR' %}process{% else %}ocr{% endif %}' }" x-init="$watch('activeTab', value => localStorage.setItem('activeTab_sheet_{{ sheet.pk }}', value))">
-
-        
         <!-- Tabs Header -->
         <div class="flex space-x-1 bg-slate-200/50 p-1 rounded-lg mb-4 shrink-0 dark:bg-slate-800/50">
             <button @click="activeTab = 'ocr'" :class="activeTab === 'ocr' ? 'bg-white text-blue-600 shadow-sm dark:bg-slate-700 dark:text-blue-400' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:text-slate-300'" class="flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all duration-200">
@@ -10666,21 +10063,16 @@ Dashboard Kỹ Thuật Viên -
                 <i class="fas fa-history mr-1"></i> Nhật ký
             </button>
         </div>
-
         <div class="flex-1 flex flex-col min-h-0 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden relative dark:bg-slate-900 dark:border-slate-700">
-
             <!-- Tab Process (Signatures & Dispatch) -->
             <div x-show="activeTab === 'process'" class="absolute inset-0 overflow-y-auto p-5 space-y-6 bg-slate-50/50 dark:bg-slate-800/50" {% if not request.user|has_group:'STATION_LEADER' and not request.user|has_group:'TECHNICIAN' and not request.user|has_group:'SUPERVISOR' %}style="display: none;"{% endif %} x-cloak>
-                
                 <!-- Signature Panel -->
         {% include "sheets/partials/_signature_panel.html" with sheet=sheet %}
-
         <!-- Actions Panel (for transferring/receiving) -->
         {% if sheet.status != 'DRAFT' and sheet.status != 'COMPLETED' %}
         <div id="assignment-card" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 dark:bg-slate-900 dark:border-slate-700">
             <h3 class="text-sm font-semibold text-slate-800 mb-4 uppercase tracking-wide dark:text-slate-200">Điều phối & Xử lý</h3>
             <div class="space-y-4">
-                
                 <!-- Hiển thị người đang được giao việc -->
                 <div class="flex flex-col gap-2 p-3 bg-slate-50 rounded border border-slate-100 dark:bg-slate-800/50 dark:border-slate-700/50">
                     <div class="flex items-center justify-between">
@@ -10704,10 +10096,8 @@ Dashboard Kỹ Thuật Viên -
                         </span>
                     </div>
                 </div>
-
                 <!-- Nút thao tác theo Role -->
                 <div class="flex flex-col gap-3 mt-2">
-
                     {% if sheet.status == 'ISSUED' and perms.sheets.can_dispatch_sheet %}
                     <!-- Điều phối viên duyệt và chuyển về Trạm -->
                     {% if not sheet.station or not sheet.relay %}
@@ -10722,7 +10112,6 @@ Dashboard Kỹ Thuật Viên -
                     <div x-data="{ confirmRoute: false }" class="relative overflow-hidden p-5 bg-gradient-to-br from-blue-50/80 to-indigo-100/80 dark:from-slate-800/80 dark:to-slate-800/80 backdrop-blur-md border border-white/60 dark:border-slate-700/60 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] group transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
                         <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all duration-500"></div>
                         <p class="text-xs font-black text-blue-900 dark:text-blue-400 mb-4 uppercase tracking-widest flex items-center"><i class="fas fa-route mr-2 text-blue-600 dark:text-blue-400 text-lg"></i> Chuyển Phiếu Về Trạm</p>
-                        
                         <div x-show="!confirmRoute" x-transition.opacity.duration.300ms>
                             <p class="text-sm text-slate-600 mb-4 relative z-10 dark:text-slate-400">Phiếu đã được rà soát. Bạn có chắc chắn muốn duyệt và chuyển phiếu này về Trạm để thực hiện không?</p>
                             <button @click="confirmRoute = true" type="button" class="w-full relative px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-bold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 transition-all duration-300 flex justify-center items-center gap-2 overflow-hidden">
@@ -10730,14 +10119,11 @@ Dashboard Kỹ Thuật Viên -
                                 <div class="absolute inset-0 bg-white/20 translate-y-full hover:translate-y-0 transition-transform duration-300"></div>
                             </button>
                         </div>
-                        
                         <div x-show="confirmRoute" x-transition.opacity.duration.300ms style="display: none;" class="bg-white/90 dark:bg-slate-900/90 p-4 rounded-xl border border-blue-100 dark:border-slate-700 shadow-inner relative z-10">
                             <p class="text-sm font-semibold text-slate-700 mb-3 text-center dark:text-slate-300">Giao nhiệm vụ thi công?</p>
-                            
                             <form hx-post="{% url 'sheet_route_to_station' sheet.pk %}" hx-target="#assignment-card" hx-select="#assignment-card" hx-select-oob="#signature-panel,#header-status-stepper,#header-status-badge" hx-swap="outerHTML">
                                 {% csrf_token %}
                                 <input type="hidden" name="_original_updated_at" value="{{ sheet.updated_at.timestamp }}">
-                                
                                 <div class="mb-4 text-left">
                                     <label class="block text-xs font-semibold text-slate-600 mb-1 dark:text-slate-400">Đơn vị / Đội thi công nhận lệnh:</label>
                                     <select name="execution_station_id" class="w-full text-sm border-slate-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-800 dark:border-slate-600 dark:text-white">
@@ -10747,7 +10133,6 @@ Dashboard Kỹ Thuật Viên -
                                     </select>
                                     <p class="text-[10px] text-slate-500 mt-1 italic">Mặc định giao cho Đội của Trạm đích. Có thể chọn Đội khác để hỗ trợ thi công chéo.</p>
                                 </div>
-
                                 <div class="flex gap-2">
                                     <button @click="confirmRoute = false" type="button" class="flex-1 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-lg transition-colors dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300">Hủy</button>
                                     <button type="submit" class="flex-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg shadow-md transition-colors flex justify-center items-center gap-2">
@@ -10759,18 +10144,15 @@ Dashboard Kỹ Thuật Viên -
                     </div>
                     {% endif %}
                     {% endif %}
-
                     {% if sheet.status == 'ROUTED_TO_STATION' and perms.sheets.can_dispatch_sheet and not sheet.assigned_to %}
                     <!-- Trưởng nhóm giao việc cho KTV & Giám sát thuộc Trạm -->
                     <div x-data="{ isTemporary: false, confirmAssign: false }" class="relative overflow-hidden p-5 bg-gradient-to-br from-emerald-50/80 to-teal-100/80 dark:from-slate-800/80 dark:to-slate-800/80 backdrop-blur-md border border-white/60 dark:border-slate-700/60 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] group transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
                         <div class="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all duration-500"></div>
                         <p class="text-xs font-black text-emerald-900 dark:text-emerald-400 mb-4 uppercase tracking-widest flex items-center"><i class="fas fa-users-cog mr-2 text-emerald-600 dark:text-emerald-400 text-lg"></i> Phân Công Đội Thi Công</p>
-                        
                         <form hx-post="{% url 'sheet_assign' sheet.pk %}" hx-target="#assignment-card" hx-select="#assignment-card" hx-select-oob="#signature-panel,#header-status-stepper,#header-status-badge" hx-swap="outerHTML" class="flex flex-col gap-4 relative z-10" id="assignForm">
                             {% csrf_token %}
                             <input type="hidden" name="_original_updated_at" value="{{ sheet.updated_at.timestamp }}">
                             <input type="hidden" name="status" value="TRANSFERRED">
-                            
                             <div class="space-y-3">
                                 <div class="relative group/select">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -10786,7 +10168,6 @@ Dashboard Kỹ Thuật Viên -
                                         <i class="fas fa-chevron-down text-slate-400 text-xs"></i>
                                     </div>
                                 </div>
-
                                 <div class="relative group/select">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <i class="fas fa-user-shield text-emerald-500 group-focus-within/select:text-emerald-700 transition-colors"></i>
@@ -10802,16 +10183,12 @@ Dashboard Kỹ Thuật Viên -
                                     </div>
                                 </div>
                             </div>
-
-
-
                             <div x-show="!confirmAssign" x-transition.opacity.duration.300ms class="mt-2">
                                 <button @click="confirmAssign = true" type="button" class="w-full relative px-4 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-sm font-bold rounded-xl shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:-translate-y-0.5 transition-all duration-300 flex justify-center items-center gap-2 overflow-hidden">
                                     <span class="relative z-10 flex items-center gap-2">Giao Việc Ngay <i class="fas fa-paper-plane group-hover:translate-x-1 transition-transform"></i></span>
                                     <div class="absolute inset-0 bg-white/20 translate-y-full hover:translate-y-0 transition-transform duration-300"></div>
                                 </button>
                             </div>
-
                             <div x-show="confirmAssign" x-transition.opacity.duration.300ms style="display: none;" class="mt-2 bg-white/90 dark:bg-slate-900/90 p-4 rounded-xl border border-emerald-100 dark:border-slate-700 shadow-inner">
                                 <p class="text-sm font-semibold text-slate-700 mb-3 text-center dark:text-slate-300">Xác nhận phân công công việc?</p>
                                 <div class="flex gap-2">
@@ -10824,8 +10201,6 @@ Dashboard Kỹ Thuật Viên -
                         </form>
                     </div>
                     {% endif %}
-
-
                     {% if sheet.status == 'TRANSFERRED' and perms.sheets.can_execute_sheet and sheet.assigned_to == request.user %}
                     <!-- KTV xác nhận tiếp nhận -->
                     <div class="p-3 bg-amber-50 dark:bg-slate-800/50 border border-amber-100 dark:border-slate-700 rounded-lg">
@@ -10840,7 +10215,6 @@ Dashboard Kỹ Thuật Viên -
         </div>
         {% endif %}
             </div>
-
             <!-- Tab OCR -->
             <div x-show="activeTab === 'ocr'" class="absolute inset-0 flex flex-col bg-slate-50 dark:bg-slate-800/50" x-data="{ searchQuery: '' }" {% if request.user|has_group:'STATION_LEADER' or request.user|has_group:'TECHNICIAN' or request.user|has_group:'SUPERVISOR' %}style="display: none;"{% endif %} x-cloak>
                 <!-- Relay Parameters Header / AI OCR & Page Navigation -->
@@ -10865,7 +10239,6 @@ Dashboard Kỹ Thuật Viên -
                             </div>
                             {% endif %}
                         </div>
-                        
                         <div class="flex items-center gap-2 shrink-0">
                             {% if 'AUTO-CORRECT' in sheet.sheet_code %}
                             <span class="text-[11px] text-green-700 font-semibold px-2 py-1 bg-green-50 rounded-md border border-green-200 hidden sm:inline-flex items-center gap-1">
@@ -10876,7 +10249,6 @@ Dashboard Kỹ Thuật Viên -
                                 <i class="fas fa-microchip text-blue-600"></i> AI OCR
                             </span>
                             {% endif %}
-
                             {% if sheet.scan_file and perms.sheets.can_create_sheet or sheet.scan_file and perms.sheets.can_dispatch_sheet or sheet.scan_file and request.user.is_superuser %}
                             <form method="POST" action="{% url 'sheet_rerun_ocr' sheet.pk %}" class="inline-block m-0" onsubmit="return confirm('Bạn có chắc chắn muốn đẩy phiếu {{ sheet.sheet_code }} vào hàng đợi để chạy lại AI OCR toàn bộ không?\n\nLưu ý: Quá trình OCR sẽ bóc tách lại Thông tin chung Trang 1 và Bảng thông số Trang 3+.');">
                                 {% csrf_token %}
@@ -10887,7 +10259,6 @@ Dashboard Kỹ Thuật Viên -
                                 </button>
                             </form>
                             {% endif %}
-
                             {% if perms.sheets.can_create_sheet and sheet.status in 'DRAFT ISSUED' or perms.sheets.can_dispatch_sheet and sheet.status in 'DRAFT ISSUED' %}
                             <button type="submit" 
                                     form="ocrForm" 
@@ -10900,7 +10271,6 @@ Dashboard Kỹ Thuật Viên -
                             {% endif %}
                         </div>
                     </div>
-
                     <!-- Hàng 2: Tìm kiếm & Điều hướng trang & Nhóm chức năng -->
                     <div class="flex items-center gap-2.5 pt-1.5 border-t border-slate-100 dark:border-slate-800 min-w-0 flex-wrap">
                         <!-- Ô tìm kiếm thông số -->
@@ -10914,7 +10284,6 @@ Dashboard Kỹ Thuật Viên -
                                 <i class="fas fa-times-circle text-[11px]"></i>
                             </button>
                         </div>
-
                         {% if section_groups %}
                         <!-- Menu nhảy nhanh tới Nhóm / Phân đoạn chức năng -->
                         <div class="relative shrink-0 max-w-[220px]">
@@ -10927,7 +10296,6 @@ Dashboard Kỹ Thuật Viên -
                             </select>
                         </div>
                         {% endif %}
-
                         {% if page_stats %}
                         <!-- Thanh chuyển nhanh giữa các trang PDF / Data -->
                         <div class="flex items-center gap-1.5 overflow-x-auto py-0.5 custom-scrollbar min-w-0 flex-1">
@@ -10949,21 +10317,16 @@ Dashboard Kỹ Thuật Viên -
                         {% endif %}
                     </div>
                 </div>
-
-
     <div id="ocrDataScrollContainer" class="flex-1 overflow-y-auto p-5 space-y-6 scroll-smooth relative custom-scrollbar bg-slate-50 dark:bg-slate-800/50">
-        
         <form id="ocrForm" method="POST" action="{% url 'sheet_save_actual_data' sheet.pk %}">
             {% csrf_token %}
             <input type="hidden" name="_original_updated_at" value="{{ sheet.updated_at.timestamp }}">
-
             <!-- Metadata Panel -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mx-1 mb-6 ocr-data-row dark:bg-slate-900 dark:border-slate-700" data-page="1">
                 <!-- TRANG 1 HEADER -->
                 <div class="bg-blue-50 border-b border-blue-100 p-2 text-center sticky top-0 z-30 shadow-sm ocr-page-group" data-page="1">
                     <span class="text-xs font-black text-blue-800 uppercase tracking-widest"><i class="fas fa-file-alt mr-1"></i> THÔNG TIN CHUNG TỪ BẢN GỐC</span>
                 </div>
-
                 <div class="px-5 py-3 border-b border-slate-100 bg-gradient-to-r from-slate-50 via-blue-50/20 to-slate-50 flex items-center justify-between dark:border-slate-700/50 dark:bg-slate-800/50">
                     <div class="flex items-center gap-2">
                         <span class="w-1.5 h-4 rounded-full bg-blue-600"></span>
@@ -10980,7 +10343,6 @@ Dashboard Kỹ Thuật Viên -
                 {% if perms.sheets.can_create_sheet and sheet.status in 'DRAFT ISSUED' or perms.sheets.can_dispatch_sheet and sheet.status in 'DRAFT ISSUED' %}
                 <!-- Khung chỉnh sửa Metadata (Đồng bộ với ocrForm) -->
                 <div id="infoForm" x-data="metadataForm()" class="space-y-4 relative">
-                    
                     <!-- Loading Overlay when OCR is running -->
                     <div x-show="isOcrRunning" x-transition.opacity class="absolute inset-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center rounded-xl">
                         <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 flex flex-col items-center max-w-[300px] text-center transform scale-100 animate-[scale-in_0.3s_ease-out]">
@@ -10997,7 +10359,6 @@ Dashboard Kỹ Thuật Viên -
                             </div>
                         </div>
                     </div>
-
                     <div x-show="autoSuggestMessage" x-cloak x-transition class="mb-5 p-3.5 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800/50 rounded-xl flex items-start gap-3 shadow-sm">
                         <div class="bg-indigo-100 dark:bg-indigo-800/50 text-indigo-600 dark:text-indigo-400 w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5">
                             <i class="fas fa-robot"></i>
@@ -11007,7 +10368,6 @@ Dashboard Kỹ Thuật Viên -
                             <p class="text-[13px] text-indigo-700 dark:text-indigo-200 leading-relaxed" x-html="autoSuggestMessage"></p>
                         </div>
                     </div>
-
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="group">
                             <label class="block text-sm font-semibold text-slate-700 mb-1 dark:text-slate-300">Mã Phiếu <span class="text-red-500">*</span></label>
@@ -11017,14 +10377,12 @@ Dashboard Kỹ Thuật Viên -
                             <label class="block text-sm font-semibold text-slate-700 mb-1 dark:text-slate-300">Tiêu đề</label>
                             <input type="text" name="title" value="{{ sheet.title|default:'' }}" class="w-full px-4 py-2.5 text-base bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all dark:bg-slate-800/50 dark:border-slate-700 dark:focus:bg-slate-900 dark:text-slate-200">
                         </div>
-                        
                         <div class="group relative" wire:ignore>
                             <label class="block text-sm font-semibold text-slate-700 mb-1 dark:text-slate-300">Trạm đích <span class="text-red-500">*</span></label>
                             <select id="stationSelect" name="station_id" required x-ref="stationSelect" placeholder="-- Tìm kiếm Trạm đích --" class="w-full px-4 py-2.5 text-base bg-slate-50 border border-slate-200 rounded-lg outline-none transition-all dark:bg-slate-800/50 dark:border-slate-700 dark:text-slate-200">
                                 <option value="">-- Tìm kiếm Trạm đích --</option>
                             </select>
                         </div>
-                        
                         <div class="group relative" wire:ignore>
                             <label class="block text-sm font-semibold text-slate-700 mb-1 dark:text-slate-300">Ngăn lộ</label>
                             <select id="baySelect" x-ref="baySelect" placeholder="-- Tìm kiếm Ngăn lộ --" class="w-full px-4 py-2.5 text-base bg-slate-50 border border-slate-200 rounded-lg outline-none transition-all dark:bg-slate-800/50 dark:border-slate-700 dark:text-slate-200">
@@ -11032,7 +10390,6 @@ Dashboard Kỹ Thuật Viên -
                             </select>
                             <!-- Hidden input because TomSelect doesn't submit if it doesn't have name (but we don't need to submit bay) -->
                         </div>
-                        
                         <div class="group md:col-span-2 relative">
                             <div class="flex items-center justify-between mb-1.5 flex-wrap gap-2">
                                 <div class="flex items-center gap-2">
@@ -11053,7 +10410,6 @@ Dashboard Kỹ Thuật Viên -
                                             title="Khôi phục lại gợi ý OCR ban đầu từ bản scan">
                                         <i class="fas fa-undo-alt text-amber-500 text-[10px]"></i> Hoàn tác OCR
                                     </button>
-
                                     <!-- Nút Chuyển chế độ: CSDL vs Nhập tay -->
                                     <button type="button"
                                             @click="toggleRelayMode()"
@@ -11063,7 +10419,6 @@ Dashboard Kỹ Thuật Viên -
                                         <i :class="isCustomRelayMode ? 'fas fa-database text-indigo-500' : 'fas fa-keyboard text-slate-500'"></i>
                                         <span x-text="isCustomRelayMode ? 'Chọn từ CSDL' : 'Nhập tay tự do'"></span>
                                     </button>
-
                                     <!-- Nút Xem CSDL đối chiếu -->
                                     <button type="button"
                                             id="btnViewRelayComparison"
@@ -11074,14 +10429,12 @@ Dashboard Kỹ Thuật Viên -
                                     </button>
                                 </div>
                             </div>
-                            
                             <!-- Dropdown CSDL (TomSelect) -->
                             <div x-show="!isCustomRelayMode">
                                 <select id="relaySelect" name="relay_id" :disabled="isCustomRelayMode" :required="!isCustomRelayMode" x-ref="relaySelect" placeholder="-- Tìm kiếm Rơ-le trong CSDL --" class="w-full px-4 py-2.5 text-base bg-slate-50 border border-slate-200 rounded-lg outline-none transition-all dark:bg-slate-800/50 dark:border-slate-700 dark:text-slate-200">
                                     <option value="">-- Tìm kiếm Rơ-le --</option>
                                 </select>
                             </div>
-
                             <!-- Nhập tay tự do -->
                             <div x-show="isCustomRelayMode" x-cloak class="relative">
                                 <input type="text"
@@ -11216,10 +10569,6 @@ Dashboard Kỹ Thuật Viên -
                 </div>
                 {% endif %}
             </div>
-        
-
-
-
                 {% if sheet.extracted_data %}
                     {% if not sheet.relay %}
                     <!-- Yêu cầu gán Relay trước -->
@@ -11233,7 +10582,6 @@ Dashboard Kỹ Thuật Viên -
                     </div>
                     {% else %}
                     <div class="flex flex-col mt-4 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden shadow-xs">
-                        
                         <!-- Vùng chứa dữ liệu bảng thông số kỹ thuật -->
                         <div class="space-y-4">
                             <!-- Bảng thông số kỹ thuật chuẩn hóa cao cấp -->
@@ -11252,11 +10600,9 @@ Dashboard Kỹ Thuật Viên -
                                         {% endif %}
                                     </div>
                                 </div>
-                                
                                 <!-- Table Body -->
                                 <div class="divide-y divide-slate-100 dark:divide-slate-800/60">
                                     {% for item in display_data %}
-                                    
                                     {% ifchanged item.page_number %}
                                     {% if item.is_history_page %}
                                     <!-- ==================== BANNER TRANG LỊCH SỬ BAN HÀNH PHIẾU ==================== -->
@@ -11274,7 +10620,6 @@ Dashboard Kỹ Thuật Viên -
                                             </span>
                                         </div>
                                     </div>
-
                                     <!-- Subheader cho Bảng Lịch sử Ban hành -->
                                     <div class="grid grid-cols-12 gap-2 px-3 py-1.5 bg-purple-50/80 dark:bg-purple-950/50 border-b border-purple-200/90 dark:border-purple-800 text-[10px] font-bold text-purple-900 dark:text-purple-300 uppercase tracking-wider sticky top-[64px] z-14 backdrop-blur-xs">
                                         <div class="col-span-1 text-center"><i class="fas fa-list-ol mr-1"></i> STT</div>
@@ -11312,7 +10657,6 @@ Dashboard Kỹ Thuật Viên -
                                             </span>
                                         </div>
                                     </div>
-
                                     <!-- Adaptive Subheader for this Page -->
                                     <div class="grid grid-cols-12 gap-2 px-3 py-1 bg-slate-100/90 dark:bg-slate-800/70 border-b border-slate-200 dark:border-slate-700 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider sticky top-[64px] z-14 backdrop-blur-xs">
                                         {% if item.page_is_matrix %}
@@ -11338,7 +10682,6 @@ Dashboard Kỹ Thuật Viên -
                                     </div>
                                     {% endif %}
                                     {% endifchanged %}
-
                                     {% if item.section_divider %}
                                     <!-- Technical Functional Section Divider -->
                                     <div class="px-3.5 py-1.5 bg-gradient-to-r from-slate-100 via-indigo-50/70 to-slate-100 dark:from-slate-800 dark:via-indigo-950/40 dark:to-slate-800 border-y border-indigo-100 dark:border-indigo-900/50 flex items-center justify-between transition-all duration-300"
@@ -11353,7 +10696,6 @@ Dashboard Kỹ Thuật Viên -
                                         <span class="text-[9px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest bg-indigo-100/70 dark:bg-indigo-900/40 px-2 py-0.5 rounded shadow-2xs">PHÂN ĐOẠN CHỨC NĂNG</span>
                                     </div>
                                     {% endif %}
-                                    
                                     {% if item.is_history_page %}
                                     <!-- ==================== BỐ CỤC DÒNG LỊCH SỬ BAN HÀNH (4 CỘT) ==================== -->
                                     <div class="grid grid-cols-12 gap-2 px-3 py-2.5 items-center hover:bg-purple-50/50 dark:hover:bg-purple-950/20 transition-colors ocr-data-row border-b border-slate-100 dark:border-slate-800/60 last:border-0 odd:bg-white even:bg-slate-50/30 dark:odd:bg-slate-900 dark:even:bg-slate-800/10 group"
@@ -11362,7 +10704,6 @@ Dashboard Kỹ Thuật Viên -
                                          data-name="{{ item.clean_name|default:item.parameter_name|default:''|escapejs }}"
                                          data-section="{{ item.section_divider|default:''|escapejs }}"
                                          x-show="searchQuery === '' || $el.dataset.code.toLowerCase().includes(searchQuery.toLowerCase()) || $el.dataset.name.toLowerCase().includes(searchQuery.toLowerCase()) || ($el.dataset.section && $el.dataset.section.toLowerCase().includes(searchQuery.toLowerCase()))">
-                                        
                                         <!-- Cột 1: STT (col-span-1) -->
                                         <div class="col-span-1 flex items-center justify-center">
                                             <span class="w-6 h-6 rounded-full bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300 font-bold text-xs flex items-center justify-center font-mono shadow-2xs border border-purple-200 dark:border-purple-800">
@@ -11370,7 +10711,6 @@ Dashboard Kỹ Thuật Viên -
                                             </span>
                                             <input type="hidden" name="ocr_code_{{ item.original_index|default:forloop.counter0 }}" value="{{ item.clean_code|default:forloop.counter }}">
                                         </div>
-
                                         <!-- Cột 2: Số phiếu ban hành (col-span-3) -->
                                         <div class="col-span-3 pr-2">
                                             <div class="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-800/80 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-2xs group-hover:border-purple-300 transition-colors">
@@ -11389,7 +10729,6 @@ Dashboard Kỹ Thuật Viên -
                                                 {% endif %}
                                             </div>
                                         </div>
-
                                         <!-- Cột 3: Nội dung sửa đổi (col-span-7) -->
                                         <div class="col-span-7 pr-2">
                                             {% if perms.sheets.can_create_sheet and sheet.status in 'DRAFT ISSUED' or perms.sheets.can_dispatch_sheet and sheet.status in 'DRAFT ISSUED' %}
@@ -11404,7 +10743,6 @@ Dashboard Kỹ Thuật Viên -
                                                 </div>
                                             {% endif %}
                                         </div>
-
                                         <!-- Cột 4: Thao tác (col-span-1) -->
                                         <div class="col-span-1 flex items-center justify-end pr-1">
                                             <input type="hidden" name="ocr_delete_{{ item.original_index|default:forloop.counter0 }}" value="0" class="row-delete-flag">
@@ -11418,7 +10756,6 @@ Dashboard Kỹ Thuật Viên -
                                             {% endif %}
                                         </div>
                                     </div>
-
                                     {% else %}
                                     <!-- ==================== DATA ROW THÔNG SỐ KỸ THUẬT ==================== -->
                                     <div class="grid grid-cols-12 gap-2 px-3 py-2 items-center hover:bg-blue-50/60 dark:hover:bg-blue-950/30 transition-colors ocr-data-row border-b border-slate-100 dark:border-slate-800/60 last:border-0 odd:bg-white even:bg-slate-50/40 dark:odd:bg-slate-900 dark:even:bg-slate-800/20 group"
@@ -11427,7 +10764,6 @@ Dashboard Kỹ Thuật Viên -
                                          data-name="{{ item.clean_name|default:item.parameter_name|default:''|escapejs }}"
                                          data-section="{{ item.section_divider|default:''|escapejs }}"
                                          x-show="searchQuery === '' || $el.dataset.code.toLowerCase().includes(searchQuery.toLowerCase()) || $el.dataset.name.toLowerCase().includes(searchQuery.toLowerCase()) || ($el.dataset.section && $el.dataset.section.toLowerCase().includes(searchQuery.toLowerCase()))">
-                                        
                                         {% if item.page_is_matrix or item.is_matrix %}
                                         <!-- ==================== BỐ CỤC 6 CỘT MA TRẬN TIẾP ĐIỂM ĐẦU RA (BO Matrix) ==================== -->
                                         <!-- Cột 1: Tiếp điểm Đầu ra (BO) (2 cols) -->
@@ -11445,7 +10781,6 @@ Dashboard Kỹ Thuật Viên -
                                                 </span>
                                             {% endif %}
                                         </div>
-
                                         <!-- Cột 2: Mã tín hiệu No. (2 cols) -->
                                         <div class="col-span-2 flex items-center">
                                             {% if perms.sheets.can_create_sheet and sheet.status in 'DRAFT ISSUED' or perms.sheets.can_dispatch_sheet and sheet.status in 'DRAFT ISSUED' %}
@@ -11461,7 +10796,6 @@ Dashboard Kỹ Thuật Viên -
                                                 </span>
                                             {% endif %}
                                         </div>
-
                                         <!-- Cột 3: Phân nhóm Group (2 cols) -->
                                         <div class="col-span-2 flex items-center">
                                             {% if perms.sheets.can_create_sheet and sheet.status in 'DRAFT ISSUED' or perms.sheets.can_dispatch_sheet and sheet.status in 'DRAFT ISSUED' %}
@@ -11477,7 +10811,6 @@ Dashboard Kỹ Thuật Viên -
                                                 </span>
                                             {% endif %}
                                         </div>
-
                                         <!-- Cột 4: Chức năng tác động Information (4 cols) -->
                                         <div class="col-span-4 flex items-center pr-1">
                                             {% if perms.sheets.can_create_sheet and sheet.status in 'DRAFT ISSUED' or perms.sheets.can_dispatch_sheet and sheet.status in 'DRAFT ISSUED' %}
@@ -11493,7 +10826,6 @@ Dashboard Kỹ Thuật Viên -
                                                 </div>
                                             {% endif %}
                                         </div>
-
                                         <!-- Cột 5: Loại Type (1 col) -->
                                         <div class="col-span-1 flex items-center justify-center">
                                             {% if perms.sheets.can_create_sheet and sheet.status in 'DRAFT ISSUED' or perms.sheets.can_dispatch_sheet and sheet.status in 'DRAFT ISSUED' %}
@@ -11509,7 +10841,6 @@ Dashboard Kỹ Thuật Viên -
                                                 </span>
                                             {% endif %}
                                         </div>
-
                                         <!-- Cột 6: Cấu hình Config (1 col) -->
                                         <div class="col-span-1 flex items-center justify-end gap-1 pr-1">
                                             <input type="hidden" name="ocr_delete_{{ item.original_index|default:forloop.counter0 }}" value="0" class="row-delete-flag">
@@ -11532,7 +10863,6 @@ Dashboard Kỹ Thuật Viên -
                                                 </span>
                                             {% endif %}
                                         </div>
-
                                         {% elif item.page_has_code %}
                                         <!-- ==================== BỐ CỤC 3 CỘT (Cho trang có mã số - Siemens/ABB) ==================== -->
                                         <!-- Cột 1: Mã thông số (2 cols - Có thể chỉnh sửa) -->
@@ -11555,7 +10885,6 @@ Dashboard Kỹ Thuật Viên -
                                                 </span>
                                             {% endif %}
                                         </div>
-
                                         <!-- Cột 2: Tên thông số cài đặt (6 cols - Có thể chỉnh sửa) -->
                                         <div class="col-span-6 pr-1">
                                             {% if perms.sheets.can_create_sheet and sheet.status in 'DRAFT ISSUED' or perms.sheets.can_dispatch_sheet and sheet.status in 'DRAFT ISSUED' %}
@@ -11576,11 +10905,9 @@ Dashboard Kỹ Thuật Viên -
                                                 </div>
                                             {% endif %}
                                         </div>
-
                                         <!-- Cột 3: Giá trị cài đặt & Thao tác Xóa (4 cols) -->
                                         <div class="col-span-4 flex items-center gap-1.5 justify-end">
                                             <input type="hidden" name="ocr_delete_{{ item.original_index|default:forloop.counter0 }}" value="0" class="row-delete-flag">
-
                                             <div class="flex flex-col items-end gap-0.5 flex-1 min-w-0">
                                                 <div class="flex items-center bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded-md w-full border border-slate-200 dark:border-slate-700 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all shadow-2xs group-hover:border-slate-300 dark:group-hover:border-slate-600">
                                                     {% if perms.sheets.can_create_sheet and sheet.status in 'DRAFT ISSUED' or perms.sheets.can_dispatch_sheet and sheet.status in 'DRAFT ISSUED' %}
@@ -11607,7 +10934,6 @@ Dashboard Kỹ Thuật Viên -
                                                     </span>
                                                 {% endif %}
                                             </div>
-
                                             {% if perms.sheets.can_create_sheet and sheet.status in 'DRAFT ISSUED' or perms.sheets.can_dispatch_sheet and sheet.status in 'DRAFT ISSUED' %}
                                             <button type="button" 
                                                     onclick="toggleDeleteRow(this)"
@@ -11617,7 +10943,6 @@ Dashboard Kỹ Thuật Viên -
                                             </button>
                                             {% endif %}
                                         </div>
-
                                         {% elif item.page_is_columnar or item.is_columnar %}
                                         <!-- ==================== BỐ CỤC 4 CỘT DẠNG BẢNG CHUẨN (NARI / EVN Standard) ==================== -->
                                         <!-- Cột 1: STT (col-span-1) -->
@@ -11627,7 +10952,6 @@ Dashboard Kỹ Thuật Viên -
                                             </span>
                                             <input type="hidden" name="ocr_code_{{ item.original_index|default:forloop.counter0 }}" value="{{ item.clean_code|default:forloop.counter }}">
                                         </div>
-
                                         <!-- Cột 2: Tên thông số cài đặt (Setting Title) (col-span-6) -->
                                         <div class="col-span-6 pr-2">
                                             {% if perms.sheets.can_create_sheet and sheet.status in 'DRAFT ISSUED' or perms.sheets.can_dispatch_sheet and sheet.status in 'DRAFT ISSUED' %}
@@ -11657,7 +10981,6 @@ Dashboard Kỹ Thuật Viên -
                                                 </div>
                                             {% endif %}
                                         </div>
-
                                         <!-- Cột 3: Giá trị cài đặt & Đơn vị (col-span-4) -->
                                         <div class="col-span-4 flex items-center justify-end pr-2">
                                             <div class="flex items-center bg-slate-50 dark:bg-slate-800/80 px-2.5 py-1 rounded-lg w-full border border-slate-200 dark:border-slate-700 focus-within:border-emerald-500 focus-within:ring-1 focus-within:ring-emerald-500 transition-all shadow-2xs group-hover:border-slate-300 dark:group-hover:border-slate-600">
@@ -11680,7 +11003,6 @@ Dashboard Kỹ Thuật Viên -
                                                 {% endif %}
                                             </div>
                                         </div>
-
                                         <!-- Cột 4: Thao tác Xóa (col-span-1) -->
                                         <div class="col-span-1 flex items-center justify-end pr-1">
                                             <input type="hidden" name="ocr_delete_{{ item.original_index|default:forloop.counter0 }}" value="0" class="row-delete-flag">
@@ -11693,12 +11015,10 @@ Dashboard Kỹ Thuật Viên -
                                             </button>
                                             {% endif %}
                                         </div>
-
                                         {% else %}
                                         <!-- ==================== BỐ CỤC 2 CỘT TỰ THÍCH ỨNG (Cho trang không có mã số - SEL / So lệch) ==================== -->
                                         <!-- Hidden empty input for ocr_code để form submit đồng nhất -->
                                         <input type="hidden" name="ocr_code_{{ item.original_index|default:forloop.counter0 }}" value="">
-
                                         <!-- Cột 1: Tên thông số kỹ thuật & Diễn giải song ngữ (6 cols) -->
                                         <div class="col-span-6 pr-2">
                                             {% if perms.sheets.can_create_sheet and sheet.status in 'DRAFT ISSUED' or perms.sheets.can_dispatch_sheet and sheet.status in 'DRAFT ISSUED' %}
@@ -11722,7 +11042,6 @@ Dashboard Kỹ Thuật Viên -
                                                 </div>
                                             {% endif %}
                                         </div>
-
                                         <!-- Cột 2: Giá trị cài đặt & Thẻ Chip Biến số (6 cols) -->
                                         <div class="col-span-6 flex items-center gap-2 justify-end">
                                             <input type="hidden" name="ocr_delete_{{ item.original_index|default:forloop.counter0 }}" value="0" class="row-delete-flag">
@@ -11731,7 +11050,6 @@ Dashboard Kỹ Thuật Viên -
                                                     <input type="hidden" name="ocr_delete_{{ m_idx }}" value="1">
                                                 {% endfor %}
                                             {% endif %}
-
                                             <div class="flex flex-col items-end gap-1.5 flex-1 min-w-0">
                                                 <!-- Sub-values Chip Badges nếu có -->
                                                 {% if item.sub_vals %}
@@ -11744,7 +11062,6 @@ Dashboard Kỹ Thuật Viên -
                                                     {% endfor %}
                                                 </div>
                                                 {% endif %}
-
                                                 <!-- Input Giá trị có thể chỉnh sửa -->
                                                 <div class="flex items-center bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded-md w-full border border-slate-200 dark:border-slate-700 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all shadow-2xs group-hover:border-slate-300 dark:group-hover:border-slate-600">
                                                     {% if perms.sheets.can_create_sheet and sheet.status in 'DRAFT ISSUED' or perms.sheets.can_dispatch_sheet and sheet.status in 'DRAFT ISSUED' %}
@@ -11766,7 +11083,6 @@ Dashboard Kỹ Thuật Viên -
                                                     {% endif %}
                                                 </div>
                                             </div>
-
                                             {% if perms.sheets.can_create_sheet and sheet.status in 'DRAFT ISSUED' or perms.sheets.can_dispatch_sheet and sheet.status in 'DRAFT ISSUED' %}
                                             <!-- Nút xóa dòng rác (🗑️) -->
                                             <button type="button" 
@@ -11780,7 +11096,6 @@ Dashboard Kỹ Thuật Viên -
                                         {% endif %}
                                     </div>
                                     {% endif %}
-
                                     {% if item.page_note %}
                                     <!-- Operator / Matrix Footnote Callout -->
                                     <div class="m-3 p-3.5 rounded-xl bg-amber-50/90 dark:bg-amber-950/40 border border-amber-200/90 dark:border-amber-800/70 flex items-start gap-3 shadow-xs">
@@ -11795,13 +11110,10 @@ Dashboard Kỹ Thuật Viên -
                                         </div>
                                     </div>
                                     {% endif %}
-
                                     {% endfor %}
                                 </div>
                             </div>
-                            
                             <div class="text-xs text-slate-400 text-center mt-2 italic pb-2">* Kỹ thuật viên (KTV) tuân thủ cài đặt rơ-le theo đúng thông số Giá trị (Thiết kế) trên.</div>
-                            
                             {% if perms.sheets.can_create_sheet and sheet.status in 'DRAFT ISSUED' or perms.sheets.can_dispatch_sheet and sheet.status in 'DRAFT ISSUED' %}
                             <!-- Action Bar Lưu dưới đáy bảng -->
                             <div class="mt-3 p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xs flex items-center justify-between gap-3">
@@ -11816,11 +11128,9 @@ Dashboard Kỹ Thuật Viên -
                             </div>
                             {% endif %}
                         </div>
-
                         </div>
                     {% endif %}
                 </form>
-                
                 {% else %}
                     <!-- Show mock OCR button -->
                     <div class="flex flex-col items-center justify-center pt-10 pb-10 mt-6 bg-white border border-slate-200 rounded-xl shadow-sm dark:bg-slate-900 dark:border-slate-700" 
@@ -11848,23 +11158,19 @@ Dashboard Kỹ Thuật Viên -
                                  });
                              }
                          }">
-                        
                         <div class="relative mb-6">
                             <i class="fas fa-robot text-5xl text-slate-300 transition-colors duration-300" :class="loading ? 'text-blue-500' : ''"></i>
                             <div x-show="loading" class="absolute -bottom-2 -right-2 bg-blue-500 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center shadow-lg border-2 border-white animate-spin">
                                 <i class="fas fa-sync-alt"></i>
                             </div>
                         </div>
-
                         <p class="text-slate-500 text-sm mb-4 text-center dark:text-slate-400" x-show="!loading && !error">
                             Phiếu chưa được chạy bóc tách dữ liệu.<br>Bấm nút bên dưới để tiến hành quét AI OCR.
                         </p>
-                        
                         <!-- Lỗi -->
                         <div x-show="error" class="bg-red-50 text-red-600 p-3 rounded-lg text-sm mb-4 max-w-md text-center border border-red-100" style="display: none;">
                             <i class="fas fa-exclamation-triangle mr-1"></i> <span x-text="error"></span>
                         </div>
-
                         <!-- Trạng thái Loading -->
                         <div x-show="loading" class="w-full max-w-sm mb-6" style="display: none;">
                             <p class="text-blue-600 text-sm mb-2 text-center font-semibold" x-text="stage || 'Đang chuẩn bị dữ liệu...'"></p>
@@ -11873,7 +11179,6 @@ Dashboard Kỹ Thuật Viên -
                             </div>
                             <p class="text-xs text-slate-400 text-center mt-3 animate-pulse">Quá trình này diễn ra hoàn toàn tự động...</p>
                         </div>
-                        
                         {% if perms.sheets.can_create_sheet %}
                             {% if sheet.status in 'DRAFT ISSUED' %}
                             <form x-show="!loading" method="POST" action="{% url 'run_mock_ocr' sheet.pk %}" @submit="loading = true; stage = 'Đang xếp hàng...'">
@@ -11891,15 +11196,10 @@ Dashboard Kỹ Thuật Viên -
                         {% endif %}
                     </div>
                 {% endif %}
-
         <!-- History Timeline Deleted -->
-
-
     </div> <!-- End ocrDataScrollContainer -->
-
     <!-- Sticky Footer removed (Button moved to header) -->
 </div> <!-- CLOSE OCR TAB -->
-
             <!-- Tab Compare (Differences) -->
             <div x-show="activeTab === 'compare'" class="absolute inset-0 overflow-y-auto bg-slate-50/50 dark:bg-slate-800/50" style="display: none;">
                 <div class="p-0">
@@ -11912,8 +11212,6 @@ Dashboard Kỹ Thuật Viên -
                         {% endif %}
                     </div>
                     <div class="p-4 space-y-3">
-
-                        
                         {% if not has_previous %}
                             <div class="flex flex-col items-center justify-center py-12 text-slate-500 dark:text-slate-400">
                                 <i class="fas fa-info-circle text-4xl mb-3 text-blue-300"></i>
@@ -11957,7 +11255,6 @@ Dashboard Kỹ Thuật Viên -
                                     </div>
                                 </div>
                             </div>
-
                             <div class="overflow-x-auto rounded-lg border border-slate-200 shadow-sm dark:border-slate-700">
                                 <table class="w-full text-left border-collapse bg-white dark:bg-slate-900">
                                     <thead>
@@ -12018,7 +11315,6 @@ Dashboard Kỹ Thuật Viên -
                     </div>
                 </div>
             </div>
-            
             {% if request.user.is_superuser or request.user|has_group:'ADMIN' %}
             <!-- Tab AutoCheck -->
             <div x-show="activeTab === 'autocheck'" class="absolute inset-0 overflow-y-auto p-5 space-y-6 bg-slate-50/50 dark:bg-slate-800/50" style="display: none;">
@@ -12027,7 +11323,6 @@ Dashboard Kỹ Thuật Viên -
                     <div class="flex-1 bg-white p-4 rounded-xl shadow-sm border border-slate-200 dark:bg-slate-900 dark:border-slate-700" id="schedule-config-container">
                         {% include "stations/partials/_schedule_config.html" with relay=sheet.relay %}
                     </div>
-                    
                     <div class="md:w-1/3 bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-center items-center text-center dark:bg-slate-900 dark:border-slate-700">
                         <h3 class="font-bold text-slate-800 mb-2 dark:text-slate-200">Chạy kiểm tra thủ công</h3>
                         <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow-sm text-sm font-semibold transition-colors flex items-center gap-2"
@@ -12038,7 +11333,6 @@ Dashboard Kỹ Thuật Viên -
                         </button>
                     </div>
                 </div>
-                
                 <div id="autocheck-results">
                     {% include "stations/partials/_autocheck_results.html" with relay=sheet.relay %}
                 </div>
@@ -12051,11 +11345,8 @@ Dashboard Kỹ Thuật Viên -
                 {% endif %}
             </div>
             {% endif %}
-            
             {% include "sheets/partials/_history_panel.html" %}
-            
         </div>
-
     <!-- Modal Xem Chi Tiết & Đối Chiếu Rơ-le -->
     <div id="relayDetailModal"
          class="fixed inset-0 z-[100] hidden items-center justify-center bg-slate-950/75 backdrop-blur-md p-2 sm:p-4 md:p-6" 
@@ -12071,28 +11362,20 @@ Dashboard Kỹ Thuật Viên -
             </div>
         </div>
     </div>
-
 </div>
-
-
-
 <script>
     (function() {
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
         let pdfDoc = null;
         let pdfScale = 1.2;
         let isSyncing = false;
     let syncTimeout = null;
-
     const pdfScrollContainer = document.getElementById('pdfScrollContainer');
     const ocrDataScrollContainer = document.getElementById('ocrDataScrollContainer');
     const pdfLoadingIndicator = document.getElementById('pdfLoadingIndicator');
     const pdfZoomStatus = document.getElementById('pdfZoomStatus');
-
     {% if sheet.scan_file and ".pdf" in sheet.scan_file.name|lower %}
     const pdfUrl = '{{ sheet.scan_file.url }}';
-
     fetch(pdfUrl)
         .then(res => {
             if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -12109,7 +11392,6 @@ Dashboard Kỹ Thuật Viên -
         .then(pdf => {
             pdfDoc = pdf;
             if(pdfLoadingIndicator) pdfLoadingIndicator.style.display = 'none';
-        
         // Auto-calculate scale to fit container width
         pdf.getPage(1).then(page => {
             setTimeout(() => {
@@ -12125,26 +11407,21 @@ Dashboard Kỹ Thuật Viên -
         console.error('Error loading PDF:', err);
         if(pdfLoadingIndicator) pdfLoadingIndicator.innerHTML = '<p class="text-red-500 font-bold">Lỗi tải PDF</p>';
     });
-
     function renderAllPages() {
         if (!pdfDoc) return;
         pdfScrollContainer.innerHTML = '';
         if(pdfZoomStatus) pdfZoomStatus.innerText = Math.round(pdfScale * 100) + '%';
-
         for (let i = 1; i <= pdfDoc.numPages; i++) {
             const pageWrapper = document.createElement('div');
             pageWrapper.className = 'pdf-page-wrapper bg-white shadow-md mb-4 relative flex-shrink-0 mx-auto w-max';
             pageWrapper.dataset.page = i;
-            
             const pageLabel = document.createElement('div');
             pageLabel.className = 'absolute top-0 left-0 bg-blue-600 text-white text-xs px-2 py-1 font-bold rounded-br z-10 opacity-80 shadow-sm';
             pageLabel.innerText = 'Trang ' + i;
             pageWrapper.appendChild(pageLabel);
-
             const canvas = document.createElement('canvas');
             pageWrapper.appendChild(canvas);
             pdfScrollContainer.appendChild(pageWrapper);
-
             pdfDoc.getPage(i).then(page => {
                 const viewport = page.getViewport({ scale: pdfScale });
                 canvas.height = viewport.height;
@@ -12157,14 +11434,12 @@ Dashboard Kỹ Thuật Viên -
             });
         }
     }
-
     window.zoomInPdf = function() {
         if(pdfScale < 3.0) { pdfScale += 0.2; renderAllPages(); }
     }
     window.zoomOutPdf = function() {
         if(pdfScale > 0.6) { pdfScale -= 0.2; renderAllPages(); }
     }
-
     // Manual Ctrl + Wheel zooming logic
     let wheelZoomTimeout = null;
     if (pdfScrollContainer) {
@@ -12175,9 +11450,7 @@ Dashboard Kỹ Thuật Viên -
                 // Standard mouse wheel delta is typically 100.
                 const zoomChange = e.deltaY * -0.0015; 
                 pdfScale = Math.min(Math.max(0.6, pdfScale + zoomChange), 4.0);
-                
                 if(pdfZoomStatus) pdfZoomStatus.innerText = Math.round(pdfScale * 100) + '%';
-                
                 // Debounce the heavy rendering to avoid lag during fast scrolling/pinching
                 clearTimeout(wheelZoomTimeout);
                 wheelZoomTimeout = setTimeout(() => {
@@ -12186,29 +11459,23 @@ Dashboard Kỹ Thuật Viên -
             }
         }, { passive: false });
     }
-
     // Synchronization Logic
     if (pdfScrollContainer && ocrDataScrollContainer) {
         let activeScrollContainer = null;
         let lastPdfScrollTop = pdfScrollContainer.scrollTop;
         let lastOcrScrollTop = ocrDataScrollContainer.scrollTop;
         let currentSyncPage = 1;
-        
         const setActiveContainer = (type) => { activeScrollContainer = type; };
-        
         pdfScrollContainer.addEventListener('mouseenter', () => setActiveContainer('pdf'));
         ocrDataScrollContainer.addEventListener('mouseenter', () => setActiveContainer('ocr'));
         pdfScrollContainer.addEventListener('touchstart', () => setActiveContainer('pdf'));
         ocrDataScrollContainer.addEventListener('touchstart', () => setActiveContainer('ocr'));
-
         function getEagerSyncPage(container, rowSelector, isScrollingDown) {
             const elements = container.querySelectorAll(rowSelector);
             const containerRect = container.getBoundingClientRect();
-            
             const visiblePages = new Set();
             const topMargin = containerRect.top + 30; // 30px buffer
             const bottomMargin = containerRect.bottom - 30;
-
             elements.forEach(el => {
                 const rect = el.getBoundingClientRect();
                 if (rect.bottom > topMargin && rect.top < bottomMargin) {
@@ -12216,13 +11483,10 @@ Dashboard Kỹ Thuật Viên -
                     if (!isNaN(pageNum)) visiblePages.add(pageNum);
                 }
             });
-
             if (visiblePages.size === 0) return currentSyncPage;
-
             const pages = Array.from(visiblePages);
             const maxVisible = Math.max(...pages);
             const minVisible = Math.min(...pages);
-
             if (isScrollingDown) {
                 if (maxVisible > currentSyncPage) currentSyncPage = maxVisible;
                 else if (!visiblePages.has(currentSyncPage)) currentSyncPage = maxVisible;
@@ -12232,8 +11496,6 @@ Dashboard Kỹ Thuật Viên -
             }
             return currentSyncPage;
         }
-
-
         pdfScrollContainer.addEventListener('scroll', () => {
             if (activeScrollContainer !== 'pdf') return;
             const currentScroll = pdfScrollContainer.scrollTop;
@@ -12241,7 +11503,6 @@ Dashboard Kỹ Thuật Viên -
             if (Math.abs(delta) < 5) return; // ignore tiny wiggles
             const isScrollingDown = delta > 0;
             lastPdfScrollTop = currentScroll;
-
             clearTimeout(syncTimeout);
             syncTimeout = setTimeout(() => {
                 const targetPageNum = getEagerSyncPage(pdfScrollContainer, '.pdf-page-wrapper', isScrollingDown);
@@ -12254,7 +11515,6 @@ Dashboard Kỹ Thuật Viên -
                 }
             }, 30);
         });
-
         ocrDataScrollContainer.addEventListener('scroll', () => {
             if (activeScrollContainer !== 'ocr') return;
             const currentScroll = ocrDataScrollContainer.scrollTop;
@@ -12262,7 +11522,6 @@ Dashboard Kỹ Thuật Viên -
             if (Math.abs(delta) < 5) return;
             const isScrollingDown = delta > 0;
             lastOcrScrollTop = currentScroll;
-
             clearTimeout(syncTimeout);
             syncTimeout = setTimeout(() => {
                 const targetPageNum = getEagerSyncPage(ocrDataScrollContainer, '.ocr-data-row', isScrollingDown);
@@ -12293,7 +11552,6 @@ Dashboard Kỹ Thuật Viên -
                 ocrContainer.scrollTo({ top: Math.max(0, scrollTop), behavior: 'smooth' });
             }
         }
-        
         const pdfContainer = document.getElementById('pdfScrollContainer');
         if (pdfContainer) {
             const targetPdf = pdfContainer.querySelector(`.pdf-page-wrapper[data-page="${pageNum}"]`);
@@ -12305,7 +11563,6 @@ Dashboard Kỹ Thuật Viên -
             }
         }
     };
-
     window.scrollToOcrSection = function(slug) {
         const ocrContainer = document.getElementById('ocrDataScrollContainer');
         if (!ocrContainer) return;
@@ -12319,13 +11576,11 @@ Dashboard Kỹ Thuật Viên -
             setTimeout(() => target.classList.remove('ring-2', 'ring-indigo-500', 'ring-offset-2'), 2500);
         }
     };
-
     window.toggleDeleteRow = function(btn) {
         const row = btn.closest('.ocr-data-row');
         if (!row) return;
         const deleteFlag = row.querySelector('.row-delete-flag');
         if (!deleteFlag) return;
-        
         if (deleteFlag.value === '1') {
             // Hoàn tác xóa (Khôi phục)
             deleteFlag.value = '0';
@@ -12349,9 +11604,7 @@ Dashboard Kỹ Thuật Viên -
         }
     };
     })();
-
 // [Fixed] x-data='metadataForm()' is now declared directly on #infoForm with scripts loaded in advance.
-
     {% if not sheet.extracted_data %}
     // Tự động tải lại trang khi OCR chạy nền hoàn tất
     console.log("OCR data is empty. Polling for updates...");
@@ -12377,10 +11630,8 @@ Dashboard Kỹ Thuật Viên -
 ````html
 {% extends "base.html" %}
 {% load auth_extras %}
-
 {% block title %}Trích xuất Dữ liệu | RMS{% endblock %}
 {% block header_title %}Trích xuất Dữ liệu Phiếu{% endblock %}
-
 {% block content %}
 <div class="max-w-5xl mx-auto py-8 px-4 sm:px-6">
     <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden transition-colors">
@@ -12398,7 +11649,6 @@ Dashboard Kỹ Thuật Viên -
                 </p>
             </div>
         </div>
-
         <!-- Alpine Component -->
         <form @submit.prevent="submitForm" enctype="multipart/form-data" class="p-6 sm:p-8 space-y-8" hx-boost="false"
               x-data="{ 
@@ -12416,9 +11666,7 @@ Dashboard Kỹ Thuật Viên -
                   isUploading: false,
                   uploadedCount: 0,
                   currentUploadingTitle: '',
-
                   validExtensions: ['.pdf', '.png', '.jpg', '.jpeg', '.webp', '.tiff', '.tif', '.bmp'],
-
                   formatSize(bytes) {
                       if (!bytes || bytes === 0) return '0 B';
                       const k = 1024;
@@ -12426,7 +11674,6 @@ Dashboard Kỹ Thuật Viên -
                       const i = Math.floor(Math.log(bytes) / Math.log(k));
                       return (bytes / Math.pow(k, i)).toFixed(i === 0 ? 0 : 1) + ' ' + sizes[i];
                   },
-
                   isValidScan(filename) {
                       if (!filename) return false;
                       const lower = filename.toLowerCase();
@@ -12435,15 +11682,12 @@ Dashboard Kỹ Thuật Viên -
                       }
                       return this.validExtensions.some(ext => lower.endsWith(ext));
                   },
-
                   wrapItem(nativeFile, relativePath) {
                       const cleanRel = (relativePath || nativeFile.webkitRelativePath || nativeFile.name || '').replace(/^[\\\/]+/, '');
                       const parts = cleanRel.split(/[\\\/]+/).filter(Boolean);
-                      
                       let folderName = 'File đơn lẻ';
                       let folderPath = '';
                       let subPath = '';
-                      
                       if (parts.length > 1) {
                           folderName = parts[0];
                           folderPath = parts.slice(0, -1).join(' / ');
@@ -12451,7 +11695,6 @@ Dashboard Kỹ Thuật Viên -
                               subPath = parts.slice(1, -1).join(' / ');
                           }
                       }
-
                       return {
                           id: Math.random().toString(36).substring(2, 9) + Date.now().toString(36),
                           file: nativeFile,
@@ -12466,36 +11709,30 @@ Dashboard Kỹ Thuật Viên -
                           isPdf: nativeFile.name.toLowerCase().endsWith('.pdf')
                       };
                   },
-
                   appendRawItems(itemList) {
                       let addedCount = 0;
                       let localSkipped = 0;
                       const skippedExtSet = new Set(this.skippedExts);
-
                       for (const raw of itemList) {
                           const fileObj = raw.file || raw;
                           const relPath = raw.relPath || fileObj.webkitRelativePath || fileObj.name;
-
                           if (!this.isValidScan(fileObj.name)) {
                               localSkipped++;
                               const extMatch = fileObj.name.match(/\.[a-zA-Z0-9]+$/);
                               if (extMatch) skippedExtSet.add(extMatch[0].toLowerCase());
                               continue;
                           }
-
                           // Kiểm tra trùng lặp
                           const isDup = this.files.some(f => 
                               f.name === fileObj.name && 
                               f.size === fileObj.size && 
                               f.relativePath === relPath
                           );
-
                           if (!isDup) {
                               this.files.push(this.wrapItem(fileObj, relPath));
                               addedCount++;
                           }
                       }
-
                       this.skippedCount += localSkipped;
                       this.skippedExts = Array.from(skippedExtSet);
                       if (addedCount > 0) {
@@ -12503,12 +11740,10 @@ Dashboard Kỹ Thuật Viên -
                       }
                       return addedCount;
                   },
-
                   async handleDrop(e) {
                       this.isDragging = false;
                       const dt = e.dataTransfer;
                       if (!dt) return;
-
                       // QUAN TRỌNG: Lấy entries đồng bộ ngay lập tức trước khi event loop giải phóng items
                       const entries = [];
                       if (dt.items && dt.items.length > 0) {
@@ -12524,15 +11759,11 @@ Dashboard Kỹ Thuật Viên -
                               }
                           }
                       }
-
                       const rawFiles = Array.from(dt.files || []);
                       if (entries.length === 0 && rawFiles.length === 0) return;
-
                       this.isScanning = true;
                       this.scanMessage = 'Đang quét và bóc tách các file bên trong thư mục...';
-
                       const collected = [];
-
                       // Duyệt đệ quy cây thư mục
                       if (entries.length > 0) {
                           const readAllEntries = (dirReader) => {
@@ -12554,7 +11785,6 @@ Dashboard Kỹ Thuật Viên -
                                   readNextBatch();
                               });
                           };
-
                           const traverse = async (entry, currentPath = '') => {
                               if (entry.isFile) {
                                   return new Promise((resolve) => {
@@ -12581,7 +11811,6 @@ Dashboard Kỹ Thuật Viên -
                               }
                               return [];
                           };
-
                           const rootTraversals = entries.map(entry => traverse(entry, ''));
                           const results = await Promise.all(rootTraversals);
                           for (const list of results) {
@@ -12593,17 +11822,14 @@ Dashboard Kỹ Thuật Viên -
                               collected.push({ file: rf, relPath: rf.name });
                           }
                       }
-
                       const added = this.appendRawItems(collected);
                       this.isScanning = false;
-
                       if (added === 0 && collected.length === 0) {
                           alert('Thư mục được chọn không có file hoặc trình duyệt chưa cấp quyền đọc thư mục này.');
                       } else if (added === 0 && this.skippedCount > 0) {
                           alert('Không tìm thấy file scan hợp lệ trong thư mục (chỉ hỗ trợ file PDF và các định dạng hình ảnh).');
                       }
                   },
-
                   handleFileInput(e) {
                       const files = Array.from(e.target.files || []);
                       if (files.length > 0) {
@@ -12611,7 +11837,6 @@ Dashboard Kỹ Thuật Viên -
                       }
                       e.target.value = '';
                   },
-
                   handleFolderInput(e) {
                       const files = Array.from(e.target.files || []);
                       if (files.length > 0) {
@@ -12622,15 +11847,12 @@ Dashboard Kỹ Thuật Viên -
                       }
                       e.target.value = '';
                   },
-
                   removeFile(id) {
                       this.files = this.files.filter(f => f.id !== id);
                   },
-
                   removeFolder(folderName) {
                       this.files = this.files.filter(f => f.folderName !== folderName);
                   },
-
                   clearAll() {
                       this.files = [];
                       this.skippedCount = 0;
@@ -12638,16 +11860,13 @@ Dashboard Kỹ Thuật Viên -
                       this.searchQuery = '';
                       this.lastImportSummary = '';
                   },
-
                   toggleFolder(folderName) {
                       this.collapsedFolders[folderName] = !this.collapsedFolders[folderName];
                   },
-
                   get totalSizeFormatted() {
                       const totalBytes = this.files.reduce((acc, f) => acc + (f.size || 0), 0);
                       return this.formatSize(totalBytes);
                   },
-
                   get uniqueFolderCount() {
                       const folders = new Set();
                       this.files.forEach(f => {
@@ -12657,11 +11876,9 @@ Dashboard Kỹ Thuật Viên -
                       });
                       return folders.size;
                   },
-
                   get groupedFolders() {
                       const query = this.searchQuery.trim().toLowerCase();
                       const groups = {};
-
                       this.files.forEach(item => {
                           if (query) {
                               const matchName = item.name.toLowerCase().includes(query);
@@ -12669,7 +11886,6 @@ Dashboard Kỹ Thuật Viên -
                               const matchPath = item.displayPath.toLowerCase().includes(query);
                               if (!matchName && !matchFolder && !matchPath) return;
                           }
-
                           const key = item.folderName || 'File đơn lẻ';
                           if (!groups[key]) {
                               groups[key] = {
@@ -12682,14 +11898,12 @@ Dashboard Kỹ Thuật Viên -
                           groups[key].files.push(item);
                           groups[key].totalSize += item.size;
                       });
-
                       return Object.values(groups).sort((a, b) => {
                           if (a.isLoose) return 1;
                           if (b.isLoose) return -1;
                           return a.name.localeCompare(b.name);
                       });
                   },
-
                   get filteredFlatFiles() {
                       const query = this.searchQuery.trim().toLowerCase();
                       if (!query) return this.files;
@@ -12699,27 +11913,22 @@ Dashboard Kỹ Thuật Viên -
                                  item.displayPath.toLowerCase().includes(query);
                       });
                   },
-
                   async submitForm() {
                       if (this.files.length === 0) return;
                       this.isUploading = true;
                       this.uploadedCount = 0;
                       this.currentUploadingTitle = '';
-
                       const csrfInput = document.querySelector('[name=csrfmiddlewaretoken]');
                       const csrfToken = csrfInput ? csrfInput.value : '';
-
                       for (let i = 0; i < this.files.length; i++) {
                           const item = this.files[i];
                           this.currentUploadingTitle = item.displayPath || item.name;
-
                           const formData = new FormData();
                           formData.append('csrfmiddlewaretoken', csrfToken);
                           formData.append('scan_files', item.file);
                           formData.append('file_title', item.displayPath || item.name);
                           formData.append('relative_path', item.relativePath || '');
                           formData.append('device_mode', this.deviceMode);
-
                           try {
                               await fetch('/sheets/create/', {
                                   method: 'POST',
@@ -12733,12 +11942,10 @@ Dashboard Kỹ Thuật Viên -
                               console.error('Lỗi tải file:', err);
                           }
                       }
-
                       window.location.href = '/sheets/ocr-progress/';
                   }
               }">
             {% csrf_token %}
-
             {% if messages %}
             <div class="bg-red-50 dark:bg-red-900/30 border border-red-100 dark:border-red-800 text-red-600 dark:text-red-400 p-4 rounded-xl text-sm flex items-start gap-3 transition-colors" x-show="!isUploading">
                 <i class="fas fa-exclamation-circle mt-0.5"></i>
@@ -12749,7 +11956,6 @@ Dashboard Kỹ Thuật Viên -
                 </div>
             </div>
             {% endif %}
-
             <!-- Trạng thái Đang Upload (Progress bar & animated spinner) -->
             <div x-show="isUploading" class="bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/60 rounded-2xl p-8 sm:p-10 text-center space-y-5 transition-colors shadow-sm" style="display: none;">
                 <div class="w-16 h-16 mx-auto bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-blue-100 dark:border-blue-900 flex items-center justify-center">
@@ -12769,7 +11975,6 @@ Dashboard Kỹ Thuật Viên -
                         <i class="fas fa-spinner fa-spin mr-1 text-primary"></i> <span x-text="currentUploadingTitle"></span>
                     </div>
                 </div>
-
                 <div class="w-full max-w-lg mx-auto bg-slate-200 dark:bg-slate-700 rounded-full h-3 overflow-hidden shadow-inner">
                     <div class="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 h-3 rounded-full transition-all duration-300" 
                          :style="`width: ${(uploadedCount / (files.length || 1)) * 100}%`"></div>
@@ -12778,10 +11983,8 @@ Dashboard Kỹ Thuật Viên -
                     <i class="fas fa-shield-halved mr-1"></i>Hệ thống đang tiếp nhận và khởi tạo tiến trình xử lý song song ngầm. Vui lòng không đóng tab này.
                 </p>
             </div>
-
             <!-- Vùng Kéo thả / Chọn Thư mục & File (Ẩn khi đang upload) -->
             <div x-show="!isUploading" class="space-y-6">
-
                 <!-- TRƯỜNG HỢP 1: CHƯA CÓ FILE (DROPZONE LỚN CHÍNH) -->
                 <div x-show="files.length === 0"
                      class="relative border-2 border-dashed rounded-2xl transition-all duration-200 group overflow-hidden cursor-pointer"
@@ -12791,13 +11994,11 @@ Dashboard Kỹ Thuật Viên -
                      @dragleave.prevent="if (!$el.contains($event.relatedTarget)) isDragging = false" 
                      @drop.prevent="handleDrop($event)"
                      :class="isDragging ? 'border-primary ring-4 ring-primary/10 bg-blue-50/70 dark:bg-blue-950/30 dark:border-blue-500' : 'border-slate-300 dark:border-slate-600 bg-slate-50/60 dark:bg-slate-800/40 hover:border-primary/50 dark:hover:border-primary/50 hover:bg-slate-50 dark:hover:bg-slate-800/60'">
-                    
                     <!-- Overlay trạng thái đang quét thư mục -->
                     <div x-show="isScanning" class="absolute inset-0 z-20 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xs flex flex-col items-center justify-center gap-3 transition-opacity" style="display: none;">
                         <i class="fas fa-circle-notch fa-spin text-3xl text-primary dark:text-blue-400"></i>
                         <p class="text-sm font-semibold text-slate-700 dark:text-slate-200" x-text="scanMessage"></p>
                     </div>
-
                     <div class="py-12 px-6 text-center space-y-4">
                         <!-- Icon chuyển đổi thư mục -> file -->
                         <div class="w-20 h-20 mx-auto rounded-2xl bg-white dark:bg-slate-700 shadow-sm border border-slate-200/80 dark:border-slate-600 flex items-center justify-center transition-transform group-hover:scale-105 duration-200"
@@ -12808,7 +12009,6 @@ Dashboard Kỹ Thuật Viên -
                                 <i class="fas fa-file-pdf text-rose-500"></i>
                             </div>
                         </div>
-
                         <!-- Tiêu đề & Hướng dẫn -->
                         <div class="space-y-1.5 max-w-lg mx-auto">
                             <h3 class="text-base sm:text-lg font-bold text-slate-800 dark:text-white">
@@ -12818,7 +12018,6 @@ Dashboard Kỹ Thuật Viên -
                                 Thả trực tiếp thư mục scan từ máy tính, hệ thống sẽ tự động quét đệ quy các thư mục con, bóc tách toàn bộ file scan ra ngoài và hiển thị rõ nguồn gốc thư mục.
                             </p>
                         </div>
-
                         <!-- Nút bấm chọn File & Thư mục -->
                         <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
                             <!-- Nút chọn file lẻ -->
@@ -12828,7 +12027,6 @@ Dashboard Kỹ Thuật Viên -
                                 <i class="fas fa-file-circle-plus text-primary dark:text-blue-400"></i>
                                 Chọn File từ Máy tính
                             </button>
-
                             <!-- Nút chọn thư mục (webkitdirectory) -->
                             <button type="button" 
                                     @click.stop="$refs.folderInput.click()" 
@@ -12837,13 +12035,11 @@ Dashboard Kỹ Thuật Viên -
                                 Chọn Thư mục (Folder)
                             </button>
                         </div>
-
                         <p class="text-[11px] text-slate-400 dark:text-slate-500">
                             Hỗ trợ: PDF, JPG, PNG, WEBP, TIFF, BMP • Tự động lọc định dạng không hỗ trợ
                         </p>
                     </div>
                 </div>
-
                 <!-- TRƯỜNG HỢP 2: ĐÃ CÓ FILE (DROPZONE THU GỌN ĐỂ THẢ THÊM) -->
                 <div x-show="files.length > 0" 
                      class="border-2 border-dashed rounded-xl p-3.5 transition-all flex items-center justify-between gap-3 cursor-pointer"
@@ -12852,7 +12048,6 @@ Dashboard Kỹ Thuật Viên -
                      @dragenter.prevent="isDragging = true"
                      @dragleave.prevent="if (!$el.contains($event.relatedTarget)) isDragging = false" 
                      @drop.prevent="handleDrop($event)">
-                    
                     <div class="flex items-center gap-3 text-xs sm:text-sm">
                         <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-primary dark:text-blue-400 flex items-center justify-center shrink-0">
                             <i class="fas fa-cloud-arrow-up text-sm"></i>
@@ -12862,7 +12057,6 @@ Dashboard Kỹ Thuật Viên -
                             <span class="hidden sm:inline text-slate-400 dark:text-slate-500 text-xs ml-1">(để bổ sung vào hàng chờ)</span>
                         </div>
                     </div>
-
                     <div class="flex items-center gap-2 shrink-0">
                         <button type="button" 
                                 @click.stop="$refs.fileInput.click()" 
@@ -12876,7 +12070,6 @@ Dashboard Kỹ Thuật Viên -
                         </button>
                     </div>
                 </div>
-
                 <!-- Hidden Inputs -->
                 <input x-ref="fileInput" 
                        @change="handleFileInput($event)" 
@@ -12884,7 +12077,6 @@ Dashboard Kỹ Thuật Viên -
                        multiple 
                        accept=".pdf,image/*" 
                        class="hidden">
-
                 <input x-ref="folderInput" 
                        @change="handleFolderInput($event)" 
                        type="file" 
@@ -12892,7 +12084,6 @@ Dashboard Kỹ Thuật Viên -
                        directory 
                        multiple 
                        class="hidden">
-
                 <!-- Thông báo nếu có file bị bỏ qua do không đúng định dạng scan -->
                 <div x-show="skippedCount > 0" class="flex items-center justify-between p-3.5 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/40 rounded-xl text-amber-800 dark:text-amber-300 text-xs transition-colors" style="display: none;">
                     <div class="flex items-center gap-2.5">
@@ -12907,7 +12098,6 @@ Dashboard Kỹ Thuật Viên -
                         Đã hiểu
                     </button>
                 </div>
-
                 <!-- ==================== KHU VỰC QUẢN LÝ NGUỒN GỐC THƯ MỤC & FILE ==================== -->
                 <div x-show="files.length > 0" class="space-y-4" style="display: none;">
                     <!-- Thanh thống kê & thao tác nhanh -->
@@ -12927,7 +12117,6 @@ Dashboard Kỹ Thuật Viên -
                                 <span x-text="totalSizeFormatted"></span>
                             </span>
                         </div>
-
                         <!-- Chế độ xem & Hành động -->
                         <div class="flex items-center flex-wrap gap-2 justify-end">
                             <!-- View mode switch -->
@@ -12945,14 +12134,12 @@ Dashboard Kỹ Thuật Viên -
                                     <i class="fas fa-list text-slate-400 text-[11px]"></i> Tất cả file
                                 </button>
                             </div>
-
                             <!-- Xóa tất cả -->
                             <button type="button" @click="clearAll()" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/50 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800/60 shadow-2xs transition-colors flex items-center gap-1">
                                 <i class="fas fa-trash-alt text-[10px]"></i> Xóa tất cả
                             </button>
                         </div>
                     </div>
-
                     <!-- Ô tìm kiếm nhanh file / thư mục khi danh sách nhiều -->
                     <div x-show="files.length > 3" class="relative">
                         <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
@@ -12964,12 +12151,10 @@ Dashboard Kỹ Thuật Viên -
                             <i class="fas fa-times-circle"></i>
                         </button>
                     </div>
-
                     <!-- ================= CHẾ ĐỘ 1: THEO THƯ MỤC NGUỒN (FOLDER PROVENANCE VIEW) ================= -->
                     <div x-show="viewMode === 'folder'" class="space-y-4">
                         <template x-for="group in groupedFolders" :key="group.name">
                             <div class="border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-xs transition-all hover:border-slate-300 dark:hover:border-slate-600">
-                                
                                 <!-- Folder Source Header Card -->
                                 <div class="px-5 py-4 bg-gradient-to-r from-slate-50 to-white dark:from-slate-800 dark:to-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-700 select-none">
                                     <div class="flex items-center gap-3.5 min-w-0 cursor-pointer" @click="toggleFolder(group.name)">
@@ -12978,7 +12163,6 @@ Dashboard Kỹ Thuật Viên -
                                              :class="group.isLoose ? 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300' : 'bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 border border-amber-200/60 dark:border-amber-700/50'">
                                             <i :class="group.isLoose ? 'fas fa-file-lines text-lg' : 'fas fa-folder-open text-lg'"></i>
                                         </div>
-
                                         <div class="min-w-0">
                                             <div class="flex items-center gap-2 flex-wrap">
                                                 <span class="text-[10px] uppercase font-extrabold tracking-wider px-2 py-0.5 rounded border"
@@ -12987,7 +12171,6 @@ Dashboard Kỹ Thuật Viên -
                                                 </span>
                                                 <h4 class="text-sm sm:text-base font-bold text-slate-800 dark:text-white truncate" x-text="group.name"></h4>
                                             </div>
-
                                             <!-- Chi tiết nguồn gốc -->
                                             <div class="flex items-center gap-2 mt-1.5 text-xs text-slate-500 dark:text-slate-400">
                                                 <span x-show="!group.isLoose" class="flex items-center gap-1.5">
@@ -13001,21 +12184,18 @@ Dashboard Kỹ Thuật Viên -
                                             </div>
                                         </div>
                                     </div>
-
                                     <!-- Thống kê & Thao tác của Folder Card -->
                                     <div class="flex items-center gap-2 self-end sm:self-center shrink-0">
                                         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 dark:bg-blue-950/80 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                                             <i class="fas fa-file-pdf text-[11px] text-red-500"></i>
                                             <span x-text="group.files.length"></span> file scan • <span x-text="formatSize(group.totalSize)"></span>
                                         </span>
-
                                         <button type="button" 
                                                 @click.stop="toggleFolder(group.name)"
                                                 class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                                                 :title="collapsedFolders[group.name] ? 'Mở rộng' : 'Thu gọn'">
                                             <i class="fas text-xs transition-transform duration-200" :class="collapsedFolders[group.name] ? 'fa-chevron-down' : 'fa-chevron-up'"></i>
                                         </button>
-
                                         <button type="button" 
                                                 @click.stop="removeFolder(group.name)" 
                                                 class="px-2.5 py-1 text-xs font-medium text-rose-600 hover:text-rose-700 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg transition-colors flex items-center gap-1.5 border border-rose-200 dark:border-rose-800/60"
@@ -13025,22 +12205,18 @@ Dashboard Kỹ Thuật Viên -
                                         </button>
                                     </div>
                                 </div>
-
                                 <!-- Danh sách File bên trong Thư mục nguồn -->
                                 <div x-show="!collapsedFolders[group.name]" class="p-3 sm:p-4 bg-slate-50/30 dark:bg-slate-800/30 divide-y divide-slate-100 dark:divide-slate-700/60">
                                     <template x-for="item in group.files" :key="item.id">
                                         <div class="py-2.5 px-3 rounded-xl hover:bg-white dark:hover:bg-slate-700/60 transition-colors flex items-center justify-between gap-3 text-xs">
-                                            
                                             <!-- Tên file & Nhãn nguồn gốc thư mục -->
                                             <div class="flex items-center gap-3 min-w-0 flex-1">
                                                 <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 shadow-2xs"
                                                      :class="item.isPdf ? 'bg-red-50 dark:bg-red-900/30 text-red-500' : 'bg-blue-50 dark:bg-blue-900/30 text-blue-500'">
                                                     <i :class="item.isPdf ? 'fas fa-file-pdf' : 'fas fa-file-image'" class="text-sm"></i>
                                                 </div>
-
                                                 <div class="min-w-0">
                                                     <span class="font-bold text-slate-800 dark:text-slate-100 text-xs sm:text-sm truncate block" x-text="item.name"></span>
-                                                    
                                                     <!-- Provenance badge / Nguồn thư mục con -->
                                                     <div class="flex items-center gap-1.5 mt-0.5 text-[11px] text-slate-400 dark:text-slate-400 flex-wrap">
                                                         <span class="inline-flex items-center gap-1 text-amber-600 dark:text-amber-400 font-medium">
@@ -13052,11 +12228,9 @@ Dashboard Kỹ Thuật Viên -
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <!-- Dung lượng & Thao tác xóa file -->
                                             <div class="flex items-center gap-3 shrink-0">
                                                 <span class="text-[11px] font-mono text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded" x-text="item.formattedSize"></span>
-                                                
                                                 <button type="button" 
                                                         @click="removeFile(item.id)" 
                                                         class="w-7 h-7 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/40 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 transition-colors flex items-center justify-center" 
@@ -13070,7 +12244,6 @@ Dashboard Kỹ Thuật Viên -
                             </div>
                         </template>
                     </div>
-
                     <!-- ================= CHẾ ĐỘ 2: DANH SÁCH PHẲNG (FLAT VIEW) ================= -->
                     <div x-show="viewMode === 'flat'" class="border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-800 shadow-xs" style="display: none;">
                         <ul class="divide-y divide-slate-100 dark:divide-slate-700/60 max-h-96 overflow-y-auto custom-scrollbar">
@@ -13091,7 +12264,6 @@ Dashboard Kỹ Thuật Viên -
                                             </span>
                                         </div>
                                     </div>
-
                                     <div class="flex items-center gap-3 shrink-0">
                                         <span class="text-[11px] text-slate-500 dark:text-slate-400 font-mono bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded" x-text="item.formattedSize"></span>
                                         <button type="button" 
@@ -13107,7 +12279,6 @@ Dashboard Kỹ Thuật Viên -
                     </div>
                 </div>
             </div>
-
             <!-- Bộ chọn Chế độ Phần cứng OCR (CPU vs GPU) -->
             <div x-show="!isUploading" class="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-700 transition-colors">
                 <div class="flex items-center justify-between">
@@ -13116,7 +12287,6 @@ Dashboard Kỹ Thuật Viên -
                     </label>
                     <span class="text-xs text-slate-400 dark:text-slate-500">Cấu hình luồng thực thi bóc tách dữ liệu</span>
                 </div>
-                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- CPU Option -->
                     <div @click="deviceMode = 'CPU'"
@@ -13141,7 +12311,6 @@ Dashboard Kỹ Thuật Viên -
                             <i class="fas fa-circle-check text-lg"></i>
                         </div>
                     </div>
-
                     <!-- GPU Option -->
                     <div @click="deviceMode = 'GPU'"
                          :class="deviceMode === 'GPU' ? 'border-purple-600 bg-purple-50/40 dark:bg-purple-900/20 ring-2 ring-purple-500/20 dark:ring-purple-500/40 shadow-sm' : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50/60 dark:hover:bg-slate-700/50'"
@@ -13166,21 +12335,17 @@ Dashboard Kỹ Thuật Viên -
                         </div>
                     </div>
                 </div>
-
                 <input type="hidden" name="device_mode" :value="deviceMode">
-
                 <div x-show="deviceMode === 'GPU'" class="flex items-center gap-2 p-3 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800/50 rounded-xl text-amber-800 dark:text-amber-400 text-xs transition-colors" style="display: none;">
                     <i class="fas fa-triangle-exclamation text-amber-500 shrink-0"></i>
                     <span><strong>Lưu ý:</strong> Nếu máy tính không có GPU NVIDIA hoặc chưa cài CUDA, hệ thống sẽ báo lỗi tại trang Tiến độ và cho phép bạn chuyển lại sang CPU chỉ với 1 click.</span>
                 </div>
             </div>
-
             <!-- Footer Actions -->
             <div class="flex items-center justify-between pt-6 border-t border-slate-100 dark:border-slate-700 mt-8 transition-colors" x-show="!isUploading">
                 <a href="{% url 'sheet_list' %}" class="px-5 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-all shadow-xs">
                     Trở về danh sách
                 </a>
-
                 <div class="flex items-center gap-3">
                     <span x-show="files.length > 0" class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:inline">
                         Sẵn sàng đẩy <strong class="text-slate-800 dark:text-white" x-text="files.length"></strong> file vào hàng chờ OCR
@@ -13206,7 +12371,6 @@ Dashboard Kỹ Thuật Viên -
 {% load auth_extras %}
 {% block title %}{{ list_title|default:"Danh sách Phiếu Chỉnh định" }} | RMS EVN{% endblock %}
 {% block header_title %}{{ list_title|default:"Quản lý Phiếu Chỉnh định" }}{% endblock %}
-
 {% block content %}
 <div class="space-y-6 max-w-[1600px] mx-auto pb-12">
     <!-- Header -->
@@ -13230,13 +12394,10 @@ Dashboard Kỹ Thuật Viên -
         </div>
         {% endif %}
     </div>
-
     <!-- MAIN HTMX WRAPPER (KPI CARDS + TOOLBAR + TABLE + PAGINATION) -->
     <div id="sheet-list-container" class="space-y-6">
-
         <!-- ==================== KPI STATS CARDS (INTERACTIVE QUICK FILTERS) ==================== -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-            
             {% if kpi_type == 'ISSUED' %}
                 <!-- Card 1: Tổng chờ rà soát -->
                 <a href="?status={{ status_filter }}&voltage={{ voltage_filter }}&q={{ search_query }}"
@@ -13256,7 +12417,6 @@ Dashboard Kỹ Thuật Viên -
                         {% if not sub_filter %}<i class="fas fa-check text-[10px]"></i>{% endif %}
                     </div>
                 </a>
-
                 <!-- Card 2: Đã khớp CSDL Rơ-le -->
                 <a href="?status={{ status_filter }}&sub_filter=MATCHED&voltage={{ voltage_filter }}&q={{ search_query }}"
                    hx-get="?status={{ status_filter }}&sub_filter=MATCHED&voltage={{ voltage_filter }}&q={{ search_query }}"
@@ -13275,7 +12435,6 @@ Dashboard Kỹ Thuật Viên -
                         {% if sub_filter == 'MATCHED' %}<i class="fas fa-check text-[10px]"></i>{% endif %}
                     </div>
                 </a>
-
                 <!-- Card 3: Chưa có CSDL / Nhập tay -->
                 <a href="?status={{ status_filter }}&sub_filter=UNLINKED&voltage={{ voltage_filter }}&q={{ search_query }}"
                    hx-get="?status={{ status_filter }}&sub_filter=UNLINKED&voltage={{ voltage_filter }}&q={{ search_query }}"
@@ -13294,7 +12453,6 @@ Dashboard Kỹ Thuật Viên -
                         {% if sub_filter == 'UNLINKED' %}<i class="fas fa-check text-[10px]"></i>{% endif %}
                     </div>
                 </a>
-
                 <!-- Card 4: Có Thay Đổi Thông Số -->
                 <a href="?status={{ status_filter }}&sub_filter=CHANGED&voltage={{ voltage_filter }}&q={{ search_query }}"
                    hx-get="?status={{ status_filter }}&sub_filter=CHANGED&voltage={{ voltage_filter }}&q={{ search_query }}"
@@ -13313,7 +12471,6 @@ Dashboard Kỹ Thuật Viên -
                         {% if sub_filter == 'CHANGED' %}<i class="fas fa-check text-[10px]"></i>{% endif %}
                     </div>
                 </a>
-
             {% elif kpi_type == 'ROUTED_TO_STATION' %}
                 <!-- Card 1: Tổng chờ phân công -->
                 <a href="?status={{ status_filter }}&voltage={{ voltage_filter }}&q={{ search_query }}"
@@ -13329,7 +12486,6 @@ Dashboard Kỹ Thuật Viên -
                     <div class="relative z-10 text-3xl md:text-4xl font-black tracking-tight mb-1">{{ kpi_stats.total }}</div>
                     <div class="relative z-10 text-[11px] font-medium mt-2 opacity-80">Đã chuyển về trạm chờ giao việc</div>
                 </a>
-
                 <!-- Card 2: Chưa giao KTV -->
                 <a href="?status={{ status_filter }}&sub_filter=UNASSIGNED&voltage={{ voltage_filter }}&q={{ search_query }}"
                    hx-get="?status={{ status_filter }}&sub_filter=UNASSIGNED&voltage={{ voltage_filter }}&q={{ search_query }}"
@@ -13344,7 +12500,6 @@ Dashboard Kỹ Thuật Viên -
                     <div class="relative z-10 text-3xl md:text-4xl font-black tracking-tight mb-1 {% if sub_filter == 'UNASSIGNED' %}text-white{% else %}text-rose-700 dark:text-rose-400{% endif %}">{{ kpi_stats.unassigned }}</div>
                     <div class="relative z-10 text-[11px] font-medium mt-2 opacity-80">Cần chỉ định KTV thực hiện</div>
                 </a>
-
                 <!-- Card 3: Đã phân công -->
                 <a href="?status={{ status_filter }}&sub_filter=ASSIGNED&voltage={{ voltage_filter }}&q={{ search_query }}"
                    hx-get="?status={{ status_filter }}&sub_filter=ASSIGNED&voltage={{ voltage_filter }}&q={{ search_query }}"
@@ -13359,7 +12514,6 @@ Dashboard Kỹ Thuật Viên -
                     <div class="relative z-10 text-3xl md:text-4xl font-black tracking-tight mb-1 {% if sub_filter == 'ASSIGNED' %}text-white{% else %}text-sky-700 dark:text-sky-400{% endif %}">{{ kpi_stats.assigned }}</div>
                     <div class="relative z-10 text-[11px] font-medium mt-2 opacity-80">KTV đang chuẩn bị tiếp nhận</div>
                 </a>
-
                 <!-- Card 4: Có Thay Đổi -->
                 <a href="?status={{ status_filter }}&sub_filter=CHANGED&voltage={{ voltage_filter }}&q={{ search_query }}"
                    hx-get="?status={{ status_filter }}&sub_filter=CHANGED&voltage={{ voltage_filter }}&q={{ search_query }}"
@@ -13374,7 +12528,6 @@ Dashboard Kỹ Thuật Viên -
                     <div class="relative z-10 text-3xl md:text-4xl font-black tracking-tight mb-1 {% if sub_filter == 'CHANGED' %}text-white{% else %}text-purple-700 dark:text-purple-400{% endif %}">{{ kpi_stats.changed }}</div>
                     <div class="relative z-10 text-[11px] font-medium mt-2 opacity-80">Thông số khác biệt so với cũ</div>
                 </a>
-
             {% elif kpi_type == 'IN_PROGRESS' %}
                 <!-- Card 1: Tổng đang xử lý -->
                 <a href="?status={{ status_filter }}&voltage={{ voltage_filter }}&q={{ search_query }}"
@@ -13390,7 +12543,6 @@ Dashboard Kỹ Thuật Viên -
                     <div class="relative z-10 text-3xl md:text-4xl font-black tracking-tight mb-1">{{ kpi_stats.total }}</div>
                     <div class="relative z-10 text-[11px] font-medium mt-2 opacity-80">Tổng phiếu đang thi công tại trạm</div>
                 </a>
-
                 <!-- Card 2: Đã giao về trạm -->
                 <a href="?status={{ status_filter }}&sub_filter=TRANSFERRED&voltage={{ voltage_filter }}&q={{ search_query }}"
                    hx-get="?status={{ status_filter }}&sub_filter=TRANSFERRED&voltage={{ voltage_filter }}&q={{ search_query }}"
@@ -13405,7 +12557,6 @@ Dashboard Kỹ Thuật Viên -
                     <div class="relative z-10 text-3xl md:text-4xl font-black tracking-tight mb-1 {% if sub_filter == 'TRANSFERRED' %}text-white{% else %}text-indigo-700 dark:text-indigo-400{% endif %}">{{ kpi_stats.transferred }}</div>
                     <div class="relative z-10 text-[11px] font-medium mt-2 opacity-80">Trạm đã nhận bàn giao</div>
                 </a>
-
                 <!-- Card 3: KTV Đang Thi Công -->
                 <a href="?status={{ status_filter }}&sub_filter=RECEIVED&voltage={{ voltage_filter }}&q={{ search_query }}"
                    hx-get="?status={{ status_filter }}&sub_filter=RECEIVED&voltage={{ voltage_filter }}&q={{ search_query }}"
@@ -13420,7 +12571,6 @@ Dashboard Kỹ Thuật Viên -
                     <div class="relative z-10 text-3xl md:text-4xl font-black tracking-tight mb-1 {% if sub_filter == 'RECEIVED' %}text-white{% else %}text-amber-700 dark:text-amber-400{% endif %}">{{ kpi_stats.received }}</div>
                     <div class="relative z-10 text-[11px] font-medium mt-2 opacity-80">KTV đang thao tác cài đặt</div>
                 </a>
-
                 <!-- Card 4: Thay đổi thông số -->
                 <a href="?status={{ status_filter }}&sub_filter=CHANGED&voltage={{ voltage_filter }}&q={{ search_query }}"
                    hx-get="?status={{ status_filter }}&sub_filter=CHANGED&voltage={{ voltage_filter }}&q={{ search_query }}"
@@ -13435,7 +12585,6 @@ Dashboard Kỹ Thuật Viên -
                     <div class="relative z-10 text-3xl md:text-4xl font-black tracking-tight mb-1 {% if sub_filter == 'CHANGED' %}text-white{% else %}text-rose-700 dark:text-rose-400{% endif %}">{{ kpi_stats.changed }}</div>
                     <div class="relative z-10 text-[11px] font-medium mt-2 opacity-80">Phiếu có chỉnh sửa thông số</div>
                 </a>
-
             {% else %}
                 <!-- Card 1: Tổng số -->
                 <a href="?status=&voltage={{ voltage_filter }}&q={{ search_query }}"
@@ -13451,7 +12600,6 @@ Dashboard Kỹ Thuật Viên -
                     <div class="relative z-10 text-3xl md:text-4xl font-black tracking-tight mb-1">{{ kpi_stats.total }}</div>
                     <div class="relative z-10 text-[11px] font-medium mt-2 opacity-80">Toàn bộ hồ sơ trong hệ thống</div>
                 </a>
-
                 <!-- Card 2: Chờ rà soát -->
                 <a href="?status=ISSUED&voltage={{ voltage_filter }}&q={{ search_query }}"
                    hx-get="?status=ISSUED&voltage={{ voltage_filter }}&q={{ search_query }}"
@@ -13466,7 +12614,6 @@ Dashboard Kỹ Thuật Viên -
                     <div class="relative z-10 text-3xl md:text-4xl font-black tracking-tight mb-1 {% if status_filter == 'ISSUED' %}text-white{% else %}text-emerald-700 dark:text-emerald-400{% endif %}">{{ kpi_stats.issued }}</div>
                     <div class="relative z-10 text-[11px] font-medium mt-2 opacity-80">Mới trích xuất qua OCR</div>
                 </a>
-
                 <!-- Card 3: Đang thực hiện -->
                 <a href="?status=ROUTED_TO_STATION,TRANSFERRED,RECEIVED,PENDING_ADMIN_APPROVAL&voltage={{ voltage_filter }}&q={{ search_query }}"
                    hx-get="?status=ROUTED_TO_STATION,TRANSFERRED,RECEIVED,PENDING_ADMIN_APPROVAL&voltage={{ voltage_filter }}&q={{ search_query }}"
@@ -13481,7 +12628,6 @@ Dashboard Kỹ Thuật Viên -
                     <div class="relative z-10 text-3xl md:text-4xl font-black tracking-tight mb-1 {% if 'ROUTED_TO_STATION' in status_filter or 'RECEIVED' in status_filter %}text-white{% else %}text-sky-700 dark:text-sky-400{% endif %}">{{ kpi_stats.in_progress }}</div>
                     <div class="relative z-10 text-[11px] font-medium mt-2 opacity-80">Đang thi công hoặc chờ duyệt</div>
                 </a>
-
                 <!-- Card 4: Hoàn thành -->
                 <a href="?status=COMPLETED&voltage={{ voltage_filter }}&q={{ search_query }}"
                    hx-get="?status=COMPLETED&voltage={{ voltage_filter }}&q={{ search_query }}"
@@ -13497,14 +12643,10 @@ Dashboard Kỹ Thuật Viên -
                     <div class="relative z-10 text-[11px] font-medium mt-2 opacity-80">Đã nghiệm thu và ký số đủ</div>
                 </a>
             {% endif %}
-
         </div>
-
         <!-- ==================== FILTER TOOLBAR & SEARCH ==================== -->
         <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-3xl p-5 border border-white/40 dark:border-slate-700 shadow-sm transition-colors duration-200 space-y-4">
-            
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                
                 <!-- Quick Filter Tabs (Pills) -->
                 <div class="flex flex-wrap items-center gap-2">
                     <a href="?status={{ status_filter }}&voltage={{ voltage_filter }}&q={{ search_query }}"
@@ -13513,7 +12655,6 @@ Dashboard Kỹ Thuật Viên -
                        class="px-4 py-2 rounded-xl text-xs font-bold transition-all {% if not sub_filter %}bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-sm{% else %}bg-slate-100 dark:bg-slate-700/60 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700{% endif %}">
                         Tất cả
                     </a>
-
                     {% if kpi_type == 'ISSUED' %}
                         <a href="?status={{ status_filter }}&sub_filter=MATCHED&voltage={{ voltage_filter }}&q={{ search_query }}"
                            hx-get="?status={{ status_filter }}&sub_filter=MATCHED&voltage={{ voltage_filter }}&q={{ search_query }}"
@@ -13523,7 +12664,6 @@ Dashboard Kỹ Thuật Viên -
                             <span>Đã Khớp CSDL</span>
                             <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-white/20 ml-1">{{ kpi_stats.matched }}</span>
                         </a>
-
                         <a href="?status={{ status_filter }}&sub_filter=UNLINKED&voltage={{ voltage_filter }}&q={{ search_query }}"
                            hx-get="?status={{ status_filter }}&sub_filter=UNLINKED&voltage={{ voltage_filter }}&q={{ search_query }}"
                            hx-target="#sheet-list-container" hx-select="#sheet-list-container" hx-swap="outerHTML" hx-push-url="true"
@@ -13532,7 +12672,6 @@ Dashboard Kỹ Thuật Viên -
                             <span>Cần Rà Soát / Nhập Tay</span>
                             <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-white/20 ml-1">{{ kpi_stats.unlinked }}</span>
                         </a>
-
                         <a href="?status={{ status_filter }}&sub_filter=CHANGED&voltage={{ voltage_filter }}&q={{ search_query }}"
                            hx-get="?status={{ status_filter }}&sub_filter=CHANGED&voltage={{ voltage_filter }}&q={{ search_query }}"
                            hx-target="#sheet-list-container" hx-select="#sheet-list-container" hx-swap="outerHTML" hx-push-url="true"
@@ -13556,7 +12695,6 @@ Dashboard Kỹ Thuật Viên -
                         </a>
                     {% endif %}
                 </div>
-
                 <!-- Voltage Filter Pills -->
                 <div class="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-700/60 p-1 rounded-2xl self-start lg:self-auto">
                     <span class="text-[11px] font-bold text-slate-400 dark:text-slate-400 px-2 uppercase tracking-wider">Cấp ĐA:</span>
@@ -13591,9 +12729,7 @@ Dashboard Kỹ Thuật Viên -
                         Trung áp
                     </a>
                 </div>
-
             </div>
-
             <!-- Search Bar & Summary Count -->
             <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 border-t border-slate-100 dark:border-slate-700/60">
                 <div class="w-full sm:w-2/3 md:w-1/2 relative">
@@ -13619,7 +12755,6 @@ Dashboard Kỹ Thuật Viên -
                         {% endif %}
                     </form>
                 </div>
-
                 <div class="flex items-center gap-2 self-end sm:self-center text-xs font-medium text-slate-500 dark:text-slate-400">
                     <span>Tìm thấy:</span>
                     <span class="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-bold border border-blue-200/60 dark:border-blue-800">
@@ -13627,9 +12762,7 @@ Dashboard Kỹ Thuật Viên -
                     </span>
                 </div>
             </div>
-
         </div>
-
         <!-- ==================== DATA TABLE ==================== -->
         <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden relative transition-colors duration-200">
             <div class="overflow-x-auto -webkit-overflow-scrolling-touch">
@@ -13648,7 +12781,6 @@ Dashboard Kỹ Thuật Viên -
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-700/60 text-sm">
                         {% for sheet in sheets %}
                         <tr class="hover:bg-blue-50/40 dark:hover:bg-slate-700/40 transition-colors duration-150 relative z-10 cursor-pointer group" onclick="if(!event.target.closest('a')) document.getElementById('sheet-link-{{ sheet.pk }}').click();">
-                            
                             <!-- Mã phiếu -->
                             <td class="px-6 py-5 whitespace-nowrap">
                                 <div class="flex items-center gap-2.5">
@@ -13660,7 +12792,6 @@ Dashboard Kỹ Thuật Viên -
                                     </a>
                                 </div>
                             </td>
-
                             <!-- Tiêu đề & cảnh báo -->
                             <td class="px-6 py-5">
                                 <div class="space-y-1">
@@ -13673,7 +12804,6 @@ Dashboard Kỹ Thuật Viên -
                                     {% endif %}
                                 </div>
                             </td>
-
                             <!-- Trạm & Rơ-le -->
                             <td class="px-6 py-5 min-w-[240px]">
                                 <div class="space-y-1.5">
@@ -13688,7 +12818,6 @@ Dashboard Kỹ Thuật Viên -
                                             <span class="text-slate-400 dark:text-slate-500 italic text-[11px]">Chưa xác định trạm</span>
                                         {% endif %}
                                     </div>
-
                                     <!-- Thông tin Rơ-le -->
                                     <div>
                                         {% if sheet.relay %}
@@ -13714,7 +12843,6 @@ Dashboard Kỹ Thuật Viên -
                                     </div>
                                 </div>
                             </td>
-
                             <!-- Người khởi tạo -->
                             <td class="px-6 py-5 whitespace-nowrap">
                                 <div class="flex items-center gap-2">
@@ -13726,7 +12854,6 @@ Dashboard Kỹ Thuật Viên -
                                     </span>
                                 </div>
                             </td>
-
                             <!-- Ngày tạo -->
                             <td class="px-6 py-5 whitespace-nowrap">
                                 <div class="flex flex-col">
@@ -13734,21 +12861,18 @@ Dashboard Kỹ Thuật Viên -
                                     <span class="text-slate-400 dark:text-slate-500 text-[11px]"><i class="far fa-clock mr-1"></i>{{ sheet.created_at|date:"H:i" }}</span>
                                 </div>
                             </td>
-
                             <!-- Trạng thái -->
                             <td class="px-6 py-5 whitespace-nowrap" id="status-cell-{{ sheet.pk }}">
                                 <div class="inline-block">
                                     {% include "sheets/partials/_status_badge.html" with sheet=sheet %}
                                 </div>
                             </td>
-
                             <!-- Thao tác -->
                             <td class="px-6 py-5 text-right whitespace-nowrap relative">
                                 <a href="{% url 'sheet_detail' sheet.pk %}" class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 border border-slate-200 dark:border-slate-600 hover:border-blue-200 dark:hover:border-blue-500/50 shadow-sm transition-all duration-200 group-hover:translate-x-1">
                                     <i class="fas fa-chevron-right text-xs"></i>
                                 </a>
                             </td>
-
                         </tr>
                         {% empty %}
                         <tr>
@@ -13772,11 +12896,9 @@ Dashboard Kỹ Thuật Viên -
                     </tbody>
                 </table>
             </div>
-
             <!-- Pagination -->
             {% include 'partials/pagination.html' with page_obj=sheets rounded_b="true" hx_target="#sheet-list-container" hx_indicator=".htmx-indicator" hx_push_url="true" %}
         </div>
-
     </div>
 </div>
 {% endblock %}
@@ -13825,7 +12947,6 @@ Dashboard Kỹ Thuật Viên -
             return this.rawItems.filter(i => !i.is_diff).length;
         }
      }">
-    
     <!-- Top Result Banner -->
     <div class="p-4 border-b border-slate-100 dark:border-slate-700/80 flex flex-wrap items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/90">
         <div class="flex items-center gap-2.5">
@@ -13842,7 +12963,6 @@ Dashboard Kỹ Thuật Viên -
                     <i class="fas fa-exclamation-circle mr-2"></i> Lỗi kết nối
                 </span>
             {% endif %}
-
             <div class="text-xs text-slate-500 dark:text-slate-400 ml-2">
                 {% if source_file_name %}
                 <span class="font-medium text-slate-700 dark:text-slate-300"><i class="fas fa-file-pdf text-red-500 mr-1"></i> {{ source_file_name }}</span> •
@@ -13850,7 +12970,6 @@ Dashboard Kỹ Thuật Viên -
                 <span><i class="far fa-clock mr-1"></i> {{ latest_log.checked_at|date:"d/m/Y H:i:s" }}</span>
             </div>
         </div>
-        
         <div class="flex items-center gap-2">
             <span class="text-xs text-slate-500">Đối chiếu với phiếu:</span>
             {% with sheet=relay.active_sheet %}
@@ -13864,7 +12983,6 @@ Dashboard Kỹ Thuật Viên -
             {% endwith %}
         </div>
     </div>
-
     <!-- Mismatch Warning & Dispatch Action Box -->
     {% if relay.is_paused_for_correction or latest_log.status == 'MISMATCH' %}
     <div class="bg-gradient-to-r from-red-50 to-amber-50 dark:from-red-950/40 dark:to-amber-950/30 border-y border-red-200 dark:border-red-900/60 p-4 md:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -13897,7 +13015,6 @@ Dashboard Kỹ Thuật Viên -
         </div>
     </div>
     {% endif %}
-
     <!-- Filter Pills & Search Input -->
     <div class="px-5 py-3 border-b border-slate-100 dark:border-slate-700 flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-800">
         <!-- Filter Tabs -->
@@ -13921,14 +13038,12 @@ Dashboard Kỹ Thuật Viên -
                 Tất cả (<span x-text="rawItems.length"></span>)
             </button>
         </div>
-
         <!-- Search Input -->
         <div class="relative min-w-[200px]">
             <i class="fas fa-search absolute left-3 top-2.5 text-slate-400 text-xs"></i>
             <input type="text" x-model="search" placeholder="Lọc thông số..." class="w-full pl-8 pr-3 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 outline-none">
         </div>
     </div>
-
     <!-- Side-by-Side Comparison Table -->
     <div class="overflow-y-auto max-h-[50vh] overscroll-contain relative custom-scrollbar">
         <table class="w-full text-left text-xs border-collapse">
@@ -13949,13 +13064,11 @@ Dashboard Kỹ Thuật Viên -
                     <tr :class="item.is_diff ? 'bg-red-50/80 dark:bg-red-950/30 hover:bg-red-100/80 dark:hover:bg-red-950/50' : 'hover:bg-slate-50 dark:hover:bg-slate-800/50'" class="transition-colors">
                         <td class="px-4 py-2.5 font-bold text-slate-800 dark:text-slate-200" x-text="item.code"></td>
                         <td class="px-4 py-2.5 font-sans text-slate-600 dark:text-slate-300" x-text="item.name"></td>
-                        
                         <!-- Giá trị Phiếu ban hành -->
                         <td class="px-4 py-2.5 bg-blue-50/20 dark:bg-blue-950/10">
                             <span class="inline-block px-2.5 py-0.5 rounded font-bold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-blue-700 dark:text-blue-300 shadow-sm" x-text="item.db_value"></span>
                             <span class="text-[11px] text-slate-400 font-sans ml-1" x-text="item.unit || ''"></span>
                         </td>
-                        
                         <!-- Giá trị đọc từ PDF -->
                         <td class="px-4 py-2.5 bg-purple-50/20 dark:bg-purple-950/10">
                             <template x-if="item.is_diff">
@@ -13985,7 +13098,6 @@ Dashboard Kỹ Thuật Viên -
             </tbody>
         </table>
     </div>
-
     <!-- Modal Footer -->
     <div class="px-5 py-3 border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/90 flex items-center justify-between">
         <span class="text-xs text-slate-400">
@@ -14033,7 +13145,6 @@ Dashboard Kỹ Thuật Viên -
             </tbody>
         </table>
     </div>
-    
     <!-- Pagination -->
     {% include 'partials/pagination.html' with hx_target="#autocheck-table-container" hx_swap="outerHTML" hx_indicator=".htmx-indicator" %}
 </div>
@@ -14060,7 +13171,6 @@ Dashboard Kỹ Thuật Viên -
             });
         }
      }">
-     
     <!-- Header -->
     <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex items-center justify-between shrink-0">
         <div class="flex items-center gap-3">
@@ -14085,7 +13195,6 @@ Dashboard Kỹ Thuật Viên -
             <i class="fas fa-times text-lg"></i>
         </button>
     </div>
-
     <!-- Active Sheet Info Banner -->
     <div class="px-6 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-900 dark:to-slate-800 border-b border-blue-100 dark:border-slate-700 flex flex-wrap items-center justify-between gap-3 text-xs">
         <div class="flex items-center gap-2">
@@ -14105,7 +13214,6 @@ Dashboard Kỹ Thuật Viên -
             </span>
             {% endif %}
         </div>
-        
         <div class="flex items-center gap-3">
             <span class="text-slate-500 dark:text-slate-400">Tổng thông số: <strong class="text-slate-800 dark:text-white" x-text="items.length">{{ total_params }}</strong></span>
             <button type="button" 
@@ -14115,7 +13223,6 @@ Dashboard Kỹ Thuật Viên -
             </button>
         </div>
     </div>
-
     <!-- Search & Filter Controls -->
     <div class="px-6 py-3 border-b border-slate-100 dark:border-slate-700 flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-800">
         <!-- Group Tabs -->
@@ -14151,13 +13258,11 @@ Dashboard Kỹ Thuật Viên -
                 Logic & Ánh xạ
             </button>
         </div>
-
         <div class="relative min-w-[200px] flex-1 md:flex-initial">
             <i class="fas fa-search absolute left-3 top-2.5 text-slate-400 text-xs"></i>
             <input type="text" x-model="search" placeholder="Tìm theo mã, tên, trị số..." class="w-full pl-8 pr-3 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-purple-500 focus:bg-white dark:focus:bg-slate-800 outline-none transition-all">
         </div>
     </div>
-
     <!-- Parameters Table -->
     <div class="p-6 overflow-y-auto flex-1 custom-scrollbar">
         <table class="w-full text-left text-sm border-collapse">
@@ -14197,7 +13302,6 @@ Dashboard Kỹ Thuật Viên -
             </tbody>
         </table>
     </div>
-
     <!-- Footer -->
     <div class="px-6 py-3 border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex items-center justify-between shrink-0">
         <span class="text-xs text-slate-400">
@@ -14218,7 +13322,6 @@ Dashboard Kỹ Thuật Viên -
     hx-trigger="refreshRow-{{ relay.id }} from:body" 
     hx-swap="outerHTML"
     class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors group">
-    
     <!-- 1. Mã & Tên Rơ-le -->
     <td class="px-5 py-3.5">
         <div class="flex items-center gap-2">
@@ -14233,7 +13336,6 @@ Dashboard Kỹ Thuật Viên -
             {{ relay.relay_name|default:"-" }}
         </div>
     </td>
-
     <!-- 2. Trạm / Ngăn lộ -->
     <td class="px-5 py-3.5">
         <div class="font-semibold text-slate-700 dark:text-slate-300 text-xs">
@@ -14244,7 +13346,6 @@ Dashboard Kỹ Thuật Viên -
             <strong class="text-blue-600 dark:text-blue-400 font-mono">{{ relay.bay.bay_code }}</strong>
         </div>
     </td>
-
     <!-- 3. Phiếu Chỉnh định Áp dụng -->
     <td class="px-5 py-3.5">
         {% with sheet=relay.active_sheet %}
@@ -14262,7 +13363,6 @@ Dashboard Kỹ Thuật Viên -
         {% endif %}
         {% endwith %}
     </td>
-
     <!-- 4. Kết quả đối chiếu -->
     <td class="px-5 py-3.5">
         {% with latest_log=relay.auto_checks.first %}
@@ -14281,7 +13381,6 @@ Dashboard Kỹ Thuật Viên -
         {% endif %}
         {% endwith %}
     </td>
-
     <!-- 5. Lần đối chiếu gần nhất -->
     <td class="px-5 py-3.5">
         {% with latest_log=relay.auto_checks.first %}
@@ -14293,7 +13392,6 @@ Dashboard Kỹ Thuật Viên -
         {% endif %}
         {% endwith %}
     </td>
-
     <!-- 6. Thao tác -->
     <td class="px-5 py-3.5 text-right">
         <div class="flex items-center justify-end gap-1.5">
@@ -14307,7 +13405,6 @@ Dashboard Kỹ Thuật Viên -
                 title="Xem danh sách thông số rơ-le">
                 <i class="fas fa-sliders-h text-xs"></i>
             </button>
-
             <!-- Nút 2: Tải PDF đối chiếu -->
             <button type="button" 
                 onclick="window.openPdfUploadModal('{{ relay.id }}', '{{ relay.relay_code }}', '{{ relay.active_sheet.sheet_code|default:"Phiếu mặc định" }}')"
@@ -14315,7 +13412,6 @@ Dashboard Kỹ Thuật Viên -
                 title="Tải file PDF thực tế để đối chiếu với Phiếu">
                 <i class="fas fa-file-upload text-xs"></i>
             </button>
-
             <!-- Nút 3: Xem kết quả so sánh Diff -->
             <button type="button" 
                 hx-get="{% url 'run_autocheck_now' relay.id %}" 
@@ -14326,7 +13422,6 @@ Dashboard Kỹ Thuật Viên -
                 title="Xem bảng đối chiếu chi tiết (Side-by-side Diff)">
                 <i class="fas fa-eye text-xs"></i>
             </button>
-
             <!-- Nút 4: Chạy kiểm tra tức thì qua API -->
             <button type="button" 
                 hx-post="{% url 'run_autocheck_now' relay.id %}" 
@@ -14353,7 +13448,6 @@ Dashboard Kỹ Thuật Viên -
           <span class="ml-2 text-xs font-medium text-slate-600 dark:text-slate-300 transition-colors">{% if relay.auto_check_enabled %}Đang Bật{% else %}Đang Tắt{% endif %}</span>
         </label>
     </div>
-    
     <div x-data="{ mode: '{% if relay.check_interval_unit == 'e' %}exact{% else %}interval{% endif %}' }" class="flex flex-col gap-3">
         <div class="flex gap-4 mb-1">
             <label class="flex items-center gap-1.5 cursor-pointer">
@@ -14365,7 +13459,6 @@ Dashboard Kỹ Thuật Viên -
                 <span class="text-sm text-slate-600 dark:text-slate-300 font-medium transition-colors">Hẹn giờ cụ thể (1 lần)</span>
             </label>
         </div>
-        
         <!-- Chế độ Định kỳ -->
         <div x-show="mode === 'interval'" class="flex items-center gap-2 bg-slate-50 dark:bg-slate-700/50 p-3 rounded-lg border border-slate-100 dark:border-slate-600 transition-colors">
             <span class="text-sm text-slate-600 dark:text-slate-300 whitespace-nowrap transition-colors">Kiểm tra mỗi:</span>
@@ -14379,7 +13472,6 @@ Dashboard Kỹ Thuật Viên -
                 <option value="y" {% if relay.check_interval_unit == 'y' %}selected{% endif %}>Năm</option>
             </select>
         </div>
-        
         <!-- Chế độ Cụ thể -->
         <div x-show="mode === 'exact'" x-cloak style="display: none;" class="flex items-center gap-2 bg-slate-50 dark:bg-slate-700/50 p-3 rounded-lg border border-slate-100 dark:border-slate-600 transition-colors" x-init="$el.style.display = (mode === 'exact' ? 'flex' : 'none')">
             <span class="text-sm text-slate-600 dark:text-slate-300 whitespace-nowrap transition-colors">Lúc:</span>
@@ -14387,7 +13479,6 @@ Dashboard Kỹ Thuật Viên -
                 value="{% if relay.check_interval_unit == 'e' and relay.next_check_at %}{{ relay.next_check_at|date:'Y-m-d\TH:i' }}{% endif %}" 
                 class="flex-1 px-2 py-1 text-sm bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded focus:ring-blue-500 focus:border-blue-500 text-slate-800 dark:text-slate-200 transition-colors" {% if not relay.auto_check_enabled %}disabled{% endif %}>
         </div>
-
         <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm flex justify-center items-center gap-2 mt-1 relative overflow-hidden" {% if not relay.auto_check_enabled %}disabled{% endif %} :class="{'opacity-75 cursor-wait': submitting}">
             <i class="fas fa-save" x-show="!submitting"></i>
             <i class="fas fa-spinner fa-spin" x-show="submitting" x-cloak style="display: none;"></i>
@@ -14399,7 +13490,6 @@ Dashboard Kỹ Thuật Viên -
         </div>
         {% endif %}
     </div>
-    
     {% if relay.next_check_at and relay.auto_check_enabled %}
     <div class="mt-2 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-3 py-2.5 rounded-lg text-sm border border-green-200 dark:border-green-800 flex items-center shadow-sm transition-colors">
         <i class="fas fa-satellite-dish mr-2 animate-pulse text-green-500 dark:text-green-400"></i>
@@ -14416,12 +13506,10 @@ Dashboard Kỹ Thuật Viên -
 ## File: templates/stations/partials/_station_tree_page.html
 ````html
 {% load auth_extras %}
-
 {% if view_type == 'tree' %}
     {% for station in page_obj %}
     <div class="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden transition-all duration-200 hover:border-blue-200 dark:hover:border-blue-500/50"
          x-data="{ expandedStation: {% if station.auto_expand %}true{% else %}false{% endif %}, loaded: false }">
-
         <div class="bg-gradient-to-r from-slate-50 to-white dark:from-slate-800 dark:to-slate-800/80 px-4 py-3 flex justify-between items-center cursor-pointer hover:from-blue-50/30 dark:hover:from-slate-700 transition-all"
              @click="expandedStation = !expandedStation; if(expandedStation && !loaded) { fetch('{% url 'htmx_bays' station.id %}{% if q %}?q={{ q|urlencode }}{% endif %}').then(r=>r.text()).then(html=>{ document.getElementById('bays-{{ station.id }}').innerHTML = html; loaded = true; htmx.process(document.getElementById('bays-{{ station.id }}')); }); }">
             <div class="flex items-center gap-3">
@@ -14448,7 +13536,6 @@ Dashboard Kỹ Thuật Viên -
                 {% endif %}
             </div>
         </div>
-
         <div class="bg-white dark:bg-slate-900" x-show="expandedStation" style="display:none;">
             <div id="bays-{{ station.id }}" class="p-4"
                  {% if station.auto_expand %}hx-get="{% url 'htmx_bays' station.id %}{% if q %}?q={{ q|urlencode }}{% endif %}" hx-trigger="load" hx-swap="innerHTML" @htmx:after-settle="loaded = true"{% endif %}>
@@ -14481,7 +13568,6 @@ Dashboard Kỹ Thuật Viên -
         </div>
     {% endfor %}
 {% endif %}
-
 {% if view_type == 'table' %}
     {% for station in page_obj %}
     <tr class="hover:bg-yellow-50/40 dark:hover:bg-slate-700/50 transition-colors">
@@ -14536,7 +13622,6 @@ Dashboard Kỹ Thuật Viên -
             Rơ-le: {{ relay.relay_code }}
         </span>
     </div>
-
     <!-- Mismatched Parameters Info -->
     <div class="mb-6 bg-red-50 border border-red-200 rounded-xl overflow-hidden shadow-sm">
         <div class="px-4 py-2 bg-red-100 border-b border-red-200 flex items-center justify-between">
@@ -14566,12 +13651,10 @@ Dashboard Kỹ Thuật Viên -
             </table>
         </div>
     </div>
-
     <!-- Stepper -->
     <div class="mb-8">
         <div class="flex items-center justify-between relative">
             <div class="absolute left-0 top-1/2 transform -translate-y-1/2 w-full h-1 bg-slate-200 z-0"></div>
-            
             {% for step_value, step_name, step_idx in ticket.get_flow_steps %}
             <div class="relative z-10 flex flex-col items-center">
                 <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-sm transition-colors 
@@ -14596,7 +13679,6 @@ Dashboard Kỹ Thuật Viên -
             {% endfor %}
         </div>
     </div>
-
     <!-- Current Step Action -->
     <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 mb-6">
         <h4 class="font-bold text-slate-700 mb-2">Trạng thái hiện tại: 
@@ -14612,7 +13694,6 @@ Dashboard Kỹ Thuật Viên -
         <p class="text-sm text-slate-500 mb-4">
             (Bản Demo: Bạn có thể ký thay cho tất cả các vai trò để trải nghiệm luồng)
         </p>
-        
         <form hx-post="{% url 'ticket_sign' ticket.id %}" hx-target="#result-modal-content" class="flex flex-col gap-3">
             <div>
                 <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Ghi chú / Ý kiến xử lý (Không bắt buộc)</label>
@@ -14623,7 +13704,6 @@ Dashboard Kỹ Thuật Viên -
             </button>
         </form>
     </div>
-
     <!-- Signature History -->
     {% if ticket.signatures.exists %}
     <div>
@@ -14656,7 +13736,6 @@ Dashboard Kỹ Thuật Viên -
 {% for bay in bays %}
 <div class="ml-4 border-l-2 border-sky-200 pl-4 relative mb-3"
      x-data="{ expanded: {% if bay.auto_expand %}true{% else %}false{% endif %}, loaded: false }">
-
     <!-- Bay Header -->
     <div class="flex items-center justify-between py-2 group cursor-pointer"
          @click="expanded = !expanded; if(expanded && !loaded) { fetch('{% url 'htmx_relays' bay.id %}{% if q %}?q={{ q|urlencode }}{% endif %}').then(r=>r.text()).then(html=>{ document.getElementById('relays-{{ bay.id }}').innerHTML = html; loaded = true; htmx.process(document.getElementById('relays-{{ bay.id }}')); }); }">
@@ -14670,7 +13749,6 @@ Dashboard Kỹ Thuật Viên -
                 <p class="text-[11px] text-slate-400 leading-tight">{{ bay.bay_name|default:"Ngăn lộ" }}</p>
             </div>
         </div>
-
         <div class="flex items-center gap-2">
             <span class="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">{{ bay.relay_count }} Rơ-le</span>
             {% if request.user|has_group:'ADMIN' or request.user.is_superuser %}
@@ -14687,7 +13765,6 @@ Dashboard Kỹ Thuật Viên -
             {% endif %}
         </div>
     </div>
-
     <!-- Relay Container -->
     <div x-show="expanded" style="display:none;" class="mt-1 mb-2">
         <div id="relays-{{ bay.id }}" class="rounded-xl overflow-hidden border border-slate-100"
@@ -14710,7 +13787,6 @@ Dashboard Kỹ Thuật Viên -
 ````html
 <div class="relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col max-h-[90vh] overflow-hidden text-slate-800 dark:text-slate-100"
      x-data="{ modalTab: '{% if ocr_comparison and ocr_comparison.has_ocr %}compare{% else %}specs{% endif %}' }">
-     
     <!-- 1. Modal Header -->
     <div class="px-6 py-4 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white flex items-center justify-between border-b border-indigo-900/50 shrink-0">
         <div class="flex items-center gap-3.5">
@@ -14750,7 +13826,6 @@ Dashboard Kỹ Thuật Viên -
             <i class="fas fa-times text-base"></i>
         </button>
     </div>
-
     <!-- 2. Sub-tab Navigation Bar -->
     <div class="px-6 py-2.5 bg-slate-100/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700/80 flex items-center gap-1.5 overflow-x-auto shrink-0 custom-scrollbar">
         {% if ocr_comparison and ocr_comparison.has_ocr %}
@@ -14789,10 +13864,8 @@ Dashboard Kỹ Thuật Viên -
             <i class="fas fa-file-invoice text-teal-500"></i> Phiếu Chỉnh định ({{ sheets|length }})
         </button>
     </div>
-
     <!-- 3. Modal Body (Scrollable) -->
     <div class="p-6 overflow-y-auto space-y-6 custom-scrollbar bg-slate-50/60 dark:bg-slate-900/60 flex-1">
-        
         <!-- ==================== TAB 1: ĐỐI CHIẾU VỚI BẢN SCAN ==================== -->
         {% if ocr_comparison and ocr_comparison.has_ocr %}
         <div x-show="modalTab === 'compare'" class="space-y-5" x-transition>
@@ -14821,7 +13894,6 @@ Dashboard Kỹ Thuật Viên -
                     </span>
                 </div>
             </div>
-
             <!-- Bảng So Sánh Đối Chiếu Trực Quan 2 Cột -->
             <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
                 <div class="px-4 py-3 bg-slate-50 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
@@ -14833,7 +13905,6 @@ Dashboard Kỹ Thuật Viên -
                     </span>
                 </div>
                 <div class="divide-y divide-slate-100 dark:divide-slate-700/60 text-xs">
-                    
                     <!-- 1. Trạm biến áp -->
                     <div class="p-3.5 grid grid-cols-1 md:grid-cols-12 gap-3 items-center hover:bg-slate-50/70 dark:hover:bg-slate-700/20 transition-colors">
                         <div class="md:col-span-3 font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
@@ -14866,7 +13937,6 @@ Dashboard Kỹ Thuật Viên -
                         </div>
                         {% endif %}
                     </div>
-
                     <!-- 2. Ngăn lộ / Thiết bị bảo vệ -->
                     <div class="p-3.5 grid grid-cols-1 md:grid-cols-12 gap-3 items-center hover:bg-slate-50/70 dark:hover:bg-slate-700/20 transition-colors">
                         <div class="md:col-span-3 font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
@@ -14899,7 +13969,6 @@ Dashboard Kỹ Thuật Viên -
                         </div>
                         {% endif %}
                     </div>
-
                     <!-- 3. Rơ-le & Model / Hãng sản xuất -->
                     <div class="p-3.5 grid grid-cols-1 md:grid-cols-12 gap-3 items-center hover:bg-slate-50/70 dark:hover:bg-slate-700/20 transition-colors">
                         <div class="md:col-span-3 font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
@@ -14933,7 +14002,6 @@ Dashboard Kỹ Thuật Viên -
                         </div>
                         {% endif %}
                     </div>
-
                     <!-- 4. Kiểu chức năng bảo vệ -->
                     <div class="p-3.5 grid grid-cols-1 md:grid-cols-12 gap-3 items-center hover:bg-slate-50/70 dark:hover:bg-slate-700/20 transition-colors">
                         <div class="md:col-span-3 font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
@@ -14966,7 +14034,6 @@ Dashboard Kỹ Thuật Viên -
                         </div>
                         {% endif %}
                     </div>
-
                     <!-- 5. Tủ bảng & Mạch bảo vệ & Máy cắt -->
                     <div class="p-3.5 grid grid-cols-1 md:grid-cols-12 gap-3 items-center hover:bg-slate-50/70 dark:hover:bg-slate-700/20 transition-colors">
                         <div class="md:col-span-3 font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
@@ -15001,7 +14068,6 @@ Dashboard Kỹ Thuật Viên -
                         </div>
                         {% endif %}
                     </div>
-
                     <!-- 6. Tỷ số Biến dòng điện (TI) -->
                     {% if ocr_comparison.ocr_ct %}
                     <div class="p-3.5 grid grid-cols-1 md:grid-cols-12 gap-3 items-center hover:bg-slate-50/70 dark:hover:bg-slate-700/20 transition-colors">
@@ -15026,10 +14092,8 @@ Dashboard Kỹ Thuật Viên -
                         </div>
                     </div>
                     {% endif %}
-
                 </div>
             </div>
-
             <!-- Khuyến nghị kỹ sư -->
             <div class="p-4 bg-indigo-50/80 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-800/40 rounded-xl flex items-start gap-3">
                 <i class="fas fa-circle-check text-indigo-600 dark:text-indigo-400 text-lg mt-0.5"></i>
@@ -15039,10 +14103,8 @@ Dashboard Kỹ Thuật Viên -
             </div>
         </div>
         {% endif %}
-
         <!-- ==================== TAB 2: THÔNG SỐ KỸ THUẬT & ĐỊNH MỨC ==================== -->
         <div x-show="modalTab === 'specs'" class="space-y-5" x-transition>
-            
             <!-- 4 Thẻ chỉ số kỹ thuật chính -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div class="p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200/80 dark:border-slate-700/80 shadow-sm text-center">
@@ -15074,7 +14136,6 @@ Dashboard Kỹ Thuật Viên -
                     <span class="text-[10px] text-slate-400 block mt-0.5">{{ ansi_title|truncatechars:18 }}</span>
                 </div>
             </div>
-
             <!-- Bảng chi tiết thông số ngăn lộ & vị trí -->
             <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200/80 dark:border-slate-700/80 shadow-sm overflow-hidden">
                 <div class="px-4 py-3 bg-slate-50 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700 font-bold text-xs uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
@@ -15129,7 +14190,6 @@ Dashboard Kỹ Thuật Viên -
                     </div>
                 </div>
             </div>
-
             <!-- Bảng thông số mẫu thực tế trong CSDL -->
             {% if sample_params %}
             <div>
@@ -15162,12 +14222,9 @@ Dashboard Kỹ Thuật Viên -
                 </div>
             </div>
             {% endif %}
-
         </div>
-
         <!-- ==================== TAB 3: CHỨC NĂNG BẢO VỆ ANSI & ĐIỂM THỬ ==================== -->
         <div x-show="modalTab === 'ansi'" class="space-y-5" x-transition>
-            
             <!-- Banner Chức năng hiện tại của Rơ-le -->
             <div class="p-5 rounded-2xl bg-gradient-to-br from-indigo-500/10 via-blue-500/5 to-slate-900/10 border border-indigo-200 dark:border-indigo-800/60 shadow-sm">
                 <div class="flex items-start gap-4">
@@ -15192,7 +14249,6 @@ Dashboard Kỹ Thuật Viên -
                     </div>
                 </div>
             </div>
-
             <!-- Bảng Quy chuẩn Toàn diện 7 Nhóm Chức năng Bảo vệ & Nội dung Hỗ trợ (Theo Quy Chuẩn RelayLab / RMS) -->
             <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
                 <div class="px-4 py-3 bg-slate-50 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -15206,7 +14262,6 @@ Dashboard Kỹ Thuật Viên -
                         Phạm vi tiêu chuẩn theo thư viện model bảo vệ rơ-le
                     </span>
                 </div>
-                
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs">
                         <thead>
@@ -15255,7 +14310,6 @@ Dashboard Kỹ Thuật Viên -
                     </table>
                 </div>
             </div>
-
             <!-- Khối Chuẩn bị Tính toán & Điểm thử Nghiệm thu Rơ-le (Secondary Injection Test Points) -->
             <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden text-xs">
                 <div class="px-4 py-3 bg-gradient-to-r from-slate-50 to-indigo-50/30 dark:from-slate-800 dark:to-indigo-950/20 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
@@ -15270,7 +14324,6 @@ Dashboard Kỹ Thuật Viên -
                     <p class="text-slate-600 dark:text-slate-300 leading-relaxed text-[11.5px]">
                         Hệ thống tự động liên kết các ngưỡng chỉnh định trên phiếu (dòng khởi động $I_{pickup}$, thời gian trễ $t$) để tính toán sẵn tọa độ điểm thử nghiệm (tiêm dòng / áp) phục vụ công tác thí nghiệm định kỳ và nghiệm thu rơ-le:
                     </p>
-                    
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse text-[11px]">
                             <thead>
@@ -15307,7 +14360,6 @@ Dashboard Kỹ Thuật Viên -
                     </div>
                 </div>
             </div>
-
             <!-- Hướng dẫn Kỹ thuật Rà soát & Phối hợp -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                 <div class="p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
@@ -15332,12 +14384,9 @@ Dashboard Kỹ Thuật Viên -
                     </ul>
                 </div>
             </div>
-
         </div>
-
         <!-- ==================== TAB 4: QUẢN LÝ TÀI SẢN EVN ==================== -->
         <div x-show="modalTab === 'asset'" class="space-y-4" x-transition>
-            
             <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200/80 dark:border-slate-700/80 shadow-sm overflow-hidden text-xs">
                 <div class="px-4 py-3 bg-slate-50 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700 font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
                     <i class="fas fa-barcode text-blue-500"></i> Định danh Quản lý Kỹ thuật & Tài sản EVN
@@ -15377,23 +14426,18 @@ Dashboard Kỹ Thuật Viên -
                     </div>
                 </div>
             </div>
-
             <div class="p-3.5 bg-slate-100 dark:bg-slate-800/80 rounded-xl text-slate-500 dark:text-slate-400 text-xs flex items-center justify-between">
                 <span>Dữ liệu được tích hợp trực tiếp từ CSDL PMIS / Kỹ thuật điện lực EVN</span>
                 <span class="font-mono text-[11px]">Cập nhật: {{ relay.updated_at|date:"d/m/Y H:i" }}</span>
             </div>
-
         </div>
-
         <!-- ==================== TAB 5: LỊCH SỬ PHIẾU CHỈNH ĐỊNH ==================== -->
         <div x-show="modalTab === 'history'" class="space-y-4" x-transition>
-            
             <div class="flex items-center justify-between">
                 <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
                     <i class="fas fa-file-invoice text-blue-500"></i> Toàn bộ phiếu chỉnh định của Rơ-le này ({{ sheets|length }})
                 </h4>
             </div>
-
             {% if sheets %}
             <div class="space-y-2.5">
                 {% for s in sheets %}
@@ -15442,11 +14486,8 @@ Dashboard Kỹ Thuật Viên -
                 <p class="text-xs font-medium">Chưa có phiếu chỉnh định nào khác liên kết với rơ-le này.</p>
             </div>
             {% endif %}
-
         </div>
-
     </div>
-
     <!-- 4. Modal Footer -->
     <div class="px-6 py-3.5 bg-slate-50 dark:bg-slate-800/90 border-t border-slate-200 dark:border-slate-700/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
         <span class="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
@@ -15491,7 +14532,6 @@ Dashboard Kỹ Thuật Viên -
             <i class="fas fa-times"></i>
         </button>
     </div>
-
     <!-- Body -->
     <div class="p-6 text-center space-y-4">
         <div class="w-16 h-16 mx-auto rounded-full bg-amber-50 dark:bg-amber-900/30 text-amber-500 flex items-center justify-center text-2xl">
@@ -15514,7 +14554,6 @@ Dashboard Kỹ Thuật Viên -
             </ul>
         </div>
     </div>
-
     <!-- Footer -->
     <div class="px-6 py-3 bg-slate-50 dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 flex justify-end">
         <button type="button" 
@@ -15650,12 +14689,9 @@ Dashboard Kỹ Thuật Viên -
 ## File: templates/stations/autocheck_dashboard.html
 ````html
 {% extends "base.html" %}
-
 {% block header_title %}Trung tâm Đối chiếu Thông số Rơ-le{% endblock %}
-
 {% block content %}
 <div class="min-h-full flex flex-col p-4 md:p-6 space-y-6">
-    
     <!-- 1. Header Section -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -15671,7 +14707,6 @@ Dashboard Kỹ Thuật Viên -
                 Bóc tách dữ liệu từ file PDF (báo cáo thử nghiệm / cài đặt) và tự động đối chiếu với Phiếu Chỉnh định hiệu lực.
             </p>
         </div>
-        
         <div class="flex items-center gap-2">
             <div class="bg-white dark:bg-slate-800 px-4 py-2 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex items-center gap-2.5 transition-colors">
                 <i class="fas fa-microchip text-indigo-500 text-base"></i>
@@ -15679,7 +14714,6 @@ Dashboard Kỹ Thuật Viên -
             </div>
         </div>
     </div>
-
     <!-- 2. KPI Mini-Stats (4 Cards) -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <!-- Card 1: Tổng Rơ-le -->
@@ -15692,7 +14726,6 @@ Dashboard Kỹ Thuật Viên -
                 <i class="fas fa-microchip"></i>
             </div>
         </div>
-
         <!-- Card 2: Đã có Phiếu Chỉnh định -->
         <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex justify-between items-center transition-all hover:shadow-md">
             <div>
@@ -15703,7 +14736,6 @@ Dashboard Kỹ Thuật Viên -
                 <i class="fas fa-file-invoice"></i>
             </div>
         </div>
-
         <!-- Card 3: Đối chiếu Trùng khớp 100% -->
         <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex justify-between items-center transition-all hover:shadow-md">
             <div>
@@ -15714,7 +14746,6 @@ Dashboard Kỹ Thuật Viên -
                 <i class="fas fa-check-double"></i>
             </div>
         </div>
-
         <!-- Card 4: Phát hiện Sai lệch (Cần rà soát) -->
         <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex justify-between items-center transition-all hover:shadow-md relative overflow-hidden">
             <div class="relative z-10">
@@ -15731,7 +14762,6 @@ Dashboard Kỹ Thuật Viên -
             {% endif %}
         </div>
     </div>
-
     <!-- 3. Filter & Search Controls -->
     <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 transition-colors">
         <form class="flex flex-col md:flex-row gap-3" 
@@ -15740,7 +14770,6 @@ Dashboard Kỹ Thuật Viên -
               hx-swap="outerHTML" 
               hx-indicator=".htmx-indicator" 
               hx-trigger="keyup delay:400ms from:input[name='q'], change from:select[name='status']">
-            
             <div class="flex-1 relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                     <i class="fas fa-search text-xs"></i>
@@ -15751,7 +14780,6 @@ Dashboard Kỹ Thuật Viên -
                        placeholder="Tìm kiếm rơ-le theo mã, tên, trạm biến áp, ngăn lộ..." 
                        class="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-blue-500 text-xs md:text-sm text-slate-800 dark:text-slate-200 transition-all outline-none">
             </div>
-            
             <select name="status" class="py-2 px-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 text-xs md:text-sm text-slate-700 dark:text-slate-200 min-w-[220px] cursor-pointer outline-none transition-all">
                 <option value="">Tất cả Rơ-le</option>
                 <option value="has_sheet" {% if status_filter == 'has_sheet' %}selected{% endif %}>📄 Đã có Phiếu Chỉnh định</option>
@@ -15763,7 +14791,6 @@ Dashboard Kỹ Thuật Viên -
             </select>
         </form>
     </div>
-
     <!-- 4. Table Data Section -->
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col relative min-h-[480px] transition-colors">
         <!-- HTMX loading indicator -->
@@ -15773,13 +14800,11 @@ Dashboard Kỹ Thuật Viên -
                 <span class="font-bold text-xs">Đang tải dữ liệu rơ-le...</span>
             </div>
         </div>
-        
         <div class="w-full overflow-x-auto">
             {% include 'stations/partials/_autocheck_table.html' %}
         </div>
     </div>
 </div>
-
 <!-- ==================== MODAL 1: XEM THÔNG SỐ RƠ-LE ==================== -->
 <div id="parameter-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 transition-all">
     <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 w-full max-w-4xl overflow-hidden flex flex-col transition-all">
@@ -15788,11 +14813,9 @@ Dashboard Kỹ Thuật Viên -
         </div>
     </div>
 </div>
-
 <!-- ==================== MODAL 2: TẢI FILE PDF ĐỐI CHIẾU ==================== -->
 <div id="upload-pdf-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 transition-all">
     <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 w-full max-w-lg overflow-hidden flex flex-col transition-all">
-        
         <!-- Header -->
         <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -15808,7 +14831,6 @@ Dashboard Kỹ Thuật Viên -
                 <i class="fas fa-times text-base"></i>
             </button>
         </div>
-
         <!-- Body & Form -->
         <form id="upload-pdf-form" 
               method="POST" 
@@ -15819,7 +14841,6 @@ Dashboard Kỹ Thuật Viên -
               hx-indicator="#upload-indicator"
               class="p-6 space-y-4">
             {% csrf_token %}
-            
             <div class="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-xl p-3 flex items-start gap-2.5 text-xs text-blue-800 dark:text-blue-300">
                 <i class="fas fa-info-circle text-blue-500 mt-0.5"></i>
                 <div>
@@ -15827,25 +14848,20 @@ Dashboard Kỹ Thuật Viên -
                     <strong id="modal-sheet-code" class="font-mono text-blue-900 dark:text-blue-200"></strong>.
                 </div>
             </div>
-
             <!-- Drag and Drop Box -->
             <div class="border-2 border-dashed border-slate-300 dark:border-slate-600 hover:border-teal-500 dark:hover:border-teal-400 rounded-2xl p-6 text-center cursor-pointer transition-all bg-slate-50/50 dark:bg-slate-900/30 group"
                  onclick="document.getElementById('pdf-file-input').click()">
                 <input type="file" id="pdf-file-input" name="pdf_file" accept=".pdf" class="hidden" onchange="window.handlePdfFileSelected(this)">
-                
                 <div class="w-14 h-14 mx-auto rounded-2xl bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform shadow-inner">
                     <i class="fas fa-cloud-arrow-up"></i>
                 </div>
-                
                 <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200">Chọn hoặc Kéo thả file PDF vào đây</h4>
                 <p class="text-xs text-slate-400 mt-1">Hỗ trợ file báo cáo thử nghiệm, file xuất từ DIGSI, PCM600, Acselerator (.pdf)</p>
-                
                 <div id="file-chosen-banner" class="hidden mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-teal-100 dark:bg-teal-900/50 text-teal-800 dark:text-teal-300 font-mono text-xs font-bold border border-teal-300 dark:border-teal-700">
                     <i class="fas fa-file-pdf text-red-500"></i>
                     <span id="file-chosen-name"></span>
                 </div>
             </div>
-
             <!-- Upload & Process Indicator -->
             <div id="upload-indicator" class="htmx-indicator text-center py-3">
                 <div class="inline-flex items-center gap-2 text-teal-600 dark:text-teal-400 font-bold text-xs bg-teal-50 dark:bg-teal-950/40 px-4 py-2 rounded-xl border border-teal-200 dark:border-teal-800">
@@ -15853,7 +14869,6 @@ Dashboard Kỹ Thuật Viên -
                     <span>Đang bóc tách dữ liệu và đối chiếu thông số với Phiếu Chỉnh định...</span>
                 </div>
             </div>
-
             <!-- Footer Actions -->
             <div class="pt-2 flex items-center justify-end gap-2">
                 <button type="button" onclick="document.getElementById('upload-pdf-modal').classList.add('hidden')" class="px-4 py-2 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
@@ -15866,7 +14881,6 @@ Dashboard Kỹ Thuật Viên -
         </form>
     </div>
 </div>
-
 <!-- ==================== MODAL 3: KẾT QUẢ ĐỐI CHIẾU (SIDE-BY-SIDE DIFF) ==================== -->
 <div id="result-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 transition-all">
     <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 w-full max-w-4xl overflow-hidden flex flex-col max-h-[90vh] transition-all">
@@ -15883,7 +14897,6 @@ Dashboard Kỹ Thuật Viên -
         </div>
     </div>
 </div>
-
 <!-- ==================== MODAL 4: CẤU HÌNH LỊCH HẸN GIỜ ==================== -->
 <div id="schedule-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 transition-all">
     <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 w-full max-w-md overflow-hidden flex flex-col transition-all">
@@ -15898,25 +14911,20 @@ Dashboard Kỹ Thuật Viên -
         </div>
     </div>
 </div>
-
 <script>
     // Mở modal upload PDF và gán URL động
     window.openPdfUploadModal = function(relayId, relayCode, sheetCode) {
         document.getElementById('modal-relay-code').innerText = relayCode;
         document.getElementById('modal-sheet-code').innerText = sheetCode;
-        
         const form = document.getElementById('upload-pdf-form');
         form.setAttribute('hx-post', `/stations/relay/${relayId}/upload_pdf_compare/`);
         htmx.process(form);
-        
         // Reset file input
         document.getElementById('pdf-file-input').value = '';
         document.getElementById('file-chosen-banner').classList.add('hidden');
         document.getElementById('submit-compare-btn').disabled = true;
-        
         document.getElementById('upload-pdf-modal').classList.remove('hidden');
     };
-
     // Khi chọn file PDF
     window.handlePdfFileSelected = function(input) {
         if (input.files && input.files[0]) {
@@ -15926,7 +14934,6 @@ Dashboard Kỹ Thuật Viên -
             document.getElementById('submit-compare-btn').disabled = false;
         }
     };
-
     // Các sự kiện đóng mở modal từ HTMX trigger
     document.body.addEventListener('closeResultModal', function() {
         document.getElementById('result-modal').classList.add('hidden');
@@ -15942,7 +14949,6 @@ Dashboard Kỹ Thuật Viên -
         document.getElementById('schedule-modal').classList.add('hidden');
     });
 </script>
-
 <style>
     .htmx-indicator {
         opacity: 0 !important;
@@ -15963,19 +14969,15 @@ Dashboard Kỹ Thuật Viên -
 ## File: templates/stations/relay_status.html
 ````html
 {% extends "base.html" %}
-
 {% block title %}Tiến độ Cấu hình Thiết bị | RMS{% endblock %}
 {% block header_title %}Theo dõi Tiến độ Cấu hình Thiết bị{% endblock %}
-
 {% block content %}
 <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6">
-    
     <!-- Dashboard Header / Progress Bar -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 mb-8">
         <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
             <i class="fas fa-chart-pie text-blue-600 mr-3 text-3xl"></i> Tổng quan Tiến độ Cấu hình
         </h2>
-        
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             <div class="bg-slate-50 rounded-xl p-6 border border-slate-100 flex items-center justify-between">
                 <div>
@@ -15986,7 +14988,6 @@ Dashboard Kỹ Thuật Viên -
                     <i class="fas fa-microchip text-xl"></i>
                 </div>
             </div>
-            
             <div class="bg-emerald-50 rounded-xl p-6 border border-emerald-100 flex items-center justify-between">
                 <div>
                     <p class="text-sm font-semibold text-emerald-600 uppercase tracking-wider">Đã cấu hình</p>
@@ -15996,7 +14997,6 @@ Dashboard Kỹ Thuật Viên -
                     <i class="fas fa-check text-xl"></i>
                 </div>
             </div>
-            
             <div class="bg-amber-50 rounded-xl p-6 border border-amber-100 flex items-center justify-between">
                 <div>
                     <p class="text-sm font-semibold text-amber-600 uppercase tracking-wider">Chưa cấu hình</p>
@@ -16007,7 +15007,6 @@ Dashboard Kỹ Thuật Viên -
                 </div>
             </div>
         </div>
-
         <div class="space-y-2">
             <div class="flex justify-between text-sm font-semibold">
                 <span class="text-slate-600">Tỷ lệ hoàn thành</span>
@@ -16018,10 +15017,8 @@ Dashboard Kỹ Thuật Viên -
             </div>
         </div>
     </div>
-
     <!-- Data Tabs (Alpine.js) -->
     <div x-data="{ activeTab: '{{ active_tab }}', searchCode: '' }" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-        
         <!-- Tab Headers + Search -->
         <div class="flex flex-col sm:flex-row border-b border-slate-200 bg-slate-50">
             <div class="flex overflow-x-auto px-4 pt-3 gap-1 flex-shrink-0">
@@ -16044,7 +15041,6 @@ Dashboard Kỹ Thuật Viên -
                 </div>
             </div>
         </div>
-
         <!-- Tab Content -->
         <div class="p-0">
             <!-- Unconfigured Tab -->
@@ -16083,7 +15079,6 @@ Dashboard Kỹ Thuật Viên -
                         {% endfor %}
                     </tbody>
                 </table>
-
                 <!-- Pagination -->
                 <div class="px-6 py-4 bg-white border-t border-slate-200 flex items-center justify-between">
                     <span class="text-sm text-slate-500">
@@ -16093,7 +15088,6 @@ Dashboard Kỹ Thuật Viên -
                         {% if unconfigured_relays.has_previous %}
                         <a href="?tab=unconfigured&page_unc={{ unconfigured_relays.previous_page_number }}&page_con={{ configured_relays.number }}" class="px-3 py-1 border border-slate-300 rounded text-sm text-slate-600 hover:bg-slate-50">&laquo; Trước</a>
                         {% endif %}
-                        
                         {% for i in unconfigured_relays.paginator.page_range %}
                             {% if unconfigured_relays.number == i %}
                             <span class="px-3 py-1 bg-blue-600 text-white rounded text-sm font-bold">{{ i }}</span>
@@ -16101,14 +15095,12 @@ Dashboard Kỹ Thuật Viên -
                             <a href="?tab=unconfigured&page_unc={{ i }}&page_con={{ configured_relays.number }}" class="px-3 py-1 border border-slate-300 rounded text-sm text-slate-600 hover:bg-slate-50">{{ i }}</a>
                             {% endif %}
                         {% endfor %}
-                        
                         {% if unconfigured_relays.has_next %}
                         <a href="?tab=unconfigured&page_unc={{ unconfigured_relays.next_page_number }}&page_con={{ configured_relays.number }}" class="px-3 py-1 border border-slate-300 rounded text-sm text-slate-600 hover:bg-slate-50">Sau &raquo;</a>
                         {% endif %}
                     </div>
                 </div>
             </div>
-
             <!-- Configured Tab -->
             <div x-show="activeTab === 'configured'" class="overflow-x-auto" style="display: none;">
                 <table class="w-full text-left text-sm text-slate-600">
@@ -16151,7 +15143,6 @@ Dashboard Kỹ Thuật Viên -
                         {% endfor %}
                     </tbody>
                 </table>
-
                 <!-- Pagination -->
                 <div class="px-6 py-4 bg-white border-t border-slate-200 flex items-center justify-between">
                     <span class="text-sm text-slate-500">
@@ -16161,7 +15152,6 @@ Dashboard Kỹ Thuật Viên -
                         {% if configured_relays.has_previous %}
                         <a href="?tab=configured&page_con={{ configured_relays.previous_page_number }}&page_unc={{ unconfigured_relays.number }}" class="px-3 py-1 border border-slate-300 rounded text-sm text-slate-600 hover:bg-slate-50">&laquo; Trước</a>
                         {% endif %}
-                        
                         {% for i in configured_relays.paginator.page_range %}
                             {% if configured_relays.number == i %}
                             <span class="px-3 py-1 bg-blue-600 text-white rounded text-sm font-bold">{{ i }}</span>
@@ -16169,7 +15159,6 @@ Dashboard Kỹ Thuật Viên -
                             <a href="?tab=configured&page_con={{ i }}&page_unc={{ unconfigured_relays.number }}" class="px-3 py-1 border border-slate-300 rounded text-sm text-slate-600 hover:bg-slate-50">{{ i }}</a>
                             {% endif %}
                         {% endfor %}
-                        
                         {% if configured_relays.has_next %}
                         <a href="?tab=configured&page_con={{ configured_relays.next_page_number }}&page_unc={{ unconfigured_relays.number }}" class="px-3 py-1 border border-slate-300 rounded text-sm text-slate-600 hover:bg-slate-50">Sau &raquo;</a>
                         {% endif %}
@@ -16188,7 +15177,6 @@ Dashboard Kỹ Thuật Viên -
 {% load auth_extras %}
 {% block title %}Quản lý Trạm | RMS{% endblock %}
 {% block header_title %}⚡ Trạm biến áp & Thiết bị{% endblock %}
-
 {% block content %}
 <div id="station-list-container" class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden p-6 transition-colors duration-200"
      x-data="{ 
@@ -16204,7 +15192,6 @@ Dashboard Kỹ Thuật Viên -
         searchQuery: '{{ q|default:''|escapejs }}'
      }"
      @keydown.window="if ($event.key === '/' && !['INPUT', 'TEXTAREA'].includes($event.target.tagName)) { $event.preventDefault(); $refs.searchInput.focus(); $refs.searchInput.select(); }">
-
     <!-- Header -->
     <div class="mb-5 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
         <div>
@@ -16222,7 +15209,6 @@ Dashboard Kỹ Thuật Viên -
             {% endif %}
         </div>
     </div>
-
     <!-- Toolbar: Search Bar (Cố định, không bị reload) + View Toggle -->
     <div class="mb-5 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
         <!-- Thanh tìm kiếm HTMX chuyên nghiệp -->
@@ -16247,13 +15233,11 @@ Dashboard Kỹ Thuật Viên -
                        autocomplete="off"
                        placeholder="Tìm kiếm Trạm, Ngăn lộ, Rơ-le bảo vệ... (Phím tắt: /)"
                        class="w-full pl-10 pr-20 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-blue-500 dark:focus:border-blue-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-blue-500/20 text-slate-800 dark:text-slate-200 outline-none transition-all text-sm font-medium shadow-inner placeholder:text-slate-400">
-
                 <div class="absolute right-3 flex items-center gap-1.5">
                     <!-- Loading Spinner quay mượt mà ngay trong ô input -->
                     <div id="search-station-spinner" class="htmx-indicator">
                         <i class="fas fa-circle-notch fa-spin text-blue-500 text-sm"></i>
                     </div>
-
                     <!-- Nút xóa nhanh từ khóa (Clear 'X') -->
                     <button type="button"
                             x-show="searchQuery && searchQuery.length > 0"
@@ -16263,14 +15247,12 @@ Dashboard Kỹ Thuật Viên -
                             class="w-5 h-5 flex items-center justify-center rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-xs">
                         <i class="fas fa-times"></i>
                     </button>
-
                     <!-- Phím tắt '/' gợi ý -->
                     <kbd class="hidden sm:inline-block text-[11px] font-semibold text-slate-400 dark:text-slate-500 bg-slate-200/80 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 px-1.5 py-0.5 rounded shadow-sm cursor-pointer hover:border-slate-400"
                          @click="$refs.searchInput.focus()">/</kbd>
                 </div>
             </div>
         </form>
-
         <!-- View Toggle (Áp dụng chung cho cả 2 view) -->
         <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-900 rounded-xl p-1 shrink-0 transition-colors self-start sm:self-auto">
             <button @click="viewMode = 'tree'"
@@ -16285,10 +15267,8 @@ Dashboard Kỹ Thuật Viên -
             </button>
         </div>
     </div>
-
     <!-- ===== RESULTS CONTAINER (Chỉ reload vùng này khi tìm kiếm hoặc phân trang) ===== -->
     <div id="station-results-container" class="space-y-4">
-
         <!-- Banner thông báo kết quả tìm kiếm nếu có từ khóa -->
         {% if is_search %}
         <div class="px-4 py-2.5 bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/60 rounded-xl flex items-center justify-between text-xs sm:text-sm text-blue-700 dark:text-blue-300 transition-colors">
@@ -16303,7 +15283,6 @@ Dashboard Kỹ Thuật Viên -
             </button>
         </div>
         {% endif %}
-
         <!-- ===== TABLE VIEW ===== -->
         <div x-show="viewMode === 'table'" style="display:none;" x-cloak>
             <!-- Stats -->
@@ -16349,26 +15328,20 @@ Dashboard Kỹ Thuật Viên -
                 </div>
             </div>
         </div>
-
         <!-- ===== TREE VIEW ===== -->
         <div x-show="viewMode === 'tree'">
             <div class="space-y-3" id="station-tree-list">
                 {% include "stations/partials/_station_tree_page.html" with view_type="tree" %}
             </div>
         </div>
-
         <!-- ===== PAGINATION ===== -->
         {% include 'partials/pagination.html' with hx_target="#station-results-container" hx_select="#station-results-container" hx_swap="outerHTML" hx_indicator="#page-loading" hx_push_url="true" rounded_b="true" %}
-
         <div id="page-loading" class="htmx-indicator text-blue-500 text-sm font-medium py-3 text-center">
             <i class="fas fa-spinner fa-spin mr-1"></i> Đang tải dữ liệu...
         </div>
-
     </div>
     <!-- END #station-results-container -->
-
     <!-- ===== MODALS ===== -->
-
     <!-- Modal Thêm Trạm -->
     <div x-show="showStationModal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/50 backdrop-blur-sm" style="display:none;" x-cloak>
         <div @click.away="showStationModal = false" class="bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-md overflow-hidden transition-colors" x-transition>
@@ -16397,7 +15370,6 @@ Dashboard Kỹ Thuật Viên -
             </form>
         </div>
     </div>
-
     <!-- Modal Thêm Ngăn Lộ -->
     <div x-show="showBayModal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/50 backdrop-blur-sm" style="display:none;" x-cloak>
         <div @click.away="showBayModal = false" class="bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-md overflow-hidden transition-colors" x-transition>
@@ -16422,7 +15394,6 @@ Dashboard Kỹ Thuật Viên -
             </form>
         </div>
     </div>
-
     <!-- Modal Thêm Rơ-le -->
     <div x-show="showRelayModal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/50 backdrop-blur-sm" style="display:none;" x-cloak>
         <div @click.away="showRelayModal = false" class="bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-md overflow-hidden transition-colors" x-transition>
@@ -16451,7 +15422,6 @@ Dashboard Kỹ Thuật Viên -
             </form>
         </div>
     </div>
-
     <!-- Modal Nhập Liệu Toàn Cục (Excel) -->
     <div x-show="showGlobalBulkModal" class="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-slate-900/50 backdrop-blur-sm" style="display:none;" x-cloak>
         <div @click.away="showGlobalBulkModal = false" class="bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-4xl overflow-hidden flex flex-col max-h-[90vh] transition-colors" x-transition>
@@ -16496,7 +15466,6 @@ Dashboard Kỹ Thuật Viên -
             </div>
         </div>
     </div>
-
     <!-- Modal Xem Chi Tiết & Đối Chiếu Rơ-le -->
     <div x-show="showRelayDetailModal" class="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/70 backdrop-blur-sm p-3 sm:p-4" style="display:none;" x-cloak>
         <div @click.away="showRelayDetailModal = false" class="w-full max-w-2xl overflow-hidden transition-all transform scale-100" x-transition>
@@ -16508,7 +15477,6 @@ Dashboard Kỹ Thuật Viên -
             </div>
         </div>
     </div>
-
 </div>
 {% endblock %}
 ````
@@ -16518,7 +15486,6 @@ Dashboard Kỹ Thuật Viên -
 <!DOCTYPE html>
 {% load auth_extras %}
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -16541,7 +15508,6 @@ Dashboard Kỹ Thuật Viên -
             html.dark { background-color: #0f172a; }
             body { background-color: transparent; }
         </style>
-
         <!-- TailwindCSS via CDN -->
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
@@ -16603,74 +15569,58 @@ Dashboard Kỹ Thuật Viên -
                 transition: width 0.1s ease, opacity 0.4s ease 0.1s;
             }
         </style>
-
         <!-- HTMX via CDN -->
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-
         <!-- Alpine.js via CDN -->
         <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
         <!-- Chart.js via CDN -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
         <!-- TomSelect via CDN -->
         <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
-
         <!-- PDF.js via CDN -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-
         <!-- FontAwesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
         <!-- Google Fonts: Inter -->
         <link
             href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900;1,14..32,400&display=swap"
             rel="stylesheet">
-
         <style>
             *,
             *::before,
             *::after {
                 box-sizing: border-box;
             }
-
             body {
                 font-family: 'Inter', system-ui, -apple-system, sans-serif;
                 font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
                 -webkit-font-smoothing: antialiased;
                 overflow-x: hidden;
             }
-
             /* === SCROLLBAR === */
             ::-webkit-scrollbar {
                 width: 5px;
                 height: 5px;
             }
-
             ::-webkit-scrollbar-track {
                 background: transparent;
             }
-
             ::-webkit-scrollbar-thumb {
                 background: #cbd5e1;
                 border-radius: 99px;
             }
-
             ::-webkit-scrollbar-thumb:hover {
                 background: #94a3b8;
             }
-
             html.dark ::-webkit-scrollbar-thumb {
                 background: #475569;
             }
-
             html.dark ::-webkit-scrollbar-thumb:hover {
                 background: #64748b;
             }
-
             /* === SIDEBAR BASE === */
             #sidebar {
                 background: #ffffff;
@@ -16678,19 +15628,16 @@ Dashboard Kỹ Thuật Viên -
                 box-shadow: 4px 0 24px rgba(0, 0, 0, 0.05);
                 z-index: 40;
             }
-
             html.dark #sidebar {
                 background: #0f172a;
                 border-right: 1px solid #1e293b;
                 box-shadow: 4px 0 24px rgba(0, 0, 0, 0.25);
             }
-
             /* ============================================
            MOBILE LAYOUT (< 1024px)
            Sidebar is HIDDEN from flow, slides in as overlay
            ============================================ */
             @media (max-width: 1023px) {
-
                 /* Hide sidebar from flex flow completely */
                 #sidebar {
                     display: none !important;
@@ -16703,13 +15650,11 @@ Dashboard Kỹ Thuật Viên -
                     transform: translateX(-100%);
                     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
                 }
-
                 /* When open: show as fixed overlay with slide animation */
                 #sidebar.sidebar-open {
                     display: flex !important;
                     transform: translateX(0);
                 }
-
                 /* Backdrop overlay */
                 #sidebar-overlay {
                     display: none;
@@ -16720,12 +15665,10 @@ Dashboard Kỹ Thuật Viên -
                     -webkit-backdrop-filter: blur(4px);
                     backdrop-filter: blur(4px);
                 }
-
                 #sidebar-overlay.overlay-visible {
                     display: block;
                 }
             }
-
             /* ============================================
            DESKTOP LAYOUT (>= 1024px)
            Sidebar is always visible in flex flow
@@ -16737,23 +15680,19 @@ Dashboard Kỹ Thuật Viên -
                     flex-shrink: 0;
                     width: 280px;
                 }
-
                 #hamburger-btn {
                     display: none !important;
                 }
-
                 #sidebar-overlay {
                     display: none !important;
                 }
             }
-
             .sidebar-logo {
                 background: linear-gradient(135deg, #1d4ed8 0%, #312e81 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 background-clip: text;
             }
-
             .nav-section-label {
                 font-size: 11px;
                 font-weight: 700;
@@ -16764,11 +15703,9 @@ Dashboard Kỹ Thuật Viên -
                 margin-top: 28px;
                 margin-bottom: 12px;
             }
-
             html.dark .nav-section-label {
                 color: #64748b;
             }
-
             /* Tree-line styling for sub-menus */
             .nav-tree {
                 position: relative;
@@ -16778,11 +15715,9 @@ Dashboard Kỹ Thuật Viên -
                 margin-top: 4px;
                 margin-bottom: 8px;
             }
-
             html.dark .nav-tree {
                 border-left: 1px dashed rgba(255, 255, 255, 0.15);
             }
-
             .nav-item-child {
                 display: flex;
                 align-items: center;
@@ -16797,11 +15732,9 @@ Dashboard Kỹ Thuật Viên -
                 margin-bottom: 4px;
                 background: transparent;
             }
-
             html.dark .nav-item-child {
                 color: #94a3b8;
             }
-
             /* The horizontal branch line */
             .nav-item-child::before {
                 content: '';
@@ -16813,46 +15746,38 @@ Dashboard Kỹ Thuật Viên -
                 background-color: #cbd5e1;
                 transition: all 0.2s ease;
             }
-
             html.dark .nav-item-child::before {
                 background-color: rgba(255, 255, 255, 0.15);
             }
-
             .nav-item-child:hover {
                 color: #1e293b;
                 background: rgba(241, 245, 249, 0.6);
                 transform: translateX(2px);
             }
-
             html.dark .nav-item-child:hover {
                 color: #f8fafc;
                 background: rgba(255, 255, 255, 0.05);
             }
-            
             .nav-item-child:hover::before {
                 background-color: #94a3b8;
             }
             html.dark .nav-item-child:hover::before {
                 background-color: rgba(255, 255, 255, 0.3);
             }
-
             .nav-item-child.active {
                 color: #2563eb;
                 font-weight: 600;
                 background: linear-gradient(90deg, #eff6ff 0%, transparent 100%);
             }
-
             html.dark .nav-item-child.active {
                 color: #60a5fa;
                 background: linear-gradient(90deg, rgba(37, 99, 235, 0.15) 0%, transparent 100%);
             }
-
             .nav-item-child.active::before {
                 background-color: #3b82f6;
                 height: 2px;
                 box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
             }
-
             .nav-item {
                 display: flex;
                 align-items: center;
@@ -16873,11 +15798,9 @@ Dashboard Kỹ Thuật Viên -
                 background: transparent;
                 border: 1px solid transparent;
             }
-
             html.dark .nav-item {
                 color: #94a3b8;
             }
-
             /* Hover effect: Subtle background & icon brightening */
             .nav-item:hover {
                 background: rgba(241, 245, 249, 0.8);
@@ -16885,24 +15808,20 @@ Dashboard Kỹ Thuật Viên -
                 border-color: rgba(226, 232, 240, 0.5);
                 box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
             }
-
             html.dark .nav-item:hover {
                 background: rgba(255, 255, 255, 0.03);
                 color: #f8fafc;
                 border-color: rgba(255, 255, 255, 0.05);
                 box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             }
-
             .nav-item:hover .nav-icon {
                 transform: scale(1.15) rotate(-2deg);
                 opacity: 1;
                 color: #3b82f6;
             }
-            
             html.dark .nav-item:hover .nav-icon {
                 color: #60a5fa;
             }
-
             .nav-item .nav-icon {
                 width: 22px;
                 text-align: center;
@@ -16910,7 +15829,6 @@ Dashboard Kỹ Thuật Viên -
                 opacity: 0.8;
                 transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             }
-
             /* Active Item base */
             .nav-item.active,
             .nav-item.active-amber,
@@ -16918,7 +15836,6 @@ Dashboard Kỹ Thuật Viên -
             .nav-item.active-red {
                 font-weight: 600;
             }
-
             .nav-item.active::before,
             .nav-item.active-amber::before,
             .nav-item.active-emerald::before,
@@ -16932,39 +15849,32 @@ Dashboard Kỹ Thuật Viên -
                 width: 4px;
                 border-radius: 0 4px 4px 0;
             }
-
             /* Active Blue */
             .nav-item.active {
                 background: linear-gradient(90deg, rgba(239, 246, 255, 0.8) 0%, rgba(255, 255, 255, 0) 100%);
                 color: #1d4ed8;
                 border-color: rgba(219, 234, 254, 0.5);
             }
-
             html.dark .nav-item.active {
                 background: linear-gradient(90deg, rgba(37, 99, 235, 0.15) 0%, rgba(15, 23, 42, 0) 100%);
                 color: #60a5fa;
                 border-color: rgba(30, 58, 138, 0.3);
             }
-
             .nav-item.active::before {
                 background: #3b82f6;
                 box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
             }
-
             html.dark .nav-item.active::before {
                 box-shadow: 0 0 12px rgba(59, 130, 246, 0.8);
             }
-
             .nav-item.active .nav-icon {
                 opacity: 1;
                 color: #2563eb !important;
                 transform: scale(1.1);
             }
-
             html.dark .nav-item.active .nav-icon {
                 color: #60a5fa !important;
             }
-
             /* Active Amber */
             .nav-item.active-amber {
                 background: linear-gradient(90deg, rgba(254, 243, 199, 0.8) 0%, transparent 100%);
@@ -16974,7 +15884,6 @@ Dashboard Kỹ Thuật Viên -
                 background: linear-gradient(90deg, rgba(245, 158, 11, 0.15) 0%, transparent 100%);
                 color: #fbbf24;
             }
-
             .nav-item.active-amber::before {
                 background: #f59e0b;
                 box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
@@ -16982,7 +15891,6 @@ Dashboard Kỹ Thuật Viên -
             html.dark .nav-item.active-amber::before {
                 box-shadow: 0 0 12px rgba(245, 158, 11, 0.8);
             }
-
             .nav-item.active-amber .nav-icon {
                 opacity: 1;
                 color: #d97706 !important;
@@ -16990,7 +15898,6 @@ Dashboard Kỹ Thuật Viên -
             html.dark .nav-item.active-amber .nav-icon {
                 color: #fbbf24 !important;
             }
-
             /* Active Emerald */
             .nav-item.active-emerald {
                 background: linear-gradient(90deg, rgba(209, 250, 229, 0.8) 0%, transparent 100%);
@@ -17000,7 +15907,6 @@ Dashboard Kỹ Thuật Viên -
                 background: linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, transparent 100%);
                 color: #34d399;
             }
-
             .nav-item.active-emerald::before {
                 background: #10b981;
                 box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
@@ -17008,7 +15914,6 @@ Dashboard Kỹ Thuật Viên -
             html.dark .nav-item.active-emerald::before {
                 box-shadow: 0 0 12px rgba(16, 185, 129, 0.8);
             }
-
             .nav-item.active-emerald .nav-icon {
                 opacity: 1;
                 color: #059669 !important;
@@ -17016,7 +15921,6 @@ Dashboard Kỹ Thuật Viên -
             html.dark .nav-item.active-emerald .nav-icon {
                 color: #34d399 !important;
             }
-
             /* Active Red */
             .nav-item.active-red {
                 background: linear-gradient(90deg, rgba(254, 226, 226, 0.8) 0%, transparent 100%);
@@ -17026,7 +15930,6 @@ Dashboard Kỹ Thuật Viên -
                 background: linear-gradient(90deg, rgba(239, 68, 68, 0.15) 0%, transparent 100%);
                 color: #f87171;
             }
-
             .nav-item.active-red::before {
                 background: #ef4444;
                 box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
@@ -17034,7 +15937,6 @@ Dashboard Kỹ Thuật Viên -
             html.dark .nav-item.active-red::before {
                 box-shadow: 0 0 12px rgba(239, 68, 68, 0.8);
             }
-
             .nav-item.active-red .nav-icon {
                 opacity: 1;
                 color: #dc2626 !important;
@@ -17042,22 +15944,18 @@ Dashboard Kỹ Thuật Viên -
             html.dark .nav-item.active-red .nav-icon {
                 color: #f87171 !important;
             }
-
             .nav-separator {
                 display: none;
             }
-
             /* === HTMX Loading === */
             .htmx-indicator {
                 opacity: 0;
                 transition: opacity 200ms ease-in;
             }
-
             .htmx-request .htmx-indicator,
             .htmx-request.htmx-indicator {
                 opacity: 1;
             }
-
             /* === CONTENT AREA === */
             .page-card {
                 background: white;
@@ -17065,63 +15963,51 @@ Dashboard Kỹ Thuật Viên -
                 box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.04);
                 border: 1px solid #f1f5f9;
             }
-
             html.dark .page-card {
                 background: #1e293b;
                 border-color: #334155;
                 box-shadow: none;
             }
-
             /* === NOTIFICATION TOAST === */
             .toast-enter {
                 animation: slideInRight 0.3s ease forwards;
             }
-
             .toast-leave {
                 animation: slideOutRight 0.2s ease forwards;
             }
-
             @keyframes slideInRight {
                 from {
                     opacity: 0;
                     transform: translateX(100%);
                 }
-
                 to {
                     opacity: 1;
                     transform: translateX(0);
                 }
             }
-
             @keyframes slideOutRight {
                 from {
                     opacity: 1;
                     transform: translateX(0);
                 }
-
                 to {
                     opacity: 0;
                     transform: translateX(100%);
                 }
             }
-
             /* === BADGE NOTIFICATION DOT === */
             .notification-dot {
                 animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
             }
-
             @keyframes pulse-dot {
-
                 0%,
                 100% {
                     opacity: 1;
                 }
-
                 50% {
                     opacity: 0.5;
                 }
             }
-
             /* === HAMBURGER BUTTON === */
             #hamburger-btn {
                 display: flex;
@@ -17137,12 +16023,10 @@ Dashboard Kỹ Thuật Viên -
                 transition: background 0.15s, color 0.15s;
                 -webkit-tap-highlight-color: transparent;
             }
-
             #hamburger-btn:hover {
                 background: #f1f5f9;
                 color: #1e293b;
             }
-
             /* === RESPONSIVE TABLE === */
             @media (max-width: 767px) {
                 .responsive-table-wrap {
@@ -17150,12 +16034,10 @@ Dashboard Kỹ Thuật Viên -
                     -webkit-overflow-scrolling: touch;
                     border-radius: 0 0 1.5rem 1.5rem;
                 }
-
                 .responsive-table-wrap table {
                     min-width: 600px;
                 }
             }
-
             /* === MAIN LAYOUT === */
             #main-layout {
                 display: flex;
@@ -17163,7 +16045,6 @@ Dashboard Kỹ Thuật Viên -
                 overflow: hidden;
                 position: relative;
             }
-
             #main-content-area {
                 flex: 1;
                 display: flex;
@@ -17172,14 +16053,12 @@ Dashboard Kỹ Thuật Viên -
                 height: 100vh;
                 overflow: hidden;
             }
-
             /* === MOBILE HEADER === */
             @media (max-width: 1023px) {
                 .header-title {
                     font-size: 14px;
                 }
             }
-
             /* Toast mobile adjustment */
             @media (max-width: 480px) {
                 #toast-container {
@@ -17189,30 +16068,24 @@ Dashboard Kỹ Thuật Viên -
                     max-width: none !important;
                 }
             }
-
             /* === MOBILE KPI CARDS === */
             @media (max-width: 639px) {
-
                 /* Smaller padding for KPI cards on mobile */
                 .kpi-card-compact {
                     padding: 12px !important;
                 }
-
                 .kpi-card-compact h3 {
                     font-size: 1.75rem !important;
                 }
-
                 /* Better touch targets */
                 a,
                 button {
                     min-height: 36px;
                 }
-
                 /* Hide some columns on mobile */
                 .mobile-hidden {
                     display: none !important;
                 }
-
                 /* Compact padding for tables on mobile */
                 .overflow-x-auto table td,
                 .overflow-x-auto table th {
@@ -17220,38 +16093,28 @@ Dashboard Kỹ Thuật Viên -
                     padding-right: 12px !important;
                 }
             }
-
             /* === OVERFLOW X for mobile tables === */
             .overflow-x-auto {
                 -webkit-overflow-scrolling: touch;
             }
-
             /* === PREVENT HORIZONTAL SCROLL === */
             .page-content-wrapper {
                 max-width: 100%;
                 overflow-x: hidden;
             }
         </style>
-
     </head>
-
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-200"
     hx-boost="true" hx-target="#main-content-area" hx-select="#main-content-area" hx-swap="outerHTML" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-
     <!-- HTMX Progress Bar -->
     <div id="htmx-progress-bar"></div>
-
     <!-- Sidebar Overlay (Mobile) -->
     <div id="sidebar-overlay" onclick="closeSidebar()"></div>
-
     <!-- ===== MAIN LAYOUT ===== -->
     <div id="main-layout">
-
         {% include 'partials/_sidebar.html' %}
-
         <!-- ===== MAIN CONTENT AREA ===== -->
         <div id="main-content-area" hx-disinherit="hx-target hx-select hx-swap">
-
             <!-- Top Header -->
             <header
                 class="h-14 bg-white dark:bg-slate-800 border-b border-slate-200/80 dark:border-slate-700/50 flex items-center justify-between px-4 md:px-6 flex-shrink-0 z-10">
@@ -17272,16 +16135,13 @@ Dashboard Kỹ Thuật Viên -
                     <div id="global-spinner" class="htmx-indicator text-blue-500">
                         <i class="fas fa-spinner fa-spin"></i>
                     </div>
-
                     {% block header_right %}{% endblock %}
-
                     <!-- Theme Toggle -->
                     <button id="theme-toggle-btn" onclick="toggleTheme()"
                         class="relative w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:text-amber-500 hover:bg-amber-50 dark:hover:text-blue-400 dark:hover:bg-slate-700 transition-colors" title="Chuyển đổi giao diện">
                         <i id="theme-icon-sun" class="fas fa-sun text-base" style="display:none;"></i>
                         <i id="theme-icon-moon" class="fas fa-moon text-base"></i>
                     </button>
-
                     <!-- Notifications Bell -->
                     <button
                         class="relative w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:hover:text-slate-300 dark:hover:bg-slate-700 transition-colors">
@@ -17289,7 +16149,6 @@ Dashboard Kỹ Thuật Viên -
                         <span
                             class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full notification-dot border-2 border-white dark:border-slate-800"></span>
                     </button>
-
                     <!-- Django Messages -->
                     {% if messages %}
                     <div class="hidden" id="django-messages-data" hx-swap-oob="true">
@@ -17300,16 +16159,13 @@ Dashboard Kỹ Thuật Viên -
                     {% endif %}
                 </div>
             </header>
-
             <!-- Page Content -->
             <div class="flex-1 overflow-y-auto p-3 md:p-6 bg-slate-50 dark:bg-slate-900 page-content-wrapper"
                 id="main-content">
                 {% block content %}{% endblock %}
             </div>
         </div>
-
     </div><!-- end #main-layout -->
-
     <!-- ===== TOAST NOTIFICATIONS (Alpine.js) ===== -->
     <div id="toast-container" x-data="notificationSystem()" x-init="initWebSocket(); initDjangoMessages()"
         @htmx:after-swap.document="setTimeout(() => initDjangoMessages(), 50)"
@@ -17379,18 +16235,15 @@ Dashboard Kỹ Thuật Viên -
             if (sun) sun.style.display = isDark ? 'inline' : 'none';
             if (moon) moon.style.display = isDark ? 'none' : 'inline';
         })();
-
         /* ===== HTMX PROGRESS BAR ===== */
         (function() {
             const bar = document.getElementById('htmx-progress-bar');
-
             function restoreSidebarScroll() {
                 const nav = document.getElementById('sidebar-nav');
                 if (!nav) return;
                 const scrollPos = localStorage.getItem('sidebar-scroll');
                 if (scrollPos !== null) nav.scrollTop = parseInt(scrollPos, 10);
             }
-
             function refreshThemeIcons() {
                 const isDark = document.documentElement.classList.contains('dark');
                 const sun = document.getElementById('theme-icon-sun');
@@ -17398,13 +16251,11 @@ Dashboard Kỹ Thuật Viên -
                 if (sun) sun.style.display = isDark ? 'inline' : 'none';
                 if (moon) moon.style.display = isDark ? 'none' : 'inline';
             }
-
             document.body.addEventListener('htmx:beforeRequest', () => {
                 if (!bar) return;
                 bar.classList.remove('htmx-done');
                 bar.classList.add('htmx-loading');
             });
-
             // Make sure the loading bar always hides, even on history restores or failed requests
             ['htmx:afterRequest', 'htmx:historyRestore', 'htmx:requestError'].forEach(evt => {
                 document.body.addEventListener(evt, () => {
@@ -17414,7 +16265,6 @@ Dashboard Kỹ Thuật Viên -
                     }
                 });
             });
-
             document.body.addEventListener('htmx:afterSwap', (e) => {
                 if (bar) {
                     bar.classList.remove('htmx-loading');
@@ -17424,7 +16274,6 @@ Dashboard Kỹ Thuật Viên -
                 // Use rAF to run AFTER Alpine.js and other handlers
                 requestAnimationFrame(() => restoreSidebarScroll());
             });
-
             // Also fire on partial swaps (pagination, filter, etc.) via afterSettle
             document.body.addEventListener('htmx:afterSettle', (e) => {
                 // Only restore if the swapped element is NOT the sidebar itself
@@ -17433,7 +16282,6 @@ Dashboard Kỹ Thuật Viên -
                 if (nav && target && !nav.contains(target)) {
                     requestAnimationFrame(() => restoreSidebarScroll());
                 }
-
                 // Re-initialize Alpine.js for newly swapped content
                 // We do this in afterSettle because HTMX evaluates <script> tags asynchronously
                 // between afterSwap and afterSettle. If we do it in afterSwap, window functions
@@ -17447,7 +16295,6 @@ Dashboard Kỹ Thuật Viên -
                 }
             });
         })();
-
         /* ===== SIDEBAR TOGGLE (Mobile) ===== */
         function openSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -17470,7 +16317,6 @@ Dashboard Kỹ Thuật Viên -
                 sidebar.removeEventListener('transitionend', handler);
             });
         }
-
         /* ===== NOTIFICATION SYSTEM ===== */
         function notificationSystem() {
             return {
@@ -17482,12 +16328,10 @@ Dashboard Kỹ Thuật Viên -
                     ws.onmessage = (e) => {
                         const data = JSON.parse(e.data);
                         window.dispatchEvent(new CustomEvent('ws-message', { detail: data }));
-
                         if (data.event_type === 'update_badges') {
                             this.fetchBadges();
                             return;
                         }
-
                         if (!data.event_type || data.event_type === 'notification') {
                             this.addNotification(data.title, data.message, data.level || data.type || 'info');
                         }
@@ -17537,12 +16381,10 @@ Dashboard Kỹ Thuật Viên -
         }
         #toast-container > div { position: relative; }
     </style>
-
     <script>
         document.body.addEventListener('htmx:configRequest', (event) => {
             event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
         });
-
         // Global function to open category edit/create modal using plain fetch()
         // This bypasses hx-boost completely
         window.openCategoryModal = function(url) {
@@ -17576,8 +16418,6 @@ Dashboard Kỹ Thuật Viên -
     </script>
     <!-- Modal Container -->
     <div id="modal-container"></div>
-
-
 <script>
 window.getOcrProgressManager = function(initialJobs, initialPagination, initialStats) {
     return {
@@ -17591,13 +16431,11 @@ window.getOcrProgressManager = function(initialJobs, initialPagination, initialS
         retryingAll: false,
         retryingJobId: null,
         deletingJobId: null,
-        
         showModal: false,
         jsonData: '',
         isLoading: false,
         copiedJson: false,
         highlightedJobId: null,
-        
         showErrorModal: false,
         errorData: {
             title: '',
@@ -17607,11 +16445,9 @@ window.getOcrProgressManager = function(initialJobs, initialPagination, initialS
             jobId: null,
             deviceMode: 'CPU'
         },
-        
         lastUpdatedTime: '',
         syncTimer: null,
         searchTimeout: null,
-
         init() {
             // Xóa bỏ các dòng "ghost rows" do HTMX hoặc BFCache phục hồi từ lịch sử
             // để tránh Alpine.js tái sử dụng gây ra hiện tượng dòng trống (không có dữ liệu)
@@ -17619,47 +16455,37 @@ window.getOcrProgressManager = function(initialJobs, initialPagination, initialS
             if (ghostRows.length > 0) {
                 ghostRows.forEach(tr => tr.remove());
             }
-
             this.updateLastTime();
             try { sessionStorage.removeItem('ocr_progress_scroll'); } catch(e) {}
-            
             this.fetchLatestData(false);
-
             // 1. Lắng nghe sự kiện WebSocket toàn cục được dispatch từ base.html
             window.addEventListener('ws-message', (e) => {
                 const data = e.detail;
                 if (!data) return;
-
                 if (data.event_type === 'ocr_update' || data.type === 'ocr_event') {
                     this.handleOcrUpdate(data);
                 }
             });
-            
             // Xóa bỏ polling setInterval, chỉ dùng WebSocket để tối ưu băng thông và giao diện mượt mà
         },
-
         updateLastTime() {
             const now = new Date();
             this.lastUpdatedTime = now.toLocaleTimeString('vi-VN');
         },
-
         setStatusFilter(filter) {
             this.statusFilter = filter;
             this.applyFilter();
         },
-
         applyFilter() {
             this.pagination.current_page = 1;
             this.fetchLatestData(true);
         },
-
         onSearchInput() {
             clearTimeout(this.searchTimeout);
             this.searchTimeout = setTimeout(() => {
                 this.applyFilter();
             }, 500);
         },
-
         resetFilters() {
             this.statusFilter = 'ALL';
             this.deviceFilter = 'ALL';
@@ -17667,18 +16493,14 @@ window.getOcrProgressManager = function(initialJobs, initialPagination, initialS
             this.pagination.current_page = 1;
             this.fetchLatestData(true);
         },
-
         handleOcrUpdate(payload) {
             this.updateLastTime();
-
             // Cập nhật stats KPI
             if (payload.stats) {
                 this.stats = Object.assign({}, this.stats, payload.stats);
             }
-
             const incomingJob = payload.job;
             if (!incomingJob) return;
-
             const existingIndex = this.jobs.findIndex(j => j.id === incomingJob.id);
             if (existingIndex !== -1) {
                 // Cập nhật in-place từng thuộc tính
@@ -17699,26 +16521,22 @@ window.getOcrProgressManager = function(initialJobs, initialPagination, initialS
                     if (this.jobs.length > 15) {
                         this.jobs.pop(); // Giữ tối đa 15 dòng trên mỗi trang
                     }
-                    
                     // Đồng bộ state vào script tags để HTMX history cache luôn có trạng thái mới nhất
                     const jobsScript = document.getElementById('ocr-jobs-data');
                     if (jobsScript) jobsScript.textContent = JSON.stringify(this.jobs);
                 }
             }
         },
-
         goToPage(page) {
             if (page >= 1 && page <= this.pagination.total_pages) {
                 this.pagination.current_page = page;
                 this.fetchLatestData(true);
             }
         },
-
         // Đồng bộ dữ liệu ngầm không reload trang
         async fetchLatestData(showIndicator = false) {
             if (this.isSyncing) return;
             if (showIndicator) this.isSyncing = true;
-
             try {
                 const url = new URL(window.location.origin + '/sheets/ocr-progress/');
                 url.searchParams.append('format', 'json');
@@ -17726,7 +16544,6 @@ window.getOcrProgressManager = function(initialJobs, initialPagination, initialS
                 url.searchParams.append('status', this.statusFilter);
                 url.searchParams.append('device_mode', this.deviceFilter);
                 url.searchParams.append('q', this.searchQuery);
-
                 const response = await fetch(url.toString(), {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'
@@ -17740,14 +16557,11 @@ window.getOcrProgressManager = function(initialJobs, initialPagination, initialS
                     }
                     this.jobs = data.jobs;
                     this.pagination = Object.assign({}, this.pagination, data.pagination);
-                    
                     // Đồng bộ state vào script tags để HTMX history cache lưu trữ trạng thái mới nhất
                     const jobsScript = document.getElementById('ocr-jobs-data');
                     if (jobsScript) jobsScript.textContent = JSON.stringify(this.jobs);
-                    
                     const paginationScript = document.getElementById('ocr-pagination-data');
                     if (paginationScript) paginationScript.textContent = JSON.stringify(this.pagination);
-                    
                     const statsScript = document.getElementById('ocr-stats-data');
                     if (statsScript) statsScript.textContent = JSON.stringify(this.stats);
                 }
@@ -17757,7 +16571,6 @@ window.getOcrProgressManager = function(initialJobs, initialPagination, initialS
                 if (showIndicator) this.isSyncing = false;
             }
         },
-
         getStatusColor(status) {
             const colors = {
                 'PENDING': 'text-slate-500 bg-slate-100 dark:bg-slate-800/50',
@@ -17768,7 +16581,6 @@ window.getOcrProgressManager = function(initialJobs, initialPagination, initialS
             };
             return colors[status] || colors['PENDING'];
         },
-
         getStatusIcon(status) {
             const icons = {
                 'PENDING': 'fas fa-hourglass-half',
@@ -17779,7 +16591,6 @@ window.getOcrProgressManager = function(initialJobs, initialPagination, initialS
             };
             return icons[status] || 'fas fa-question-circle';
         },
-
         getStatusLabel(status) {
             const labels = {
                 'PENDING': 'Đang chờ',
@@ -17790,7 +16601,6 @@ window.getOcrProgressManager = function(initialJobs, initialPagination, initialS
             };
             return labels[status] || 'Không rõ';
         },
-
         getProgressBarWidth(job) {
             if (job.status === 'SUCCESS' || job.status === 'SUCCESS_WITH_WARNINGS') return '100%';
             if (job.status === 'FAILED') return '100%';
@@ -17807,12 +16617,10 @@ window.getOcrProgressManager = function(initialJobs, initialPagination, initialS
             }
             return '0%';
         },
-
         highlightJob(jobId) {
             this.highlightedJobId = jobId;
             setTimeout(() => { this.highlightedJobId = null; }, 3000);
         },
-
         async retryJob(jobId, deviceMode = null) {
             if (this.retryingJobId === jobId) return;
             this.retryingJobId = jobId;
@@ -17841,7 +16649,6 @@ window.getOcrProgressManager = function(initialJobs, initialPagination, initialS
                 this.retryingJobId = null;
             }
         },
-
         async retryAll(deviceMode = null) {
             if (this.retryingAll) return;
             this.retryingAll = true;
@@ -17871,11 +16678,9 @@ window.getOcrProgressManager = function(initialJobs, initialPagination, initialS
                 this.open = false;
             }
         },
-
         async deleteJob(jobId) {
             if (this.deletingJobId === jobId) return;
             if (!confirm('Bạn có chắc chắn muốn xóa tiến trình này? Dữ liệu OCR (nếu có) sẽ bị mất.')) return;
-            
             this.deletingJobId = jobId;
             try {
                 const response = await fetch(`/sheets/ocr-job/${jobId}/delete/`, {
@@ -17900,13 +16705,11 @@ window.getOcrProgressManager = function(initialJobs, initialPagination, initialS
                 this.deletingJobId = null;
             }
         },
-
         async viewJsonData(jobId) {
             this.showModal = true;
             this.isLoading = true;
             this.jsonData = '';
             this.copiedJson = false;
-
             try {
                 const response = await fetch(`/sheets/ocr-job/${jobId}/data/`);
                 if (!response.ok) throw new Error('Network response was not ok');
@@ -17918,7 +16721,6 @@ window.getOcrProgressManager = function(initialJobs, initialPagination, initialS
                 this.isLoading = false;
             }
         },
-
         copyJson() {
             if (!this.jsonData) return;
             navigator.clipboard.writeText(this.jsonData).then(() => {
@@ -17929,7 +16731,6 @@ window.getOcrProgressManager = function(initialJobs, initialPagination, initialS
                 alert('Không thể sao chép dữ liệu!');
             });
         },
-
         viewError(title, code, stage, detail, jobId, deviceMode) {
             this.errorData = {
                 title: title || 'Phiếu không tên',
@@ -17941,7 +16742,6 @@ window.getOcrProgressManager = function(initialJobs, initialPagination, initialS
             };
             this.showErrorModal = true;
         },
-
         handleRowClick(job, event) {
             // Không kích hoạt nếu bấm vào button, link hoặc input
             if (event && event.target && event.target.closest('a, button, input, select')) {
@@ -17960,7 +16760,6 @@ window.getOcrProgressManager = function(initialJobs, initialPagination, initialS
 </script>
 {% block scripts %}{% endblock %}
 </body>
-
 </html>
 ````
 
