@@ -23,7 +23,7 @@ def user_has_role(user, role_codes, organization_id=None, station_id=None):
 
     allowed_scopes = Q(scope_type=RoleGrant.ScopeType.GLOBAL)
     if organization_id:
-        # Chỉ cho khớp đúng đơn vị; quan hệ kế thừa xuống trạm cần được định nghĩa ở module assets.
+        # Organization grant chỉ áp dụng cho đúng org; tài sản con phải truyền org sở hữu trực tiếp.
         allowed_scopes |= Q(
             scope_type=RoleGrant.ScopeType.ORGANIZATION,
             organization_id=organization_id,

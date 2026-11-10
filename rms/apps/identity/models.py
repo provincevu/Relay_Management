@@ -42,7 +42,7 @@ class UserProfile(models.Model):
         null=True,
         blank=True,
     )
-    # Dùng mã text tạm thời vì PK của Station chưa được chốt ở module assets.
+    # Giữ station ID dạng scalar để identity không phụ thuộc ngược vào module assets.
     home_station_id = models.CharField(max_length=64, null=True, blank=True)
     phone_number = models.CharField(max_length=32, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -74,7 +74,7 @@ class RoleGrant(models.Model):
         null=True,
         blank=True,
     )
-    # Dùng mã text đến khi assets chốt kiểu PK và tạo được FK thật tới Station.
+    # Dùng scalar thay FK để giữ chiều phụ thuộc từ assets sang identity.
     station_id = models.CharField(max_length=64, null=True, blank=True)
     starts_at = models.DateTimeField(null=True, blank=True)
     ends_at = models.DateTimeField(null=True, blank=True)

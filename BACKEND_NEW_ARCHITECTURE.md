@@ -28,6 +28,18 @@ Các quyết định dưới đây do chủ sản phẩm cung cấp sau bản đ
 - Auto-check thiết bị và đồng bộ PMIS không thuộc giai đoạn MVP.
 - Mỗi rơ-le chỉ được có tối đa **một phiếu tạm đang hiệu lực**. Không duyệt phiếu tạm mới nếu phiếu tạm hiện tại chưa hết hạn hoặc chưa được Admin hoàn tác.
 
+### Asset 1A: khóa chính và phạm vi quyền
+
+Các quyết định dưới đây là mặc định thiết kế cho backend mới, dùng làm nền cho lát cắt Asset; đây không phải khẳng định về hành vi cũ và không làm thay đổi quy trình phiếu:
+
+1. **Khóa chính nội bộ:** dùng `BigAutoField` cho các thực thể RMS tạo mới, thống nhất với `DEFAULT_AUTO_FIELD` hiện tại của Django. ID từ PMIS/hệ thống ngoài không dùng làm PK; lưu riêng dưới dạng chuỗi trong `ExternalReference.external_id`.
+2. **Cây tổ chức:** mỗi `Organization` có thể có một `parent`. Một `RoleGrant` ở phạm vi `ORGANIZATION` chỉ áp dụng cho đúng đơn vị được gán và asset có `Station.organization_id` bằng đơn vị đó. Không tự kế thừa quyền xuống các đơn vị con; muốn cấp ở đơn vị con thì tạo grant riêng.
+3. **Phạm vi trạm:** `RoleGrant` ở phạm vi `STATION` áp dụng cho đúng trạm được gán và các Bay/Relay thuộc cây tài sản của trạm đó. Không tự mở rộng lên các trạm khác hoặc quyền cấp ngược cho đơn vị.
+4. **Phạm vi toàn cục:** `GLOBAL` áp dụng toàn hệ thống. Các grant cộng gộp; quyền `is_superuser` tiếp tục là bypass quản trị của Django. `is_staff` không tự cấp quyền nghiệp vụ trên asset.
+5. **Hồ sơ user:** `UserProfile.organization_id` là đơn vị công tác/tham chiếu mặc định, không tự nó cấp quyền. Mọi truy cập asset phải kiểm tra `RoleGrant` ở backend.
+6. **Ranh giới module:** `assets` được phép có FK tới `identity.Organization`; `identity` không tạo FK ngược tới `assets.Station`. Trường tham chiếu trạm trong `UserProfile`/`RoleGrant` là scalar ID. Schema đích dùng số nguyên tương thích `BigAutoField`; hai trường `CharField` trong scaffold hiện tại chỉ là dạng trung gian và sẽ được chuyển bằng migration có kiểm tra dữ liệu trong lát cắt asset.
+7. **Cây asset:** `Station.organization_id` bắt buộc; `Bay.station_id` bắt buộc; `Relay.bay_id` bắt buộc. Khi kiểm tra quyền của Bay/Relay, application service phải phân giải về Station sở hữu rồi truyền đúng `station_id` vào policy.
+
 ### Điểm đang mâu thuẫn hoặc chưa chốt
 
 - **Dòng OCR rỗng/không hiểu được:** Điều độ xác nhận toàn bộ một lần và có thể sửa một số dòng; dòng không có candidate phải hiển thị rõ là trống/chưa nhận diện, không tự sinh giá trị. Cần xác nhận có cho phép hoàn tất review khi một số dòng vẫn trống không.
@@ -135,20 +147,20 @@ rms/
 
 ## 4. Mô hình dữ liệu mới
 
-Tất cả bảng có `id` UUID hoặc bigint thống nhất, `created_at`, `updated_at`, và các unique/index được ghi khi cần. Kiểu chính: `UUID`, `varchar`, `text`, `boolean`, `integer`, `numeric`, `timestamptz`, `jsonb`, FK. Kiểu đầy đủ/DDL là bước thiết kế chi tiết tiếp theo.
+Các bảng RMS dùng `BigAutoField` làm khóa chính nội bộ, cùng `created_at`, `updated_at` và unique/index theo nhu cầu. ID từ hệ thống ngoài là `varchar` riêng, không làm khóa chính nội bộ. Các kiểu dữ liệu khác gồm `varchar`, `text`, `boolean`, `integer`, `numeric`, `timestamptz`, `jsonb`, FK.
 
 ### 4.1. Identity, catalog và tài sản
 
 | Thực thể | Trường/chủ thể chính | Thay đổi so với cũ và lý do |
 |---|---|---|
-| `Organization` | `code` unique, `name`, `type`, `parent_id` | Giữ cây tổ chức; thay `parent_code` text bằng FK ở nơi cần toàn vẹn. |
-| `UserProfile` | `user_id` 1-1, `organization_id`, `home_station_id`, contact | Giữ dữ liệu phân quyền theo đơn vị/trạm. |
-| `Role`, `RoleGrant` | role code, user/group/org/station scope, effective dates | Tách role assignment có scope khỏi các `if group name`; quyền có thể kiểm tra nhất quán. Việc giữ Django Group làm implementation chi tiết: quyết định sau. |
+| `Organization` | `id BigAutoField`, `code` unique, `name`, `type`, `parent_id` nullable FK | Giữ cây tổ chức; `parent_code` text cũ được thay bằng FK. Quyền cấp cho một tổ chức chỉ áp dụng đúng node đó, không tự truyền xuống tổ chức con. |
+| `UserProfile` | `user_id` 1-1, `organization_id`, `home_station_id` scalar, contact | Giữ thông tin đơn vị/trạm mặc định. Organization trong profile không tự cấp quyền; identity giữ station ID dạng scalar để không phụ thuộc ngược vào assets. |
+| `Role`, `RoleGrant` | role code, user/group/org/station scope, effective dates | Tách role assignment có scope khỏi các `if group name`; quyền được kiểm tra nhất quán. Organization grant áp dụng đúng org và Station trực tiếp thuộc org; Station grant áp dụng Station và Bay/Relay bên dưới. Việc giữ Django Group làm implementation chi tiết: quyết định sau. |
 | `CatalogType`, `CatalogItem` | type, `code`, `name`, active, source metadata | Gộp các danh mục cùng cấu trúc cũ; giảm nhiều model/viewset trùng. Nếu một catalog cần fields riêng thì mở extension table, không nhét JSON tùy tiện. |
 | `ExternalReference` | `system`, `entity_type`, `entity_id`, `external_id`, `payload_hash`, last synced | Thay các cột `id_*` text rải rác; giữ ID PMIS nhưng truy vết nguồn/không tạo FK giả. |
-| `Station` | code unique, name, address/location, organization FK, voltage-level FK, lifecycle fields | Dùng FK thật tới catalog nơi danh mục thuộc RMS; phần ngoại hệ thống nằm `ExternalReference`. |
-| `Bay` | `station_id` non-null, code, name, electrical attributes | Bắt buộc thuộc Station sau khi data migration xử lý orphan; unique `(station_id, code)`. |
-| `Relay` | `bay_id` non-null, code, name/model, manufacturer FK nullable, lifecycle metadata | Bắt buộc thuộc Bay, unique `(bay_id, code)` hoặc natural key được nghiệp vụ xác nhận. Không dùng `relay_text` như entity thay thế. |
+| `Station` | `id BigAutoField`, code unique, name, address/location, organization FK bắt buộc, voltage-level FK, lifecycle fields | Dùng FK thật tới catalog nơi danh mục thuộc RMS; phần ngoại hệ thống nằm `ExternalReference`. |
+| `Bay` | `id BigAutoField`, `station_id` non-null FK, code, name, electrical attributes | Bắt buộc thuộc Station sau khi data migration xử lý orphan; unique `(station_id, code)`. |
+| `Relay` | `id BigAutoField`, `bay_id` non-null FK, code, name/model, manufacturer FK nullable, lifecycle metadata | Bắt buộc thuộc Bay, unique `(bay_id, code)` hoặc natural key được nghiệp vụ xác nhận. Không dùng `relay_text` như entity thay thế. |
 | `RelayBaseline` + `RelayBaselineParameter` | Relay, revision/sheet published from, effective range; code, name, value text+normalized numeric, unit, tolerance, provenance | Thay `RelaySetting` float-only. Thông số relay có thể là text/matrix, cần lưu value gốc, numeric nếu parse được, version hiệu lực và nguồn. |
 
 ### 4.2. Document, OCR và sheet workflow
