@@ -43,7 +43,7 @@ class UserProfile(models.Model):
         blank=True,
     )
     # Giữ station ID dạng scalar để identity không phụ thuộc ngược vào module assets.
-    home_station_id = models.CharField(max_length=64, null=True, blank=True)
+    home_station_id = models.PositiveBigIntegerField(null=True, blank=True)
     phone_number = models.CharField(max_length=32, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -75,7 +75,7 @@ class RoleGrant(models.Model):
         blank=True,
     )
     # Dùng scalar thay FK để giữ chiều phụ thuộc từ assets sang identity.
-    station_id = models.CharField(max_length=64, null=True, blank=True)
+    station_id = models.PositiveBigIntegerField(null=True, blank=True)
     starts_at = models.DateTimeField(null=True, blank=True)
     ends_at = models.DateTimeField(null=True, blank=True)
     granted_by = models.ForeignKey(

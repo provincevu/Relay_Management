@@ -14,7 +14,7 @@ class RoleGrantSerializer(serializers.Serializer):
     role_code = serializers.CharField()
     scope_type = serializers.CharField()
     organization_id = serializers.IntegerField(allow_null=True)
-    station_id = serializers.CharField(allow_null=True)
+    station_id = serializers.IntegerField(allow_null=True, min_value=1)
     starts_at = serializers.DateTimeField(allow_null=True)
     ends_at = serializers.DateTimeField(allow_null=True)
 
@@ -22,5 +22,5 @@ class RoleGrantSerializer(serializers.Serializer):
 class UserProfileSerializer(serializers.Serializer):
     organization_id = serializers.IntegerField(allow_null=True)
     organization_name = serializers.CharField(allow_null=True)
-    home_station_id = serializers.CharField(allow_null=True)
+    home_station_id = serializers.IntegerField(allow_null=True, min_value=1)
     phone_number = serializers.CharField()
