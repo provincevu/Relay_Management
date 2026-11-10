@@ -228,7 +228,7 @@ erDiagram
 
 | Method & endpoint | Đầu vào chính | Đầu ra / lỗi trọng yếu | Khác API cũ |
 |---|---|---|---|
-| `GET /api/v2/assets/stations` | q, organization, voltage, page | Station list; 400 filter, 403 scope | Thay tree/list HTML và danh mục API phân tán bằng asset API thống nhất. |
+| `GET /api/v2/assets/stations/` | `q`, `organization`, `voltage`, `page` | Paginated station results; 400 invalid filters, 403 missing/out-of-scope asset grant | Tìm theo code/name/location; chỉ trả Station đang hoạt động. Role code được phép đọc lấy từ `ASSET_READ_ROLE_CODES`; scope trực tiếp theo org/trạm, không kế thừa tổ chức con. |
 | `GET /api/v2/assets/stations/{id}/tree` | depth=`bays|relays` | cây station-bay-relay đã scope | Thay hai endpoint HTMX lazy load; UI vẫn có thể tải lazy qua JSON. |
 | `POST /api/v2/assets/imports` | file/reference + mode | import job | Thay bulk create/paste semantics không chuẩn; format import cần chốt. |
 | `GET/POST /api/v2/relays/{id}/baselines` | create chỉ qua publish workflow | baseline/version/parameters | Cũ cập nhật `RelaySetting` khi ký trực tiếp; mới chỉ publish transition được phép. |
