@@ -229,8 +229,8 @@ erDiagram
 | Method & endpoint | Đầu vào chính | Đầu ra / lỗi trọng yếu | Khác API cũ |
 |---|---|---|---|
 | `GET /api/v2/assets/stations/` | `q`, `organization`, `voltage`, `page` | Paginated station results; 400 invalid filters, 403 missing/out-of-scope asset grant | Tìm theo code/name/location; chỉ trả Station đang hoạt động. Role code được phép đọc lấy từ `ASSET_READ_ROLE_CODES`; scope trực tiếp theo org/trạm, không kế thừa tổ chức con. |
-| `GET /api/v2/assets/stations/{id}/tree` | depth=`bays|relays` | cây station-bay-relay đã scope | Thay hai endpoint HTMX lazy load; UI vẫn có thể tải lazy qua JSON. |
-| `POST /api/v2/assets/imports` | file/reference + mode | import job | Thay bulk create/paste semantics không chuẩn; format import cần chốt. |
+| `GET /api/v2/assets/stations/{id}/tree/` | `depth=bays|relays`, `q` theo Bay code/name, `page`, `page_size` | Station + danh sách Bay phân trang; `depth=relays` thêm Relay đang hoạt động dưới từng Bay; 400 filter, 403 scope, 404 Station không tồn tại/không hoạt động | Thay hai endpoint HTMX lazy load; UI vẫn có thể tải theo độ sâu qua JSON. |
+| `POST /api/v2/assets/imports/` | `entity_type`, `mode`, CSV file, optional `source_system` | import-run resource; `GET /api/v2/assets/imports/{run_id}/` returns status and row report | Contract draft in [`ASSET_IMPORT_CONTRACT.md`](ASSET_IMPORT_CONTRACT.md); replaces old inconsistent bulk create/paste formats. Role, limits, retention, and apply policy must be confirmed before production. |
 | `GET/POST /api/v2/relays/{id}/baselines` | create chỉ qua publish workflow | baseline/version/parameters | Cũ cập nhật `RelaySetting` khi ký trực tiếp; mới chỉ publish transition được phép. |
 | `POST /api/v2/sheets` | metadata, document upload/reference, idempotency key | 201 sheet + revision + first OCR attempt | Thay `sheets/create/`; upload and domain response tách rõ. |
 | `GET /api/v2/sheets`, `GET /api/v2/sheets/{id}` | filters/status/scope; include | sheet/revision/assignments/workflow summary | Thay list/detail HTML và status filter rải rác. |
