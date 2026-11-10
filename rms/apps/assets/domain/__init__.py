@@ -1,0 +1,1 @@
+"""Asset entities and policies."""

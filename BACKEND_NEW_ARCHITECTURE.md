@@ -2,6 +2,37 @@
 
 > **Căn cứ:** `repomix-backend.md`, `repomix-frontend.md`, `repomix-urls.md`, `API_CONTRACT.md`. Đây là thiết kế mục tiêu, không phải khẳng định rằng mọi chi tiết đã tồn tại trong mã cũ. Công nghệ được giữ: Python/Django + Django REST Framework, PostgreSQL, Redis, Celery, Django Channels/Daphne, Docker Compose và dịch vụ OCR local hiện hữu.
 
+## Quyết định nghiệp vụ đã được xác nhận
+
+Các quyết định dưới đây do chủ sản phẩm cung cấp sau bản đề xuất. Chúng có ưu tiên cao hơn các phương án mặc định ở các phần sau.
+
+### Vòng đời phiếu và vai trò
+
+1. Chỉ **Điều độ** và **Admin** tạo phiếu.
+2. Điều độ rà soát OCR, xác nhận đúng trạm/ngăn lộ/rơ-le và xác nhận phiếu. Trưởng trạm không tham gia bước rà soát OCR.
+3. Trưởng trạm tiếp nhận phiếu và phân công KTV, Giám sát.
+4. KTV xử lý thông số được giao và ký xác nhận.
+5. Giám sát kiểm tra và ký duyệt.
+6. Admin phê duyệt cuối. Chỉ khi Admin duyệt thành công, phiếu chuyển `COMPLETED` và baseline rơ-le mới được cập nhật.
+7. Người từ chối phải nhập lý do. Phiếu được trả về đúng vai trò cần chỉnh sửa; chữ ký trước đó được giữ trong lịch sử. Sau khi chỉnh sửa, quy trình ký lại từ đầu.
+8. Phiếu `COMPLETED` là bất biến. Thay đổi sau đó phải tạo phiếu mới.
+9. Điều độ có quyền liên quan đến phiếu, nhưng không có quyền quản trị hệ thống. Admin cấp quyền theo nguyên tắc tối thiểu cần thiết; quyền duyệt cuối vẫn thuộc Admin.
+10. Trưởng trạm và Giám sát có quyền nghiệp vụ ngang KTV theo chỉ đạo hiện tại; quyền riêng để tiếp nhận/phân công, kiểm tra/ký vẫn là các capability riêng của vai trò trong workflow, không suy ra chỉ từ quyền KTV.
+
+### OCR và lưu trữ
+
+- Điều độ xác nhận trạm/rơ-le và kết quả OCR. Xác nhận thông số theo hướng **hàng loạt**, nhưng phạm vi chọn hàng loạt và khả năng loại trừ từng dòng vẫn cần mô tả UI/validation chi tiết.
+- OCR lỗi không tự retry. Điều độ hoặc Admin phải upload lại PDF để tạo lần chạy mới.
+- PDF và kết quả OCR được lưu vô hạn trong RMS. Vì OCR service chỉ giữ mặc định 7 ngày, RMS phải lấy và lưu result ngay khi OCR hoàn tất; cần có chính sách backup/khôi phục tương ứng.
+- Ký số thật không thuộc MVP; MVP dùng chữ ký ảo. Chữ ký ảo phải được thể hiện rõ trong UI/audit và không được coi là bằng chứng SmartCA đã xác minh.
+- Auto-check thiết bị và đồng bộ PMIS không thuộc giai đoạn MVP.
+- Mỗi rơ-le chỉ được có tối đa **một phiếu tạm đang hiệu lực**. Không duyệt phiếu tạm mới nếu phiếu tạm hiện tại chưa hết hạn hoặc chưa được Admin hoàn tác.
+
+### Điểm đang mâu thuẫn hoặc chưa chốt
+
+- **Dòng OCR rỗng/không hiểu được:** Điều độ xác nhận toàn bộ một lần và có thể sửa một số dòng; dòng không có candidate phải hiển thị rõ là trống/chưa nhận diện, không tự sinh giá trị. Cần xác nhận có cho phép hoàn tất review khi một số dòng vẫn trống không.
+- **Retention vô hạn:** đã được yêu cầu; backup, mã hóa, quyền truy cập và quy trình khôi phục cần được thiết kế tương ứng.
+
 ## 1. Quyết định kiến trúc
 
 Chọn **modular monolith Django** làm hệ thống RMS chính, chạy cùng PostgreSQL, Redis, Celery worker/beat và Daphne/Channels. OCR vẫn là một dịch vụ local độc lập tại `http://127.0.0.1:18010`, được gọi qua HTTP theo `API_CONTRACT.md`. Không sao chép OCR engine vào Django, không để browser gọi trực tiếp OCR API, và không dùng artifact/file của OCR làm nguồn dữ liệu nghiệp vụ lâu dài.
@@ -87,7 +118,7 @@ rms/
 | `FETCHING_RESULT` | Poll trả `succeeded` | GET `/result`, validate schema version. |
 | `SUCCEEDED` | Result lưu/chuẩn hóa thành công | Chuyển revision sang `OCR_READY`; tạo event cho UI. |
 | `FAILED_SUBMISSION` | 400/401/413/415 hoặc network error lúc submit | Không tự resubmit vô hạn; hiển thị lỗi kỹ thuật đã phân loại. |
-| `FAILED_PROCESSING` | OCR status `failed`, 404 remote job, 409 sai thời điểm, result/schema không hợp lệ | Người dùng hoặc policy tạo attempt mới. |
+| `FAILED_PROCESSING` | OCR status `failed`, 404 remote job, 409 sai thời điểm, result/schema không hợp lệ | Không auto retry. Điều độ/Admin phải upload lại PDF để tạo attempt mới. |
 | `CANCELLED` | RMS hủy trước khi submit hoặc bỏ attempt nội bộ | OCR API không có cancel, nên remote job có thể vẫn chạy. |
 
 `OcrAttempt` không dùng trạng thái cũ `PENDING/PROCESSING/SUCCESS/SUCCESS_WITH_WARNINGS/FAILED` như contract công khai. Nếu cần tương thích UI, mapping được đặt tại API presenter duy nhất.
@@ -98,8 +129,9 @@ rms/
 2. Celery task đọc `Document` qua storage adapter, gửi multipart `file` tới `POST /api/v1/jobs` với Bearer token. Lưu `remote_job_id`, `page_count`, `source_filename`, thời điểm submit.
 3. Beat/task poll `GET /api/v1/jobs/{remote_job_id}`. Interval/backoff là cấu hình RMS; không suy diễn progress từng trang vì OCR contract không trả progress.
 4. Khi `succeeded`, worker gọi `GET /result`, lưu nguyên bản vào `OcrResultSnapshot.payload`, kiểm tra `schema_version`, rồi normalizer tạo header/parameter candidate có provenance. Không ghi thẳng OCR JSON vào baseline Relay.
-5. User review và xác nhận sheet. Chỉ use case publish/approve mới tạo hoặc cập nhật `RelayBaselineParameter`.
-6. OCR `failed` không có error detail theo contract. RMS phải lưu mã `OCR_REMOTE_FAILED` và metadata status; không tự bịa nguyên nhân.
+5. Điều độ review và xác nhận sheet; sau đó workflow lần lượt qua Trưởng trạm tiếp nhận/phân công, KTV xử lý/ký, Giám sát kiểm tra/ký và Admin phê duyệt.
+6. Chỉ khi Admin phê duyệt thành công, phiếu chuyển `COMPLETED` và use case publish mới cập nhật `RelayBaselineParameter`. Phiếu hoàn tất không được sửa; cần thay đổi thì tạo phiếu mới.
+7. OCR `failed` không có error detail theo contract. RMS phải lưu mã `OCR_REMOTE_FAILED` và metadata status; không tự bịa nguyên nhân.
 
 ## 4. Mô hình dữ liệu mới
 
@@ -125,11 +157,11 @@ Tất cả bảng có `id` UUID hoặc bigint thống nhất, `created_at`, `upd
 |---|---|---|
 | `Document` | storage key, original name, media type, size, SHA-256, uploaded_by, retention state | Tách file upload khỏi sheet để chống trùng và quản retention/quyền truy cập. |
 | `SettingSheet` | code unique, title, `relay_id` nullable lúc OCR, `station_id`, owner/execution station, current revision, lifecycle state | Giữ khái niệm phiếu; code và asset chỉ được xác nhận bằng review workflow, không tự coi OCR guess là dữ liệu chuẩn. |
-| `SheetRevision` | sheet, sequence unique per sheet, source document, state, created_by, supersedes, effective_from/until, is_temporary | Thay fields `revert_to_sheet`, `reverted`, `has_parameters_changed` trên một bản ghi. Version và temporary/revert trở nên minh bạch/auditable. |
+| `SheetRevision` | sheet, sequence unique per sheet, source document, state, created_by, supersedes, effective_from/until, is_temporary, temporary_expiry_at, restored_from_baseline_id | Thay fields `revert_to_sheet`, `reverted`, `has_parameters_changed` trên một bản ghi. Version và temporary/revert trở nên minh bạch/auditable; snapshot baseline khi duyệt phiếu tạm được định danh cụ thể. |
 | `SheetParameter` | revision, parameter code/name, group, raw value, normalized value/type/unit, range/tolerance, page/source coordinates, review state | Thay `extracted_data JSONField`: searchable, validate được, diff/version được, giữ provenance OCR. JSON snapshot vẫn lưu riêng để trace. |
 | `SheetAssignment` | sheet/revision, assignment role, assignee, assigned_by, due_at, active | Thay `assigned_to`, `supervisor_assigned`, `assigned_at` cố định; hỗ trợ đổi người và lịch sử. |
 | `WorkflowInstance`, `WorkflowTransition` | subject type/id, current state, transition, actor, reason, at, version | Thay status string và nhiều if/else phân tán; áp dụng cho sheet và correction case. |
-| `ApprovalSignature` | workflow transition, signer, signer role, provider, provider reference, signed_at, verified_at, content hash, status | Thay `SignatureRecord` mock; hỗ trợ adapter ký thật và audit không sửa. |
+| `ApprovalSignature` | workflow transition, signer, signer role, mode (`VIRTUAL`/provider), provider reference nullable, signed_at, content hash, status, rejection reason | MVP dùng `VIRTUAL`; lưu rõ chế độ ký để không nhầm với chữ ký nhà cung cấp đã xác minh. Có thể bổ sung provider thật sau này. |
 | `OcrAttempt` | revision, `remote_job_id` unique nullable, status, submitted/polled/completed timestamps, page count, failure code, retry_of, attempt number | Tách local/OCR external job. Một revision có nhiều attempt; `remote_job_id` là ID của OCR API. |
 | `OcrResultSnapshot` | attempt 1-1, schema version, payload jsonb, checksum, fetched_at | Lưu nguyên result OCR trước khi normalize; tránh phụ thuộc retention 7 ngày của OCR. |
 | `OcrCandidate` | attempt, candidate type/header/parameter, value JSON, confidence nullable, source locator, accepted/rejected/reviewed_by | Tách kết quả chưa xác nhận khỏi SheetParameter đã review. Contract không bắt buộc confidence nên nullable. |
@@ -193,13 +225,13 @@ erDiagram
 | `POST /api/v2/sheets/{id}/revisions` | document, temporary/effective metadata | 201 revision | Cũ dùng một SettingSheet với flags revert/temporary. |
 | `PATCH /api/v2/sheet-revisions/{id}/metadata` | station/relay/version | metadata đã validate | Thay fallback relay text/DOM; 409 conflict, 422 asset invalid. |
 | `PUT /api/v2/sheet-revisions/{id}/parameters` | full parameter command + version | revised parameters/diff summary | Thay field form `ocr_*_{index}`; payload typed and atomic. |
-| `POST /api/v2/sheet-revisions/{id}/ocr-attempts` | optional resubmit reason; idempotency | 202 attempt status | Thay `run-mock-ocr`/rerun; dùng OCR local thật. |
+| `POST /api/v2/sheet-revisions/{id}/ocr-attempts` | user request; source document đã lưu hoặc upload document; idempotency | 202 attempt status | Thay `run-mock-ocr`/rerun; không chạy lại tự động. Vai trò cho phép: Điều độ/Admin. |
 | `GET /api/v2/ocr-attempts/{id}` | none | local status, remote status summary, failure code, links | Thay `ocr-job/*/json` shape cũ; không expose remote token. |
 | `POST /api/v2/ocr-attempts/{id}/retry` | reason | 202 new attempt | Khác OCR external: RMS creates a new attempt because OCR lacks retry API. |
 | `GET /api/v2/ocr-attempts/{id}/result` | none | normalized candidates + reviewed status; raw snapshot only privileged | Thay path `/data/` không tồn tại và JSON raw lẫn UI data. |
 | `POST /api/v2/sheets/{id}/assignments` | role, assignee, due date, version | active assignment + workflow state | Thay `assign` và `route-to-station` split logic; execution station is a typed field. |
 | `POST /api/v2/sheets/{id}/transitions` | transition, comment, version | new workflow state | Thay `update-status` mock and implicit role/status changes. |
-| `POST /api/v2/workflow-transitions/{id}/signatures` | provider response/reference, signature material policy | verified/pending signature | Thay mock initiate/confirm pair. Provider-specific challenge endpoints only added when real signing contract exists. |
+| `POST /api/v2/workflow-transitions/{id}/signatures` | virtual confirmation, transition version; rejection requires reason | virtual signature/audit record | MVP thay mock initiate/confirm bằng một lần xác nhận chữ ký ảo có role/state validation; không gọi SmartCA. |
 | `GET/PATCH /api/v2/relays/{id}/auto-check-policy` | schedule, enabled, version | policy | Thay schedule fields on Relay. |
 | `POST /api/v2/relays/{id}/auto-check-runs` | source/action idempotency | 202 run | Thay mock `autochecks/now`; actual device adapter chosen server-side. |
 | `GET /api/v2/auto-check-runs/{id}` | include differences | run/difference list | Thay HTML rows/JSON arrays. |
@@ -251,22 +283,33 @@ Tách `sheets/workflow`, `monitoring`, `integrations` thành deployable services
 |---|---|---|
 | 0. Nền tảng | Settings môi trường, Docker Compose, PostgreSQL migrations, Redis/Celery/Channels, identity tối thiểu, error/idempotency/audit/outbox, health/readiness RMS | Một user scope được auth; một command có idempotency; audit/outbox được ghi trong cùng transaction; worker/beat và WebSocket hoạt động. |
 | 1. Asset & quyền scope | Catalog, Station–Bay–Relay, external reference, asset list/tree API và adapter UI | Không tạo Bay/Relay mồ côi; scope tổ chức/trạm được kiểm tra server-side; import có SyncRun/audit; list/tree có pagination/filter ổn định. |
-| 2. Sheet upload + OCR local | Document, SheetRevision, OcrAttempt/Gateway/poll, snapshot, WebSocket event, màn hình trạng thái | Upload PDF hợp lệ tạo attempt; RMS gọi đúng ba endpoint OCR theo contract; remote `job_id` được lưu; result được snapshot; `failed/404/409/401/413/415` có failure code RMS và không lộ token; retry tạo attempt mới. |
-| 3. Review dữ liệu OCR & version | Normalize candidate, parameter review/edit typed, metadata asset validation, diff revision | Không có UI fallback tự quyết định relay; reviewer chấp nhận/từ chối candidate có audit; parameter có provenance; diff giữa revision trả chính xác; OCR JSON không cập nhật baseline trực tiếp. |
-| 4. Assignment & workflow sheet | Scoped role grants, assignment, transition machine, approval signature adapter interface | Mọi transition bị chặn khi role/state/version sai; lịch sử immutable; người được giao chỉ xem/sửa đúng scope; mock signature không tồn tại ở production. |
-| 5. Publish baseline & temporary setting | Publish approved revision, effective period, temporary/revert job, RelayBaselineParameter | Baseline chỉ đổi qua transition hợp lệ; active baseline được chọn rõ theo thời gian/revert; mọi parameter có nguồn sheet revision. |
-| 6. Auto-check & correction case | Policy/scheduler, device adapter interface, run/difference, case workflow | Một run luôn so với baseline xác định; mismatch sinh differences có query được; pause/resume policy auditable; case không thể tự tiến bước qua role trái phép. |
-| 7. PMIS/catalog integration | Integration endpoint secret ref, SyncRun/checkpoint/item results, mapping and resume | Không có `verify=False` mặc định; secret không trả về UI/log; retry/resume theo record/run; sync-all là một server job, không phải click DOM tuần tự. |
+| 2. Sheet upload + OCR local | Document, SheetRevision, OcrAttempt/Gateway/poll, snapshot, WebSocket event, màn hình trạng thái | Upload PDF hợp lệ tạo attempt; RMS gọi đúng ba endpoint OCR theo contract; remote `job_id` được lưu; result được snapshot lâu dài; `failed/404/409/401/413/415` có failure code RMS và không lộ token; không auto retry; Điều độ/Admin chủ động tạo attempt mới. |
+| 3. Review dữ liệu OCR & version | Normalize candidate, bulk confirmation/edit typed, metadata asset validation, diff revision | Chỉ Điều độ xác nhận station/bay/relay; xác nhận thông số hàng loạt có audit; parameter có provenance; diff revision chính xác; OCR JSON không cập nhật baseline trực tiếp. |
+| 4. Assignment & workflow sheet | Scoped role grants, assignment, transition machine, virtual signature, rejection/return | Chỉ Điều độ/Admin tạo; luồng ký theo quyết định đã xác nhận; từ chối bắt buộc lý do; giữ chữ ký cũ, sau sửa ký lại từ đầu; chỉ Admin hoàn tất; COMPLETED bất biến; quyền được kiểm tra server-side. |
+| 5. Publish baseline & temporary setting | Publish approved revision, immutable version, effective source sheet, baseline snapshot, expiry task, audit | Baseline chỉ đổi sau Admin approve và COMPLETED; phiếu tạm thuộc MVP, lưu snapshot baseline trước khi áp dụng; hết hạn tự khôi phục snapshot và ghi sự kiện; tác vụ cũ không thể ghi đè baseline mới hơn; chặn duyệt phiếu tạm thứ hai khi rơ-le đang có phiếu tạm hiệu lực; phiếu COMPLETED không sửa được. |
+| 6. Auto-check & correction case (sau MVP) | Policy/scheduler, device adapter, run/difference, case workflow | Bắt đầu sau MVP theo quyết định hiện tại; khi làm, mỗi run phải tham chiếu baseline xác định và các thay đổi phải auditable. |
+| 7. PMIS/catalog integration (sau MVP) | Integration endpoint secret ref, SyncRun/checkpoint/item results, mapping and resume | Không thuộc MVP; khi triển khai không có `verify=False` mặc định, secret không trả về UI/log, resume theo record/run. |
 | 8. Compatibility cutover & hardening | Map routes cũ, migrate frontend, retention/backup, metrics/log/tracing, load/security tests, retire mocks | Không còn hardcode API không tồn tại; API contract versioned; OCR retention 7 ngày không làm mất dữ liệu RMS; monitoring phát hiện OCR/Redis/worker failure; mock/test endpoint không public production. |
 
-## 8. Quyết định cần chốt trước khi triển khai lát cắt 4–7
+## 8. Tiêu chí hoàn tất MVP và các quyết định còn mở
 
-Các tài liệu nguồn không đủ để tự suy đoán các điểm sau, nên cần nghiệp vụ phê duyệt:
+### Tiêu chí nghiệm thu MVP
 
-1. State machine chính xác của sheet: các trạng thái hợp lệ, transition, ai được thực hiện và điều kiện ký.
-2. Giá trị pháp lý của chữ ký: nhà cung cấp, callback/challenge contract, dữ liệu lưu, verification/retention.
-3. Định nghĩa active baseline khi có sheet tạm, hết hạn và revert; precedence theo thời gian.
-4. Contract thiết bị/PMIS thực: auth, TLS/CA, schema, idempotency, rate limit, retry và error codes.
-5. Schema version và trường bắt buộc trong `page1`/`page3_plus` OCR; API contract hiện chỉ nói các trường này có thể vắng mặt/lồng nhau.
-6. Retention, backup, phân loại dữ liệu nhạy cảm và quyền tải PDF/OCR raw result.
-7. SLO/tải dự kiến để quyết định batch size, worker concurrency, poll interval và khi nào cần tách dịch vụ.
+MVP được xem là hoàn tất khi tất cả tiêu chí sau đạt trong môi trường staging chạy bằng các công nghệ đã chọn:
+
+1. **Luồng phiếu đầu-cuối:** Điều độ/Admin tạo phiếu; OCR local hoàn tất; Điều độ rà soát metadata, xác nhận toàn bộ candidate và sửa được một số dòng; Trưởng trạm tiếp nhận/phân công; KTV cập nhật thông số/ký; Giám sát kiểm tra/ký; Admin duyệt; chỉ lúc đó phiếu thành `COMPLETED` và baseline đổi.
+2. **Quyền và trạng thái:** request trái vai trò/scope hoặc transition không hợp lệ bị từ chối ở backend; không thể dùng UI/API để sửa phiếu `COMPLETED`; Điều độ không truy cập chức năng quản trị hệ thống nếu không được cấp capability riêng.
+3. **Từ chối và làm lại:** từ chối bắt buộc có lý do; phiếu quay đúng vai trò cần chỉnh sửa; chữ ký cũ vẫn tra cứu được; sau chỉnh sửa toàn bộ chuỗi ký lại từ đầu; lịch sử có actor và thời gian.
+4. **OCR local:** kiểm chứng được submit multipart có Bearer token, poll, fetch result sau `succeeded`, xử lý `400/401/404/409/413/415`, timeout/network error và `failed`; không auto retry; Điều độ/Admin upload lại để tạo attempt mới; token không xuất hiện trong browser/log thông thường.
+5. **Lưu trữ:** PDF gốc, OCR result snapshot, candidate, revision và audit còn đọc được sau khi OCR service hết retention 7 ngày; dữ liệu vẫn còn sau khi phiếu bị từ chối hoặc hoàn tác.
+6. **Phiếu tạm:** Admin duyệt phiếu tạm lưu snapshot baseline đang hiệu lực; đúng thời điểm hết hạn hệ thống khôi phục snapshot và ghi sự kiện tự hoàn tác; tác vụ hết hạn trễ/retry không ghi đè baseline mới hơn; Admin có thể hoàn tác sớm với lý do và audit; hai phiếu tạm hiệu lực đồng thời trên cùng rơ-le bị từ chối.
+7. **Chữ ký ảo:** lưu người ký, vai trò, thời điểm, nội dung/hash theo thiết kế, chế độ `VIRTUAL` và lịch sử; UI ghi rõ đây không phải chữ ký SmartCA đã xác minh.
+8. **Vận hành:** worker/beat khởi động lại không làm mất trạng thái; job OCR đang chờ tiếp tục được poll; lỗi có correlation ID; backup/restore staging giữ được PDF, result và dữ liệu nghiệp vụ.
+9. **Giao diện:** không yêu cầu giữ nguyên toàn bộ UI cũ. Chỉ kế thừa pattern hữu ích; các màn hình MVP phải hoàn tất luồng và có loading/error/empty state, không dựa vào route mock/test.
+10. **API:** OpenAPI khớp với hành vi thực; route cũ chỉ giữ khi frontend chuyển đổi cần adapter; frontend không gọi endpoint OCR delete hoặc data path không tồn tại.
+
+### Còn cần xác nhận
+
+1. **Candidate rỗng:** có cho Điều độ xác nhận phiếu khi một số dòng OCR không nhận diện được không, hay bắt buộc sửa/loại các dòng đó trước?
+2. **Ma trận quyền:** Admin cấp quyền tối thiểu, nhưng các capability bắt buộc để hoàn tất workflow phải luôn có người được giao. Cần lập ma trận cuối theo hành động/scope trước khi triển khai.
+3. **Retention vô hạn:** xác nhận dữ liệu không bị xóa khỏi RMS; cần chọn backup/khôi phục và quyền truy cập PDF/OCR raw.

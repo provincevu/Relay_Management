@@ -1,0 +1,1 @@
+"""Sheet HTTP API adapters."""
