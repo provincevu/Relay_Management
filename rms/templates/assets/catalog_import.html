@@ -1,0 +1,90 @@
+{% load static %}
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7fb">
+  <title>Catalog Import (Nhập danh mục) | RMS</title>
+  <link rel="stylesheet" href="{% static 'assets/catalog-import.css' %}">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Điều hướng chính">
+      <a class="brand" href="/assets/" aria-label="RMS, trang Assets (Tài sản)">
+        <span class="brand-mark">R</span>
+        <span><strong>RMS</strong><small>Relay Management System (Hệ thống quản lý rơ-le)</small></span>
+      </a>
+      <div class="nav-caption">WORKSPACE (KHU VỰC LÀM VIỆC)</div>
+      <a class="nav-link" href="/assets/"><span class="nav-icon" aria-hidden="true">▦</span><span>Assets (Tài sản)</span><span class="nav-chevron" aria-hidden="true">›</span></a>
+      <a class="nav-link active" href="/assets/imports/"><span class="nav-icon" aria-hidden="true">⇧</span><span>Catalog Import (Nhập danh mục)</span><span class="nav-chevron" aria-hidden="true">›</span></a>
+      <div class="sidebar-note"><span class="status-dot"></span><div><strong>Preview Mode (Chế độ xem trước)</strong><small>Kiểm tra CSV, chưa ghi Catalog Item.</small></div></div>
+      <div class="sidebar-footer">RMS · System Management (Quản lý hệ thống)</div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="breadcrumbs"><a href="/assets/">Assets (Tài sản)</a><b>/</b><strong>Catalog Import (Nhập danh mục)</strong></div>
+        <a class="admin-link" href="/admin/">Administration (Quản trị) <span aria-hidden="true">↗</span></a>
+      </header>
+
+      <section class="page-heading">
+        <div>
+          <p class="eyebrow">DATA MANAGEMENT (QUẢN LÝ DỮ LIỆU)</p>
+          <h1>Catalog Item Import (Nhập mục danh mục)</h1>
+          <p class="page-subtitle">Tải CSV lên để kiểm tra mã, dữ liệu và liên kết trước khi quyết định các bước tiếp theo.</p>
+        </div>
+        <span class="preview-badge"><span></span>Preview Only (Chỉ xem trước)</span>
+      </section>
+
+      <section class="import-layout" aria-label="Catalog Item Import (Nhập mục danh mục)">
+        <section class="form-panel panel" aria-labelledby="upload-heading">
+          <div class="panel-heading"><div class="step-mark">1</div><div><h2 id="upload-heading">Upload CSV (Tải tệp CSV)</h2><p>Chọn một tệp có header theo cấu trúc đã công bố.</p></div></div>
+          <form id="import-form" enctype="multipart/form-data" data-max-bytes="{{ max_file_bytes }}">
+            {% csrf_token %}
+            <input type="hidden" name="entity_type" value="catalog_item">
+            <input type="hidden" name="mode" value="preview">
+            <label class="field-label" for="csv-file">CSV File (Tệp CSV) <span class="required">*</span></label>
+            <label id="drop-zone" class="drop-zone" for="csv-file">
+              <span class="upload-icon" aria-hidden="true">⇧</span>
+              <strong>Kéo thả tệp vào đây</strong>
+              <span>hoặc <span class="browse-text">chọn tệp từ máy</span></span>
+              <small>Định dạng CSV · Tối đa {{ max_file_size_label }}</small>
+              <input id="csv-file" name="file" type="file" accept=".csv,text/csv" required>
+            </label>
+            <div id="selected-file" class="selected-file" hidden></div>
+
+            <label class="field-label source-label" for="source-system">Source System (Hệ thống nguồn) <span class="optional">Tùy chọn</span></label>
+            <input id="source-system" class="text-input" name="source_system" type="text" maxlength="64" placeholder="Ví dụ: PMIS">
+            <p class="field-help">Chỉ cần điền khi CSV có External ID (Mã hệ thống ngoài).</p>
+
+            <div class="format-card">
+              <div class="format-card-title"><span aria-hidden="true">ⓘ</span> CSV Format (Cấu trúc CSV)</div>
+              <p>Các cột bắt buộc:</p>
+              <code>catalog_type_code, code, name</code>
+              <p class="optional-columns">Cột tùy chọn: <code>description</code>, <code>sort_order</code>, <code>is_active</code>, <code>external_id</code>.</p>
+              <a class="sample-link" href="{% static 'assets/catalog-item-preview.csv' %}" download>Download Sample (Tải CSV mẫu)</a>
+            </div>
+
+            <div id="form-error" class="inline-error" role="alert" hidden></div>
+            <button id="preview-button" class="primary-button" type="submit"><span aria-hidden="true">⌕</span> Preview Import (Xem trước nhập liệu)</button>
+            <p class="safe-note"><span aria-hidden="true">✓</span> Preview Only: không tạo hoặc sửa Catalog Item (Mục danh mục).</p>
+          </form>
+        </section>
+
+        <section class="result-panel panel" aria-labelledby="result-heading">
+          <div class="panel-heading result-heading"><div class="step-mark muted">2</div><div><h2 id="result-heading">Preview Results (Kết quả xem trước)</h2><p id="result-subtitle">Báo cáo kiểm tra sẽ hiển thị tại đây.</p></div></div>
+          <div id="result-state" class="result-empty" aria-live="polite">
+            <div class="empty-illustration" aria-hidden="true"><span>▤</span><i></i><i></i><i></i></div>
+            <h3>Chưa có báo cáo</h3>
+            <p>Tải CSV lên và chọn Preview Import (Xem trước nhập liệu) để kiểm tra từng dòng.</p>
+          </div>
+          <div id="result-report" class="report" hidden></div>
+        </section>
+      </section>
+      <footer class="page-footer">Kết quả xem trước không làm thay đổi dữ liệu Catalog Item (Mục danh mục).</footer>
+    </main>
+  </div>
+  <script src="{% static 'assets/catalog-import.js' %}" defer></script>
+</body>
+</html>

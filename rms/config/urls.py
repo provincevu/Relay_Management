@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 
-from rms.apps.assets.ui.views import StationBrowserView
+from rms.apps.assets.ui.views import AssetImportPageView, StationBrowserView
 from rms.config.health import health, not_found, readiness, server_error_json
 
 urlpatterns = [
@@ -13,6 +13,7 @@ urlpatterns = [
     path("ready/", readiness, name="readiness-slash"),
     path("admin/", admin.site.urls),
     path("assets/", StationBrowserView.as_view(), name="asset-browser"),
+    path("assets/imports/", AssetImportPageView.as_view(), name="asset-import-page"),
     path("api/v2/", include("rms.config.api_urls")),
 ]
 

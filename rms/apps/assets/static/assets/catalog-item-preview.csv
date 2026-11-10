@@ -1,0 +1,2 @@
+catalog_type_code,code,name,description,sort_order,is_active,external_id
+VOLTAGE_LEVEL,PREVIEW_ONLY,Giá trị thử xem trước,Chỉ dùng kiểm tra chức năng xem trước,999,true,
