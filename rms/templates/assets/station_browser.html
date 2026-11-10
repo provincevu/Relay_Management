@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f4f7fb">
-  <title>Tra cứu tài sản | RMS</title>
+  <title>Assets (Tài sản) | RMS</title>
   <link rel="stylesheet" href="{% static 'assets/station-browser.css' %}">
 </head>
 <body>
@@ -13,32 +13,32 @@
     <aside class="sidebar" aria-label="Điều hướng chính">
       <a class="brand" href="/assets/" aria-label="RMS, trang tài sản">
         <span class="brand-mark">R</span>
-        <span><strong>RMS</strong><small>Quản lý rơ-le</small></span>
+        <span><strong>RMS</strong><small>Relay Management System (Hệ thống quản lý rơ-le)</small></span>
       </a>
       <div class="nav-caption">KHU VỰC LÀM VIỆC</div>
       <a class="nav-link active" href="/assets/">
         <span class="nav-icon" aria-hidden="true">▦</span>
-        <span>Tài sản</span>
+        <span>Assets (Tài sản)</span>
         <span class="nav-chevron" aria-hidden="true">›</span>
       </a>
       <div class="sidebar-note">
         <span class="status-dot"></span>
-        <div><strong>Danh mục tài sản</strong><small>Dữ liệu theo phạm vi được cấp</small></div>
+        <div><strong>Asset Catalog (Danh mục tài sản)</strong><small>Dữ liệu theo phạm vi được cấp</small></div>
       </div>
-      <div class="sidebar-footer">RMS · Quản lý hệ thống</div>
+      <div class="sidebar-footer">RMS · System Management (Quản lý hệ thống)</div>
     </aside>
 
     <main class="main-content">
       <header class="topbar">
-        <div class="breadcrumbs"><span>Khu vực làm việc</span><b>/</b><strong>Tài sản</strong></div>
-        <a class="admin-link" href="/admin/" title="Mở trang quản trị">Quản trị <span aria-hidden="true">↗</span></a>
+        <div class="breadcrumbs"><span>Workspace (Khu vực làm việc)</span><b>/</b><strong>Assets (Tài sản)</strong></div>
+        <a class="admin-link" href="/admin/" title="Mở trang Administration (Quản trị)">Administration (Quản trị) <span aria-hidden="true">↗</span></a>
       </header>
 
       <section class="page-heading">
         <div>
-          <p class="eyebrow">DANH MỤC VẬN HÀNH</p>
-          <h1>Tra cứu tài sản</h1>
-          <p class="page-subtitle">Tìm trạm và xem cấu trúc ngăn lộ, rơ-le trong phạm vi tài khoản của bạn.</p>
+          <p class="eyebrow">Operational Catalog (Danh mục vận hành)</p>
+          <h1>Asset Browser (Tra cứu tài sản)</h1>
+          <p class="page-subtitle">Tìm Stations (Trạm), xem cấu trúc Bays (Ngăn lộ) và Relays (Rơ-le) trong phạm vi được cấp.</p>
         </div>
         <div class="heading-icon" aria-hidden="true">⌕</div>
       </section>
@@ -46,12 +46,12 @@
       <section class="workspace" aria-label="Tra cứu cây tài sản">
         <section class="station-panel panel" aria-labelledby="station-heading">
           <div class="panel-heading station-panel-heading">
-            <div><h2 id="station-heading">Trạm điện</h2><p id="station-count">Đang tải danh sách…</p></div>
+            <div><h2 id="station-heading">Stations (Trạm)</h2><p id="station-count">Đang tải danh sách…</p></div>
             <span class="panel-icon" aria-hidden="true">⌖</span>
           </div>
           <label class="search-box" for="station-search">
             <span aria-hidden="true">⌕</span>
-            <input id="station-search" type="search" placeholder="Tìm theo mã, tên hoặc địa điểm" autocomplete="off">
+            <input id="station-search" type="search" placeholder="Tìm Station (Trạm) theo mã, tên hoặc địa điểm" autocomplete="off">
             <kbd>/</kbd>
           </label>
           <div id="station-list" class="station-list" aria-live="polite">
@@ -69,13 +69,13 @@
         <section class="detail-panel panel" aria-labelledby="detail-heading">
           <div id="station-detail" class="detail-header empty-detail">
             <div class="empty-icon" aria-hidden="true">⌖</div>
-            <div><h2 id="detail-heading">Chọn một trạm</h2><p>Cây ngăn lộ và rơ-le sẽ hiển thị tại đây.</p></div>
+            <div><h2 id="detail-heading">Chọn Station (Trạm)</h2><p>Bays (Ngăn lộ) và Relays (Rơ-le) sẽ hiển thị tại đây.</p></div>
           </div>
           <div id="tree-content" class="tree-content">
             <div class="welcome-state">
               <div class="welcome-art" aria-hidden="true"><span>⌖</span><i></i><i></i><i></i></div>
-              <h3>Bắt đầu từ một trạm</h3>
-              <p>Chọn trạm ở danh sách bên trái để xem thiết bị và thông tin cấu hình.</p>
+              <h3>Bắt đầu bằng cách chọn Station (Trạm)</h3>
+              <p>Chọn trạm bên trái để xem Bays (Ngăn lộ), Relays (Rơ-le) và thông tin cấu hình.</p>
             </div>
           </div>
         </section>

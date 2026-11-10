@@ -5,3 +5,4 @@ class OcrConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "rms.apps.ocr"
     label = "rms_ocr"
+    verbose_name = "OCR (Nhận dạng ký tự)"

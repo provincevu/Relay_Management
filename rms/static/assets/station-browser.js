@@ -34,7 +34,7 @@
   // Hiển thị lỗi theo ngữ cảnh và gắn thao tác thử lại vào đúng khu vực bị lỗi.
   function showError(container, error, retry) {
     const message = error.status === 403
-      ? "Tài khoản chưa được cấp quyền xem tài sản trong phạm vi này."
+      ? "Tài khoản chưa được cấp quyền xem Assets (Tài sản) trong phạm vi này."
       : error.status === 401
         ? "Phiên đăng nhập đã hết hạn. Hãy đăng nhập lại để tiếp tục."
         : error.status === 404
@@ -49,8 +49,8 @@
   // Vẽ danh sách trạm, cập nhật phân trang và chọn trạm đầu tiên nếu kết quả thay đổi.
   function renderStations(payload) {
     state.stations = payload.results || [];
-    stationCount.textContent = `${payload.count || 0} trạm trong phạm vi của bạn`;
-    stationPageLabel.textContent = state.stations.length ? `Hiển thị ${state.stations.length} trạm` : "Không có kết quả";
+    stationCount.textContent = `${payload.count || 0} Stations (Trạm) trong phạm vi của bạn`;
+    stationPageLabel.textContent = state.stations.length ? `Hiển thị ${state.stations.length} Stations (Trạm)` : "Không có kết quả";
     stationPrev.disabled = !payload.previous;
     stationNext.disabled = !payload.next;
     stationPrev.onclick = payload.previous ? () => loadStations(payload.previous) : null;
@@ -58,9 +58,9 @@
 
     if (!state.stations.length) {
       state.selectedStation = null;
-      stationList.innerHTML = `<div class="empty-state"><span class="empty-state-icon">⌕</span><h3>Không tìm thấy trạm</h3><p>Thử từ khóa khác hoặc xóa nội dung tìm kiếm.</p></div>`;
+      stationList.innerHTML = `<div class="empty-state"><span class="empty-state-icon">⌕</span><h3>Không tìm thấy Stations (Trạm)</h3><p>Thử từ khóa khác hoặc xóa nội dung tìm kiếm.</p></div>`;
       stationDetail.className = "detail-header empty-detail";
-      stationDetail.innerHTML = `<div class="empty-icon" aria-hidden="true">⌖</div><div><h2 id="detail-heading">Không có trạm phù hợp</h2><p>Thử thay đổi từ khóa tìm kiếm.</p></div>`;
+      stationDetail.innerHTML = `<div class="empty-icon" aria-hidden="true">⌖</div><div><h2>Không có Station (Trạm) phù hợp</h2><p>Thử thay đổi từ khóa tìm kiếm.</p></div>`;
       treeContent.innerHTML = "";
       return;
     }
@@ -115,8 +115,8 @@
     const voltage = station.voltage_level?.name ? ` · ${station.voltage_level.name}` : "";
     stationDetail.className = "detail-header";
     stationDetail.innerHTML = `<div class="empty-icon" aria-hidden="true">⌖</div>
-      <div><h2 id="detail-heading">${escapeHtml(station.name)}</h2><span class="station-code">${escapeHtml(station.code)}</span></div>
-      <div class="detail-pills"><span class="detail-pill"><strong>Đơn vị</strong> ${escapeHtml(station.organization?.name || "Chưa xác định")}</span><span class="detail-pill"><strong>Địa điểm</strong> ${escapeHtml(station.location || "Chưa cập nhật")}${escapeHtml(voltage)}</span></div>`;
+      <div><h2>${escapeHtml(station.name)}</h2><span class="station-code">Station (Trạm): ${escapeHtml(station.code)}</span></div>
+      <div class="detail-pills"><span class="detail-pill"><strong>Organization (Đơn vị)</strong> ${escapeHtml(station.organization?.name || "Chưa xác định")}</span><span class="detail-pill"><strong>Location (Địa điểm)</strong> ${escapeHtml(station.location || "Chưa cập nhật")}${escapeHtml(voltage ? ` · Voltage Level (Cấp điện áp)${voltage}` : "")}</span></div>`;
     loadTree();
   }
 
@@ -124,30 +124,30 @@
   function renderTree(payload, keepSearchFocus = false) {
     const bays = payload.results || [];
     const relayCount = bays.reduce((sum, bay) => sum + (bay.relays?.length || 0), 0);
-    const countLabel = `${payload.count || 0} ngăn lộ${state.depth === "relays" ? ` · ${relayCount} rơ-le trên trang` : ""}`;
+    const countLabel = `${payload.count || 0} Bays (Ngăn lộ)${state.depth === "relays" ? ` · ${relayCount} Relays (Rơ-le) trên trang` : ""}`;
     // Mỗi Bay là một thẻ; Relay nằm bên trong Bay để thể hiện đúng quan hệ tài sản.
     const bayCards = bays.map((bay) => {
-      const voltage = bay.rated_voltage ? `${escapeHtml(bay.rated_voltage)} kV` : "Chưa có điện áp";
-      const current = bay.rated_current ? `${escapeHtml(bay.rated_current)} A` : "Chưa có dòng định mức";
+      const voltage = bay.rated_voltage ? `Voltage (Điện áp): ${escapeHtml(bay.rated_voltage)} kV` : "Chưa có điện áp";
+      const current = bay.rated_current ? `Current (Dòng điện): ${escapeHtml(bay.rated_current)} A` : "Chưa có dòng định mức";
       const relays = (bay.relays || []).map((relay) => `<div class="relay-row">
         <span class="relay-mark" aria-hidden="true">⌁</span>
-        <span class="relay-info"><strong>${escapeHtml(relay.name)}</strong><span>${escapeHtml(relay.code)}${relay.manufacturer?.name ? ` · ${escapeHtml(relay.manufacturer.name)}` : ""}</span></span>
-        ${relay.model_name ? `<span class="relay-model">${escapeHtml(relay.model_name)}</span>` : ""}
+        <span class="relay-info"><strong>${escapeHtml(relay.name)}</strong><span>Relay (Rơ-le): ${escapeHtml(relay.code)}${relay.manufacturer?.name ? ` · Manufacturer (Nhà sản xuất): ${escapeHtml(relay.manufacturer.name)}` : ""}</span></span>
+        ${relay.model_name ? `<span class="relay-model">Model (Mẫu thiết bị): ${escapeHtml(relay.model_name)}</span>` : ""}
       </div>`).join("");
       return `<article class="bay-card"><div class="bay-heading"><span class="bay-symbol" aria-hidden="true">▤</span>
-        <span class="bay-info"><strong>${escapeHtml(bay.name)}</strong><span>Mã ${escapeHtml(bay.code)}</span></span>
+        <span class="bay-info"><strong>${escapeHtml(bay.name)}</strong><span>Bay (Ngăn lộ): ${escapeHtml(bay.code)}</span></span>
         <span class="bay-metrics"><span>${voltage}</span><span>${current}</span></span></div>
-        ${state.depth === "relays" ? `<div class="relay-list">${relays || `<div class="relay-row"><span class="relay-info"><span>Chưa có rơ-le đang hoạt động</span></span></div>`}</div>` : ""}
+        ${state.depth === "relays" ? `<div class="relay-list">${relays || `<div class="relay-row"><span class="relay-info"><span>Chưa có Relays (Rơ-le) đang hoạt động</span></span></div>`}</div>` : ""}
       </article>`;
     }).join("");
 
     treeContent.innerHTML = `<div class="tree-toolbar">
-      <label class="search-box tree-search" for="bay-search"><span aria-hidden="true">⌕</span><input id="bay-search" type="search" placeholder="Lọc ngăn lộ theo mã hoặc tên" value="${escapeHtml(state.treeQuery)}" autocomplete="off"></label>
-      <div class="view-toggle" role="group" aria-label="Mức chi tiết"><button type="button" data-depth="bays" class="${state.depth === "bays" ? "active" : ""}">Ngăn lộ</button><button type="button" data-depth="relays" class="${state.depth === "relays" ? "active" : ""}">Ngăn lộ + rơ-le</button></div>
+      <label class="search-box tree-search" for="bay-search"><span aria-hidden="true">⌕</span><input id="bay-search" type="search" placeholder="Lọc Bays (Ngăn lộ) theo mã hoặc tên" value="${escapeHtml(state.treeQuery)}" autocomplete="off"></label>
+      <div class="view-toggle" role="group" aria-label="Mức chi tiết"><button type="button" data-depth="bays" class="${state.depth === "bays" ? "active" : ""}">Bays (Ngăn lộ)</button><button type="button" data-depth="relays" class="${state.depth === "relays" ? "active" : ""}">Bays + Relays (Ngăn lộ + Rơ-le)</button></div>
     </div>
-    <div class="tree-content-inner"><div class="tree-summary"><span><strong>${escapeHtml(state.selectedStation?.code || "")}</strong> · Cấu trúc tài sản</span><span>${escapeHtml(countLabel)}</span></div>
-      ${bays.length ? bayCards : `<div class="empty-state"><span class="empty-state-icon">▤</span><h3>Chưa có ngăn lộ phù hợp</h3><p>Thử xóa bộ lọc hoặc kiểm tra dữ liệu của trạm này.</p></div>`}
-      ${payload.next || payload.previous ? `<div class="tree-pagination"><button class="icon-button" type="button" data-tree-page="previous" ${payload.previous ? "" : "disabled"}>‹</button><span>Trang ngăn lộ</span><button class="icon-button" type="button" data-tree-page="next" ${payload.next ? "" : "disabled"}>›</button></div>` : ""}
+    <div class="tree-content-inner"><div class="tree-summary"><span><strong>${escapeHtml(state.selectedStation?.code || "")}</strong> · Asset Tree (Cây tài sản)</span><span>${escapeHtml(countLabel)}</span></div>
+      ${bays.length ? bayCards : `<div class="empty-state"><span class="empty-state-icon">▤</span><h3>Chưa có Bays (Ngăn lộ) phù hợp</h3><p>Thử xóa bộ lọc hoặc kiểm tra dữ liệu của Station (Trạm) này.</p></div>`}
+      ${payload.next || payload.previous ? `<div class="tree-pagination"><button class="icon-button" type="button" data-tree-page="previous" aria-label="Trang trước" ${payload.previous ? "" : "disabled"}>‹</button><span>Trang Bays (Ngăn lộ)</span><button class="icon-button" type="button" data-tree-page="next" aria-label="Trang sau" ${payload.next ? "" : "disabled"}>›</button></div>` : ""}
     </div>`;
 
     treeContent.querySelectorAll("[data-depth]").forEach((button) => button.addEventListener("click", () => {

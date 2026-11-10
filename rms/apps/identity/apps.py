@@ -5,3 +5,4 @@ class IdentityConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "rms.apps.identity"
     label = "rms_identity"
+    verbose_name = "Identity (Định danh và phân quyền)"

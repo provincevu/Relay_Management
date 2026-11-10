@@ -1,6 +1,23 @@
 from django.contrib import admin
 
-from rms.apps.assets.models import Bay, Relay, Station
+from rms.apps.assets.models import AssetImportRun, Bay, Relay, Station
+
+
+@admin.register(AssetImportRun)
+class AssetImportRunAdmin(admin.ModelAdmin):
+    list_display = ["id", "entity_type", "mode", "status", "total_rows", "error_count", "created_by", "created_at"]
+    list_filter = ["entity_type", "mode", "status"]
+    search_fields = ["created_by__username", "failure_code"]
+    readonly_fields = [field.name for field in AssetImportRun._meta.fields]
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class BayInline(admin.TabularInline):

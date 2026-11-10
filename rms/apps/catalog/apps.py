@@ -5,3 +5,4 @@ class CatalogConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "rms.apps.catalog"
     label = "rms_catalog"
+    verbose_name = "Catalog (Danh mục)"

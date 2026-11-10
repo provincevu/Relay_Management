@@ -8,7 +8,7 @@
 
 Provide a predictable way for an authorized operator to load catalog and electrical asset records into the new RMS without creating orphaned Station, Bay, or Relay records. The proposed flow validates the whole file before writing and reports row-level errors.
 
-The first version covers one entity type per file:
+The contract covers one entity type per file. The first implementation slice supports preview for `catalog_item` only:
 
 1. `catalog_item`
 2. `station`
@@ -36,8 +36,9 @@ The new contract below intentionally replaces the different positional formats w
 - A header row is required. Header names are exact, lowercase `snake_case` as listed below; unknown, missing, or duplicate headers reject the file.
 - Values are trimmed at the edges. Codes remain case-sensitive unless a future domain rule explicitly changes this.
 - Empty values are allowed only for optional fields. For a new record, an empty optional field maps to its model's empty/null representation. For an existing record, an empty optional field is treated as the desired empty/null value during comparison; it does not mean “leave unchanged.”
+- Completely blank data rows are ignored.
 - Boolean values use `true` or `false` only. Integer values use base-10 digits. Date-time values use ISO 8601 with an explicit timezone. Invalid values are row errors.
-- File size, row count, and processing timeout limits: **Unknown / to be configured before production**.
+- Initial configurable preview limits: `ASSET_IMPORT_MAX_BYTES=10485760` (10 MiB) and `ASSET_IMPORT_MAX_ROWS=10000`. These are operational defaults, not legacy business rules.
 
 ### 3.2 Entity schemas
 
@@ -78,7 +79,8 @@ Proposed behavior:
 2. If the natural key already exists and all imported writable values match after normalization, report `unchanged`.
 3. If the natural key exists but any imported writable value differs, report a conflict. Import does not overwrite existing data. A separate, explicitly authorized update mode can be designed later.
 4. If an `external_id` is already linked to another local entity under the same source and entity type, report a conflict.
-5. Parent records are never auto-created. Missing Organization, CatalogType, CatalogItem, Station, or Bay references are row errors.
+5. If the same `external_id` is assigned to different natural keys in one file, report a conflict on the later row.
+6. Parent records are never auto-created. Missing Organization, CatalogType, CatalogItem, Station, or Bay references are row errors.
 
 These are new-backend safety defaults; legacy duplicate and overwrite behavior is **Unknown**.
 
@@ -90,13 +92,13 @@ Content type: `multipart/form-data`
 
 | Input | Type | Required | Meaning |
 |---|---|---:|---|
-| `entity_type` | string | Yes | One of `catalog_item`, `station`, `bay`, `relay`. |
-| `mode` | string | Yes | `preview` or `apply`. |
+| `entity_type` | string | Yes | Contract allows `catalog_item`, `station`, `bay`, `relay`; current slice accepts only `catalog_item`. |
+| `mode` | string | Yes | Contract allows `preview` or `apply`; current slice accepts only `preview`. |
 | `file` | file | Yes | CSV matching that entity's schema. |
 | `source_system` | string | Only when any row contains `external_id` | Source namespace for `ExternalReference`. |
 | `Idempotency-Key` | header | For `apply` | Prevents duplicate apply requests when clients retry after a connection failure. Key retention period: **Unknown / to be configured**. |
 
-Authorization: **Exact role/capability is Unknown**. The existing architecture calls for scoped access checks and import audit/SyncRun; the endpoint must enforce them server-side. It must not assume that Django `is_staff` alone grants asset-import permission.
+Authorization for the preview slice: Django superuser or an active `GLOBAL` RoleGrant whose code is listed in configurable `ASSET_IMPORT_ROLE_CODES` (default `ADMIN`). `is_staff` alone does not grant access. Authorization for future scoped imports remains **Unknown**.
 
 Proposed response: `202 Accepted` with an import-run resource because the architecture defines imports as jobs. Exact synchronous/asynchronous threshold is **Unknown / to be configured**; this draft proposes that both preview and apply use the job flow for a consistent status/result interface.
 
@@ -118,11 +120,11 @@ The example illustrates the shape only. ID representation and timestamps are gov
 Proposed response fields:
 
 - Run identity: `id`, `entity_type`, `mode`, `status`, `created_at`, `started_at`, `finished_at`.
-- Counts: `total_rows`, `created_count`, `unchanged_count`, `error_count`.
-- Row results: CSV row number (header is row 1), outcome (`created`, `unchanged`, `error`, or `conflict`), stable error code, human-readable message, and affected natural key when resolvable.
+- Counts: `total_rows`, `would_create_count`, `would_link_reference_count`, `unchanged_count`, `error_count`.
+- Row results: CSV row number (header is row 1), outcome (`would_create`, `would_link_reference`, `unchanged`, `error`, or `conflict`), stable error code, human-readable message, and affected natural key when resolvable.
 - Never return uploaded file contents or secret material in the response.
 
-Proposed run statuses: `QUEUED`, `PROCESSING`, `PREVIEWED`, `COMPLETED`, `REJECTED`, `FAILED`. `PREVIEWED` means validation completed and no database writes were made. `REJECTED` means apply was requested but validation/conflicts prevented all writes. `FAILED` means an unexpected processing failure; exact retry/recovery policy is **Unknown / to be configured**.
+Proposed run statuses: `QUEUED`, `PROCESSING`, `PREVIEWED`, `COMPLETED`, `REJECTED`, `FAILED`. `PREVIEWED` means validation completed and no `CatalogItem` or `ExternalReference` writes were made; the run/report and audit event are stored. `REJECTED` means apply was requested but validation/conflicts prevented all asset writes. `FAILED` means an unexpected processing failure; exact retry/recovery policy is **Unknown / to be configured**.
 
 ### Error envelope
 
@@ -130,19 +132,19 @@ Use the common RMS error envelope in `BACKEND_NEW_ARCHITECTURE.md` for request-l
 
 | HTTP status | Case |
 |---|---|
-| `400` | Missing/invalid form fields, unsupported entity type/mode, malformed CSV/header, missing `source_system` when required. |
+| `400` | Missing/invalid form fields or unsupported entity type/mode. In the preview slice, malformed CSV/header and an `external_id` without `source_system` are reported as row errors in the run resource. |
 | `401` | No valid authenticated identity. |
 | `403` | Authenticated identity lacks the configured import capability or asset scope. |
 | `404` | Requested import run does not exist or is not visible in the caller's scope. |
 | `409` | Idempotency key reused with a different request, or apply conflicts with an existing run/request state. |
-| `413` | Configured file-size limit exceeded. Actual limit: **Unknown**. |
-| `422` | File parsed, but one or more rows fail validation or reference resolution; row details are available from the run resource. |
+| `413` | Configured file-size limit exceeded. Preview defaults are configurable as described above. |
+| `422` | Reserved for a future synchronous validation response. The current asynchronous preview reports row failures in the `202` run resource. |
 
 The legacy source excerpt does not establish HTTP statuses or response schemas. These are proposed new API behavior.
 
 ## 6. Preview and apply transaction rules (proposed defaults)
 
-- `preview` parses and validates the complete file, resolves every parent/reference, returns row outcomes, and performs no writes to assets or `ExternalReference`.
+- `preview` parses and validates the complete file, resolves every parent/reference, returns row outcomes, and performs no writes to `CatalogItem` or `ExternalReference`. It does persist the import run/report and an audit event.
 - `apply` performs the same validation first. If any row has an error or conflict, write no asset or external-reference rows and finish as `REJECTED`.
 - If all rows are valid, apply the full file in one database transaction. Any unexpected database failure rolls back all rows in that import run.
 - The atomicity boundary is one file/entity type, not a multi-file hierarchy. The caller imports each type in dependency order.
@@ -153,7 +155,7 @@ The legacy source excerpt does not establish HTTP statuses or response schemas. 
 
 - Imported business records are written to PostgreSQL tables for `CatalogItem`, `Station`, `Bay`, and `Relay`.
 - External IDs are written to `ExternalReference`, not copied into asset primary keys.
-- Import run/report persistence model and uploaded-file storage location/retention are **Unknown** in the current implementation and must be decided before production. Proposed minimum: retain run metadata and row-level error report for audit; avoid retaining duplicate upload copies longer than operationally required.
+- Import run/report is stored in PostgreSQL. The uploaded file is stored temporarily under Django media storage and deleted after preview processing. Run metadata and row-level reports have no automatic retention cleanup yet; production retention remains **Unknown**.
 - Do not put full row payloads containing unnecessary personal or secret data into logs.
 
 ## 8. Completion criteria for the first implementation slice
@@ -163,13 +165,13 @@ The contract can be implemented incrementally. For the first small vertical slic
 1. Validate request fields, CSV encoding/header, required values, types, and references to existing `CatalogType`.
 2. Detect duplicate natural keys within the file and conflicts against existing `CatalogItem` values.
 3. Return a run/status/result resource with row numbers and stable error codes.
-4. Prove preview makes no database writes.
+4. Confirm preview creates no `CatalogItem` or `ExternalReference`; only run/report/audit records are written.
 5. Do not implement `apply` or Station/Bay/Relay import until this slice is reviewed and verified.
 
 ## 9. Open decisions before production apply
 
 - Import roles/capabilities and scope behavior: **Unknown**.
-- Maximum upload bytes, row count, and job timeout: **Unknown**.
+- Preview file/row defaults are set in configuration; production job timeout: **Unknown**.
 - Allowed `source_system` codes and ownership/approval: **Unknown**.
 - Run/report retention and upload-object storage/cleanup: **Unknown**.
 - Whether a later explicit update mode is needed: **Unknown**.

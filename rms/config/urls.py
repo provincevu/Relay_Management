@@ -16,6 +16,10 @@ urlpatterns = [
     path("api/v2/", include("rms.config.api_urls")),
 ]
 
+admin.site.site_header = "RMS (Hệ thống quản lý rơ-le)"
+admin.site.site_title = "Administration (Quản trị) · RMS"
+admin.site.index_title = "Business Data (Dữ liệu nghiệp vụ)"
+
 # Django Admin và trang asset dùng staticfiles trong môi trường local DEBUG.
 if settings.DEBUG:
     urlpatterns += staticfiles_urlpatterns()

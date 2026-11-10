@@ -19,6 +19,16 @@ def get_asset_read_grants(user):
     return get_active_role_grants(user).filter(role_code__in=settings.ASSET_READ_ROLE_CODES)
 
 
+def user_can_import_catalog(user):
+    """Chỉ cho phép superuser hoặc role được cấu hình có grant toàn cục nhập Catalog."""
+    if user.is_superuser:
+        return True
+    return get_active_role_grants(user).filter(
+        role_code__in=settings.ASSET_IMPORT_ROLE_CODES,
+        scope_type=RoleGrant.ScopeType.GLOBAL,
+    ).exists()
+
+
 def get_accessible_station_queryset(user):
     """Lọc trạm theo grant toàn cục, tổ chức trực tiếp hoặc trạm cụ thể."""
     stations = Station.objects.filter(

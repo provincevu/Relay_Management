@@ -5,3 +5,4 @@ class AuditConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "rms.apps.audit"
     label = "rms_audit"
+    verbose_name = "Audit (Kiểm toán)"

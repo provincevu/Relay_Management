@@ -5,3 +5,4 @@ class NotificationsConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "rms.apps.notifications"
     label = "rms_notifications"
+    verbose_name = "Notifications (Thông báo)"
