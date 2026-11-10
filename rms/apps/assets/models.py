@@ -51,3 +51,44 @@ class Station(models.Model):
 
     def __str__(self):
         return f"{self.code} - {self.name}"
+
+
+class Bay(models.Model):
+    """Ngăn lộ thuộc đúng một trạm, với mã duy nhất trong phạm vi trạm đó."""
+
+    station = models.ForeignKey(
+        Station,
+        on_delete=models.PROTECT,
+        related_name="bays",
+    )
+    code = models.CharField(max_length=64)
+    name = models.CharField(max_length=255)
+    rated_voltage = models.CharField(max_length=50, blank=True)
+    rated_current = models.CharField(max_length=50, blank=True)
+    # Giữ nguyên giá trị SDM cũ đến khi ý nghĩa và đơn vị của nó được xác định.
+    legacy_sdm = models.CharField(
+        max_length=50,
+        blank=True,
+        help_text="Giá trị nguồn SDM; chưa chuẩn hóa ý nghĩa hoặc đơn vị.",
+    )
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["station__code", "code"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["station", "code"],
+                name="rms_bay_station_code_uniq",
+            )
+        ]
+        indexes = [
+            models.Index(
+                fields=["station", "is_active"],
+                name="rms_bay_station_active_idx",
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.station.code} / {self.code} - {self.name}"
