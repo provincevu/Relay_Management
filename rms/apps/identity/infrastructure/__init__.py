@@ -1,1 +1,1 @@
-"""Identity persistence and framework adapters."""
+"""Adapter lưu trữ và framework của module định danh."""

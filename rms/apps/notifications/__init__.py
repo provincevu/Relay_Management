@@ -1,1 +1,1 @@
-"""Notification delivery and WebSocket projections."""
+"""Gửi thông báo và biểu diễn dữ liệu qua WebSocket."""

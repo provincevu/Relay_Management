@@ -1,1 +1,1 @@
-"""Catalog use cases."""
+"""Use case của module danh mục."""

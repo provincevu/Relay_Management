@@ -1,1 +1,1 @@
-"""Station, bay, relay, and approved relay baselines."""
+"""Trạm, ngăn lộ, rơ-le và cấu hình nền đã được duyệt."""

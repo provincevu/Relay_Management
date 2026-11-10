@@ -1,3 +1,7 @@
-"""WebSocket routes are added here when a feature slice needs them."""
+from django.urls import path
 
-websocket_urlpatterns = []
+from rms.apps.notifications.api.consumers import NotificationConsumer
+
+websocket_urlpatterns = [
+    path("ws/notifications/", NotificationConsumer.as_asgi(), name="notifications"),
+]

@@ -1,1 +1,1 @@
-"""Asset entities and policies."""
+"""Thực thể và chính sách của module tài sản."""

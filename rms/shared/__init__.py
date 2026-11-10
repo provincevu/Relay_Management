@@ -1,1 +1,1 @@
-"""Shared primitives; feature-specific business rules belong in apps."""
+"""Thành phần dùng chung; quy tắc nghiệp vụ riêng nằm trong từng app."""

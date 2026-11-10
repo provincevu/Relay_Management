@@ -1,4 +1,4 @@
-"""Environment-driven Django settings for the new RMS backend."""
+"""Cấu hình Django lấy từ biến môi trường."""
 
 import os
 from pathlib import Path
@@ -42,6 +42,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "rms.shared.api.middleware.RequestIdMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -113,6 +114,22 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 25,
+    "EXCEPTION_HANDLER": "rms.shared.api.exceptions.api_exception_handler",
+}
+
+CELERY_BEAT_SCHEDULE = {
+    "publish-pending-outbox": {
+        "task": "rms.apps.audit.tasks.publish_pending_outbox",
+        "schedule": 5.0,
+    },
+    "delete-expired-idempotency-records": {
+        "task": "rms.apps.audit.tasks.delete_expired_idempotency_records",
+        "schedule": 3600.0,
+    },
+    "platform-heartbeat": {
+        "task": "rms.apps.audit.tasks.update_platform_heartbeat",
+        "schedule": 10.0,
+    },
 }
 
 LANGUAGE_CODE = "vi"

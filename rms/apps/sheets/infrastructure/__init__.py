@@ -1,1 +1,1 @@
-"""Sheet persistence and signing adapters."""
+"""Adapter lưu trữ phiếu và chữ ký."""

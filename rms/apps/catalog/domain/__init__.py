@@ -1,1 +1,1 @@
-"""Catalog entities and policies."""
+"""Thực thể và chính sách của module danh mục."""

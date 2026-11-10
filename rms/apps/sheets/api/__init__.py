@@ -1,1 +1,1 @@
-"""Sheet HTTP API adapters."""
+"""Adapter HTTP API của module phiếu."""

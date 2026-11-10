@@ -1,1 +1,1 @@
-"""Catalog persistence and integration adapters."""
+"""Adapter lưu trữ và tích hợp của module danh mục."""

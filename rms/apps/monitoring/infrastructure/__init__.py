@@ -1,1 +1,1 @@
-"""Device and persistence adapters; introduced after the MVP."""
+"""Adapter thiết bị và lưu trữ sẽ được bổ sung sau MVP."""

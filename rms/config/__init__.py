@@ -1,4 +1,4 @@
-"""Django project configuration package."""
+"""Gói cấu hình dự án Django."""
 
 from .celery import app as celery_app
 

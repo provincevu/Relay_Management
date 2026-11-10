@@ -1,1 +1,1 @@
-"""Integration endpoint and sync-run models will be added when PMIS sync starts."""
+"""Model endpoint tích hợp sẽ được thêm khi bắt đầu đồng bộ PMIS."""

@@ -1,1 +1,1 @@
-"""OCR attempt HTTP API adapters."""
+"""Adapter HTTP API của module OCR."""

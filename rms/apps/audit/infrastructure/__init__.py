@@ -1,1 +1,1 @@
-"""Audit persistence and outbox delivery adapters."""
+"""Adapter lưu audit và phát outbox."""

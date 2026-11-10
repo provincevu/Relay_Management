@@ -1,1 +1,1 @@
-"""External system clients and persistence adapters."""
+"""Client hệ thống ngoài và adapter lưu trữ."""

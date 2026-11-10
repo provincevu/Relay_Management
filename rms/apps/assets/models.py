@@ -1,1 +1,1 @@
-"""Asset models will be added after identity/catalog boundaries are agreed."""
+"""Model tài sản sẽ được bổ sung sau khi chốt liên kết định danh và danh mục."""

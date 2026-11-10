@@ -1,1 +1,1 @@
-"""Identity HTTP API adapters."""
+"""Adapter HTTP API của module định danh."""

@@ -1,1 +1,1 @@
-"""Celery task helpers; tasks should delegate to application use cases."""
+"""Tiện ích Celery; task chuyển việc xử lý cho application use case."""

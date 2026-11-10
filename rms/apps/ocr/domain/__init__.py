@@ -1,1 +1,1 @@
-"""OCR attempt state and result normalization policies."""
+"""Trạng thái lần OCR và quy tắc chuẩn hóa kết quả."""

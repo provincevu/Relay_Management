@@ -1,1 +1,1 @@
-"""Monitoring models will be added after the MVP sheet workflow."""
+"""Model giám sát sẽ được bổ sung sau workflow phiếu của MVP."""

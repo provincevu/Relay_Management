@@ -1,1 +1,1 @@
-"""Framework-independent domain primitives and event interfaces."""
+"""Thành phần miền nghiệp vụ độc lập với framework."""

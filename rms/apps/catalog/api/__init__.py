@@ -1,1 +1,1 @@
-"""Catalog HTTP API adapters."""
+"""Adapter HTTP API của module danh mục."""

@@ -1,1 +1,1 @@
-"""Audit and outbox use cases."""
+"""Use case audit và outbox gắn với transaction."""

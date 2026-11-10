@@ -1,1 +1,1 @@
-"""Identity, organization, role grants, and authorization policies."""
+"""Định danh, đơn vị, phân vai và chính sách truy cập."""

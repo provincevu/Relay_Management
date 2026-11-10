@@ -1,1 +1,1 @@
-"""Catalog models will be added with the asset vertical slice."""
+"""Model danh mục sẽ được bổ sung cùng lát cắt tài sản."""

@@ -1,1 +1,1 @@
-"""OCR submission, polling, and result ingestion use cases."""
+"""Use case gửi OCR, truy vấn trạng thái và nhận kết quả."""

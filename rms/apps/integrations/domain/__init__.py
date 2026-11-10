@@ -1,1 +1,1 @@
-"""Integration configuration and sync-run policies."""
+"""Chính sách cấu hình tích hợp và lần đồng bộ."""

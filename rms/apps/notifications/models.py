@@ -1,1 +1,1 @@
-"""Notification models will be introduced with user-facing workflow events."""
+"""Model thông báo sẽ được bổ sung cùng event workflow hiển thị cho người dùng."""

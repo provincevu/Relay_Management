@@ -1,1 +1,1 @@
-"""Local OCR HTTP client and OCR persistence adapters."""
+"""Client HTTP OCR local và adapter lưu trữ dữ liệu OCR."""

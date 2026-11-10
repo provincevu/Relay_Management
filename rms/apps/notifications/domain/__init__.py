@@ -1,1 +1,1 @@
-"""Notification event types and policies."""
+"""Loại event và chính sách thông báo."""

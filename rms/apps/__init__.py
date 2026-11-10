@@ -1,1 +1,1 @@
-"""Modular monolith feature packages."""
+"""Các module tính năng của modular monolith."""

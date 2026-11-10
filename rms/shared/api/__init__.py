@@ -1,1 +1,1 @@
-"""Reusable API response, permission, and pagination primitives."""
+"""Tiện ích API dùng chung giữa các app theo ranh giới module."""

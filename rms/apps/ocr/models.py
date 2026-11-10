@@ -1,1 +1,1 @@
-"""OCR attempt, result snapshot, and candidate models will be added in slice 2."""
+"""Model lần OCR, bản chụp kết quả và ứng viên sẽ được bổ sung ở lát cắt 2."""

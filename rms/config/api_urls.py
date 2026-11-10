@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 
 
 class ApiIndexView(APIView):
-    """Temporary API index while feature endpoints are added by vertical slice."""
+    """Điểm thông tin API tạm thời trong lúc bổ sung từng lát cắt."""
 
     authentication_classes = []
     permission_classes = []

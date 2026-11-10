@@ -1,1 +1,1 @@
-"""Audit events, outbox records, and idempotency records."""
+"""Sự kiện audit, outbox và bản ghi idempotency."""

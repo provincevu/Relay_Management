@@ -1,1 +1,1 @@
-"""Monitoring use cases; introduced after the MVP."""
+"""Use case giám sát sẽ được bổ sung sau MVP."""

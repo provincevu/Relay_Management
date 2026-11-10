@@ -1,1 +1,1 @@
-"""Notification persistence and delivery adapters."""
+"""Adapter lưu trữ và gửi thông báo."""

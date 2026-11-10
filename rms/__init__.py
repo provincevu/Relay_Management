@@ -1,1 +1,1 @@
-"""EVN RMS backend package."""
+"""Gói backend RMS."""

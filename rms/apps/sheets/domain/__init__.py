@@ -1,1 +1,1 @@
-"""Sheet, revision, and workflow policies."""
+"""Chính sách phiếu, phiên bản và workflow."""

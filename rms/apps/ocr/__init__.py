@@ -1,1 +1,1 @@
-"""OCR attempt orchestration and local OCR API adapter."""
+"""Điều phối lần OCR và adapter gọi API OCR local."""

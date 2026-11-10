@@ -1,1 +1,1 @@
-"""Notification HTTP and WebSocket adapters."""
+"""Adapter HTTP API và WebSocket của module thông báo."""

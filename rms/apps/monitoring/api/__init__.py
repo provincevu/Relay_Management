@@ -1,1 +1,1 @@
-"""Monitoring HTTP API adapters; introduced after the MVP."""
+"""Adapter HTTP API giám sát sẽ được bổ sung sau MVP."""

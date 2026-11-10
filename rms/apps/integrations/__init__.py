@@ -1,1 +1,1 @@
-"""External catalog integrations; PMIS sync is deferred beyond the MVP."""
+"""Tích hợp danh mục ngoài; đồng bộ PMIS được để sau MVP."""

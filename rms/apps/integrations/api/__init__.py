@@ -1,1 +1,1 @@
-"""Integration HTTP API adapters."""
+"""Adapter HTTP API của module tích hợp."""

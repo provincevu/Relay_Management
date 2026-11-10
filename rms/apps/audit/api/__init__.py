@@ -1,1 +1,1 @@
-"""Audit query HTTP adapters."""
+"""Adapter HTTP truy vấn audit."""
